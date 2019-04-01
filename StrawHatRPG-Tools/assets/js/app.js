@@ -718,9 +718,7 @@ function digitSum(arg)
                  arg/=10;
             }
          arg=Math.floor(sum);
-    //while(arg>=25){
-      //  arg=digitsum(tempWordCount+3);
-}
+    if (arg%2==0) {arg*=2;}
     return arg;
 }
 function calculate() {
