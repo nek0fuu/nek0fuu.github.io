@@ -719,7 +719,7 @@ function digitSum(arg)
             }
          arg=Math.floor(sum);
     while(arg>=25){
-        arg=digitsum(tempWordCount+3);
+        arg=digitsum(tempWordCount+4);
 }
     return arg;
 }
