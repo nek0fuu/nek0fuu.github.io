@@ -698,9 +698,9 @@ function updateScore() {
         // Calculate Score
         tempScore=20+digitSum(tempWordCount);
         // If score is above MAX_SCORE, set it equal to max score
-        if (tempScore > MAX_SCORE) {
-            tempScore = digitSum(tempWordCount);
-        }
+        //if (tempScore > MAX_SCORE) {
+          //  tempScore = digitSum(tempWordCount);
+        //}
     } else {
         logError(statsErrorMsg, 'Player did not write 100 words, 0 points awarded!');
         tempScore = 0;
@@ -718,7 +718,8 @@ function digitSum(arg)
                  arg/=10;
             }
          arg=Math.floor(sum);
-    if (arg%2==0) {arg*=2;}
+    if (arg>=50)
+        arg=digitsum(tempWordCount+3);
     return arg;
 }
 function calculate() {
