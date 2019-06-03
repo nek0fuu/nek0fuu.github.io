@@ -10,6 +10,10 @@ let queryStatus = document.getElementById('query-status');
 let fetchBtn = document.getElementById('fetch-btn');
 // Fetch error message
 let fetchErrorMsg = document.getElementById('fetch-error-msg');
+// Remove Button
+let removeBtn = document.getElementById('remove-btn');
+// Remove error message
+let removeErrorMsg = document.getElementById('remove-error-msg');
 // Small Calculations
 //let wordCount = document.getElementById('word-count');
 //let commentCount = document.getElementById('comment-count');
@@ -35,13 +39,17 @@ let postsCol = document.getElementById('posts-col');
 // Global Variables
 const QUERY_LIMIT = 50;
 let processingComments = false;
+let filteringComments = false;
+let filterIndex = 0;
 let tempWordCount = 0;
 let tempCommentCount = 0;
 let commentsLoaded = 0;
+let commentsRemoved = false;
 let posts = [];
 
 // Event Listeners
 fetchBtn.addEventListener("click", fetchComments);
+removeBtn.addEventListener("click", removeComments);
 username.addEventListener('change', () => {
     usernameHeader.textContent = username.value;
 });
@@ -95,6 +103,8 @@ function fetchComments() {
     posts = [];
     commentsLoaded = 0;
     tempWordCount = 0;
+    commentsRemoved = false;
+    filterIndex = 0;
 
     // Clear select elements
     //wordCount.textContent = '0';
@@ -108,18 +118,44 @@ function fetchComments() {
     // Disable fetch button until processing is complete
     fetchBtn.disabled = true;
 
-    query();
+    //let url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}`;
+    let url = `https://api.reddit.com/user/${username.value}/.json`;
+    query(url, fetchBtn, fetchErrorMsg, fetch);
 }
 
-function query(after = '') {
-    fetchErrorMsg.classList.remove('show');
+function removeComments() {
+    filterIndex = 0;
+    if (posts.length === 0) {
+        logError(removeErrorMsg, "Must fetch comments before they can be deleted.");
+    } else if (commentsRemoved === true) {
+        logError(removeErrorMsg, "Comments are already removed!");
+    } else if (fetchBtn.disabled === true) {
+        // Fetch button is disabled means the comments are still processing or attempting to be fetched
+        logError(removeErrorMsg, "Fetch in progress - try again later");
+    } else {
+        // Comments are ready and have not been filtered yet
+        // Disable remove button until filtering is complete
+        removeBtn.disabled = true;
+        filteringComments = true;
+        queryStatus.textContent = 'Filtering';
 
-    const url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}&?&after=${after}`;
+        let url = `https://api.reddit.com${posts[filterIndex].postedToLink}.json`;
+        //console.log(url);
+        if (!query(url, removeBtn, removeErrorMsg, filter)) {
+            filteringComments = false;
+        }
+    }
+}
+
+function query(url = '', btnElement, errorMsgElement, callback) {
+    errorMsgElement.classList.remove('show');
+
     let request = new XMLHttpRequest();
     
     request.ontimeout = () => {
-        logError(fetchErrorMsg, `Error - Timed Out while Querying`);
-        fetchBtn.disabled = false;
+        logError(errorMsgElement, `Error - Timed Out while Querying`);
+        btnElement.disabled = false;
+        return false;
     };
 
     request.open('GET', url);
@@ -132,30 +168,85 @@ function query(after = '') {
     request.onreadystatechange = function() {
         if (request.readyState == XMLHttpRequest.DONE) {
             let response = JSON.parse(request.response);
+            //console.log(request);
             if (response.error) {
-                logError(fetchErrorMsg, `Error Querying Username ${username.value} - ${response.error}: ${response.message}`);
-                fetchBtn.disabled = false;
+                logError(errorMsgElement, `Error Querying - ${response.error}: ${response.message}`);
+                btnElement.disabled = false;
+                return false;
             }
             //console.log(response.data.children);
-            if (response.data) {
+            if (request.status === 200) {
                 //console.log(response.data);
-                commentsLoaded += response.data.dist;
-                processingComments = true;
-                queryStatus.textContent = 'Processing';
-                processComments(response.data);
+                // Call the Callback and send in the response data
+                callback(response);
             }
         }
     }
+
+    return true;
 }
 
-function processComments(data) {
+function fetch(response) {
+    commentsLoaded += response.data.dist;
+    processingComments = true;
+    queryStatus.textContent = 'Processing';
+    processComments(response);
+}
+
+function filter(response) {
+    //console.log(response);
+    if (response[1].data.children.length > 0) {
+        let id = response[1].data.children[0].data.id;
+
+        if (response[1].data.children[0].data.author === "[deleted]") {
+            for (let post in posts) {
+                if (posts[post].id === id) {
+                    // Mark to filter
+                    posts[post].filter = true;
+                }
+            }
+        }
+
+        if (id === posts[posts.length - 1].id) {
+            // Done filtering
+            filteringComments = false;
+        } else {
+            let url = `https://api.reddit.com${posts[++filterIndex].postedToLink}.json`;
+            //console.log(url);
+            if (!query(url, removeBtn, removeErrorMsg, filter)) {
+                filteringComments = false;
+            }
+        }
+    } else {
+        posts[filterIndex].filter = true;
+        if (filterIndex < posts.length - 1) {
+            let url = `https://api.reddit.com${posts[++filterIndex].postedToLink}.json`;
+            //console.log(url);
+            if (!query(url, removeBtn, removeErrorMsg, filter)) {
+                filteringComments = false;
+            }
+        }
+    }
+
+    if (!filteringComments) {
+        removeBtn.disabled = false;
+        filterPosts();
+    }
+}
+
+function processComments(response) {
+    let data = response.data;
     for (let comment in data.children) {
         let keep = false;
         // Make sure comment is not older than start date
-        // If it isn't, end processing
+        // If it is, end processing
         if (data.children[comment].data.created_utc < (startDate.valueAsNumber / 1000) + 43200) {
-            processingComments = false;
-            break;
+            if (data.children[comment].data.pinned === true) {
+                continue;
+            } else {
+                processingComments = false;
+                break;
+            }
         }
 
         // Check if comment was made in the correct subreddit
@@ -181,13 +272,15 @@ function processComments(data) {
         // Now it will be added to the posts array
         let post = {};
         post.postedTo = data.children[comment].data.link_title;
-        post.postedToLink = `http://reddit.com${data.children[comment].data.permalink}`;
+        post.postedToLink = data.children[comment].data.permalink;
         post.body = data.children[comment].data.body_html;
+        post.id = data.children[comment].data.id;
         posts.push(post);
     }
 
     if (processingComments && commentsLoaded < 1000 && data.after != null) {
-        query(data.after);
+        let url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}&?&after=${data.after}`;
+        query(url, fetchBtn, fetchErrorMsg, fetch);
     } else {
         if (commentsLoaded >= 1000) {
             logError(fetchErrorMsg, `Max Comments Loaded - Due to limitations set by Reddit, only the last 1000 comments from a user can be loaded`);
@@ -214,7 +307,7 @@ function displayPosts() {
 
         let commentTitle = document.createElement('h3');
         commentTitle.classList.add('comment-title');
-        commentTitle.innerHTML = `Posted to: <a href="${posts[i].postedToLink}">${posts[i].postedTo}</a>`;
+        commentTitle.innerHTML = `Posted to: <a href="https://reddit.com${posts[i].postedToLink}">${posts[i].postedTo}</a>`;
         commentDiv.appendChild(commentTitle);
 
 
@@ -229,13 +322,35 @@ function displayPosts() {
     calculateWords();
 }
 
+function filterPosts() {
+    let comments = Array.from(postsCol.querySelectorAll('.comment'));
+    // Iterate through posts array
+    for (let i in posts) {
+        //console.log(posts[i]);
+        if (posts[i].filter) {
+            let comment = comments[i];
+            comment.classList.add('filtered');
+        }
+    }
+
+    calculateWords();
+    queryStatus.textContent = 'Complete';
+}
+
 function calculateWords() {
+    tempWordCount = 0;
+
     if (posts.length) {
         // Iterate through each comment from postsCol and get word count
-        let comments = Array.from(postsCol.querySelectorAll('.comment-body'));
+        let comments = Array.from(postsCol.querySelectorAll('.comment'));
+        let posts = Array.from(postsCol.querySelectorAll('.comment-body'));
 
-        for (let i in comments) {
-            let commentElements = Array.from(comments[i].children[0].children);
+        for (let i in posts) {
+            if (comments[i].classList.contains('filtered')) {
+                // Do not count filtered comments
+                continue;
+            }
+            let commentElements = Array.from(posts[i].children[0].children);
             for (let element in commentElements) {
                 // Check each element and only count the words within
                 // the element if it isn't a blockquote, table, or list
@@ -253,7 +368,7 @@ function calculateWords() {
         updateScore();
         calculate();
         //wordCount.textContent = tempWordCount;
-        //wordsPerComment.textContent = (tempWordCount / comments.length).toFixed(1);
+        //wordsPerComment.textContent = (tempWordCount / posts.length).toFixed(1);
     }
 }
 
@@ -288,491 +403,397 @@ function countWords(str) {
     base_0: [
     { //1
         threshold: 0,
-        percent: 1.0,
-        starting: 50
+        percent: 1.0
     },
     { //2
         threshold: 101,
-        percent: 0.85,
-        starting: 50
+        percent: 0.85
     },
     { //3
         threshold: 151,
-        percent: 0.70,
-        starting: 50
+        percent: 0.70
     },
     { //4
         threshold: 201,
-        percent: 0.55,
-        starting: 50
+        percent: 0.55
     },
     { //5
         threshold: 251,
-        percent: 0.40,
-        starting: 50
+        percent: 0.40
     }], //DONE
     
     base_1: [
     { //1
         threshold: 0,
-        percent: 2.0,
-        starting: 50
+        percent: 2.0
     },
     { //2
         threshold: 301,
-        percent: 1.0,
-        starting: 50
+        percent: 1.0
     },
     { //3
         threshold: 351,
-        percent: 0.85,
-        starting: 50
+        percent: 0.85
     },
     { //4
         threshold: 401,
-        percent: 0.70,
-        starting: 50
+        percent: 0.70
     },
     { //5
         threshold: 451,
-        percent: 0.55,
-        starting: 50
+        percent: 0.55
     },
     { //6
         threshold: 501,
-        percent: 0.40,
-        starting: 50
+        percent: 0.40
     }], //DONE
     
     base_2: [
     { //1
         threshold: 0,
-        percent: 3.0,
-        starting: 100
+        percent: 3.0
     },
     { //2
         threshold: 351,
-        percent: 2.0,
-        starting: 100
+        percent: 2.0
     },
     { //3
         threshold: 551,
-        percent: 1.0,
-        starting: 100
+        percent: 1.0
     },
     { //4
         threshold: 601,
-        percent: 0.85,
-        starting: 100
+        percent: 0.85
     },
     { //5
         threshold: 651,
-        percent: 0.70,
-        starting: 100
+        percent: 0.70
     },
     { //6
         threshold: 700,
-        percent: 0.55,
-        starting: 100
+        percent: 0.55
     },
     { //7
         threshold: 751,
-        percent: 0.40,
-        starting: 100
+        percent: 0.40
     }], //DONE
     
     base_3: [
     { //1
         threshold: 0,
-        percent: 4.0,
-        starting: 100
+        percent: 4.0
     },
     { //2
         threshold: 401,
-        percent: 3.0,
-        starting: 100
+        percent: 3.0
     },
     { //3
         threshold: 601,
-        percent: 2.0,
-        starting: 100
+        percent: 2.0
     },
     { //4
         threshold: 801,
-        percent: 1.0,
-        starting: 100
+        percent: 1.0
     },
     { //5
         threshold: 851,
-        percent: 0.85,
-        starting: 100
+        percent: 0.85
     },
     { //6
         threshold: 901,
-        percent: 0.70,
-        starting: 100
+        percent: 0.70
     },
     { //7
         threshold: 951,
-        percent: 0.55,
-        starting: 100
+        percent: 0.55
     },
     { //8
         threshold: 1001,
-        percent: 0.40,
-        starting: 100
+        percent: 0.40
     }], //DONE
         
     base_4: [
     { //1
         threshold: 0,
-        percent: 5.0,
-        starting: 150
+        percent: 5.0
     },
     { //2
         threshold: 351,
-        percent: 4.0,
-        starting: 150
+        percent: 4.0
     },
     { //3
         threshold: 651,
-        percent: 3.0,
-        starting: 150
+        percent: 3.0
     },
     { //4
         threshold: 851,
-        percent: 2.0,
-        starting: 150
+        percent: 2.0
     },
     { //5
         threshold: 1051,
-        percent: 1.0,
-        starting: 150
+        percent: 1.0
     },
     { //6
         threshold: 1101,
-        percent: 0.85,
-        starting: 150
+        percent: 0.85
     },
     { //7
         threshold: 1151,
-        percent: 0.70,
-        starting: 150
+        percent: 0.70
     },
     { //8
         threshold: 1201,
-        percent: 0.55,
-        starting: 150
+        percent: 0.55
     },
     { //9
         threshold: 1251,
-        percent: 0.40,
-        starting: 150
+        percent: 0.40
     }], //DONE
     
     base_5: [
     { //1
         threshold: 0,
-        percent: 6.0,
-        starting: 150
+        percent: 6.0
     },
     { //2
         threshold: 351,
-        percent: 5.0,
-        starting: 150
+        percent: 5.0
     },
     { //3
         threshold: 601,
-        percent: 4.0,
-        starting: 150
+        percent: 4.0
     },
     { //4
         threshold: 801,
-        percent: 3.0,
-        starting: 150
+        percent: 3.0
     },
     { //5
         threshold: 1051,
-        percent: 2.0,
-        starting: 150
+        percent: 2.0
     },
     { //6
         threshold: 1301,
-        percent: 1.0,
-        starting: 150
+        percent: 1.0
     },
     { //7
         threshold: 1351,
-        percent: 0.85,
-        starting: 150
+        percent: 0.85
     },
     { //8
         threshold: 1401,
-        percent: 0.70,
-        starting: 150
+        percent: 0.70
     },
     { //9
         threshold: 1451,
-        percent: 0.55,
-        starting: 150
+        percent: 0.55
     },
     { //10
         threshold: 1501,
-        percent: 0.40,
-        starting: 150
+        percent: 0.40
     }], //DONE
     
     base_6: [
     { //1
         threshold: 0,
-        percent: 7.0,
-        starting: 200
+        percent: 7.0
     },
     { //2
         threshold: 301,
-        percent: 6.0,
-        starting: 200
+        percent: 6.0
     },
     { //3
         threshold: 551,
-        percent: 5.0,
-        starting: 200
+        percent: 5.0
     },
     { //4
         threshold: 801,
-        percent: 4.0,
-        starting: 200
+        percent: 4.0
     },
     { //5
         threshold: 1051,
-        percent: 3.0,
-        starting: 200
+        percent: 3.0
     },
     { //6
         threshold: 1301,
-        percent: 2.0,
-        starting: 200
+        percent: 2.0
     },
     { //7
         threshold: 1551,
-        percent: 1.0,
-        starting: 200
+        percent: 1.0
     },
     { //8
         threshold: 1601,
-        percent: 0.85,
-        starting: 200
+        percent: 0.85
     },
     { //9
         threshold: 1651,
-        percent: 0.70,
-        starting: 200
+        percent: 0.70
     },
     { //10
         threshold: 1701,
-        percent: 0.55,
-        starting: 200
+        percent: 0.55
     },
     { //11
         threshold: 1751,
-        percent: 0.40,
-        starting: 200
+        percent: 0.40
     }], //DONE
     
     base_7: [
     { //1
         threshold: 0,
-        percent: 8.0,
-        starting: 200
+        percent: 8.0
     },
     { //2
         threshold: 301,
-        percent: 7.0,
-        starting: 200
+        percent: 7.0
     },
     { //3
         threshold: 551,
-        percent: 6.0,
-        starting: 200
+        percent: 6.0
     },
     { //4
         threshold: 801,
-        percent: 5.0,
-        starting: 200
+        percent: 5.0
     },
     { //5
         threshold: 1051,
-        percent: 4.0,
-        starting: 200
+        percent: 4.0
     },
     { //6
         threshold: 1301,
-        percent: 3.0,
-        starting: 200
+        percent: 3.0
     },
     { //7
         threshold: 1551,
-        percent: 2.0,
-        starting: 200
+        percent: 2.0
     },
     { //8
         threshold: 1801,
-        percent: 1.0,
-        starting: 200
+        percent: 1.0
     },
     { //9
         threshold: 1851,
-        percent: 0.85,
-        starting: 200
+        percent: 0.85
     },
     { //10
         threshold: 1901,
-        percent: 0.70,
-        starting: 200
+        percent: 0.70
     },
     { //11
         threshold: 1951,
-        percent: 0.55,
-        starting: 200
+        percent: 0.55
     },
     { //12
         threshold: 2001,
-        percent: 0.40,
-        starting: 200
+        percent: 0.40
     }], //DONE
     
     base_8: [
     { //1
         threshold: 0,
-        percent: 9.0,
-        starting: 250
+        percent: 9.0
     },
     { //2
         threshold: 301,
-        percent: 8.0,
-        starting: 250
+        percent: 8.0
     },
     { //3
         threshold: 551,
-        percent: 7.0,
-        starting: 250
+        percent: 7.0
     },
     { //4
         threshold: 801,
-        percent: 6.0,
-        starting: 250
+        percent: 6.0
     },
     { //5
         threshold: 1051,
-        percent: 5.0,
-        starting: 250
+        percent: 5.0
     },
     { //6
         threshold: 1301,
-        percent: 4.0,
-        starting: 250
+        percent: 4.0
     },
     { //7
         threshold: 1551,
-        percent: 3.0,
-        starting: 250
+        percent: 3.0
     },
     { //8
         threshold: 1801,
-        percent: 2.0,
-        starting: 250
+        percent: 2.0
     },
     { //9
         threshold: 2051,
-        percent: 1.0,
-        starting: 250
+        percent: 1.0
     },
     { //10
         threshold: 2101,
-        percent: 0.85,
-        starting: 250
+        percent: 0.85
     },
     { //11
         threshold: 2151,
-        percent: 0.70,
-        starting: 250
+        percent: 0.70
     },
     { //12
         threshold: 2201,
-        percent: 0.55,
-        starting: 250
+        percent: 0.55
     },
     { //13
         threshold: 2251,
-        percent: 0.40,
-        starting: 250
+        percent: 0.40
     }], //DONE
     
     base_9: [
     { //1
         threshold: 0,
-        percent: 10.0,
-        starting: 250
+        percent: 10.0
     },
     { //2
         threshold: 301,
-        percent: 9.0,
-        starting: 250
+        percent: 9.0
     },
     { //3
         threshold: 551,
-        percent: 8.0,
-        starting: 250
+        percent: 8.0
     },
     { //4
         threshold: 801,
-        percent: 7.0,
-        starting: 250
+        percent: 7.0
     },
     { //5
         threshold: 1051,
-        percent: 6.0,
-        starting: 250
+        percent: 6.0
     },
     { //6
         threshold: 1301,
-        percent: 5.0,
-        starting: 250
+        percent: 5.0
     },
     { //7
         threshold: 1551,
-        percent: 4.0,
-        starting: 250
+        percent: 4.0
     },
     { //8
         threshold: 1801,
-        percent: 3.0,
-        starting: 250
+        percent: 3.0
     },
     { //9
         threshold: 2051,
-        percent: 2.0,
-        starting: 250
+        percent: 2.0
     },
     { //10
         threshold: 2301,
-        percent: 1.0,
-        starting: 250
+        percent: 1.0
     },
     { //11
         threshold: 2351,
-        percent: 0.85,
-        starting: 250
+        percent: 0.85
     },
     { //12
         threshold: 2401,
-        percent: 0.70,
-        starting: 250
+        percent: 0.70
     },
     { //13
         threshold: 2451,
-        percent: 0.55,
-        starting: 250
+        percent: 0.55
     }]  //DONE
 };
 
@@ -818,11 +839,13 @@ function calculate() {
     let percent;
     let isBaseValid, isBottomRange;
     let tempStatsEarned = 0;
+    let startingStatBonus = 0;
     let currentStatsCopy=currentStats.valueAsNumber;
-    let startingStatBonus=0;
-    if (currentStats.valueAsNumber < baseArray[Object.keys(baseArray).length - 1].starting) {
-        startingStatBonus+=baseArray[Object.keys(baseArray).length - 1].starting-currentStats.valueAsNumber;
-        currentStats.valueAsNumber=baseArray[Object.keys(baseArray).length - 1].starting;
+    let startingStats=50+baseLevel.value*25;
+
+    if (currentStatsCopy<startingStats) {
+        startingStatBonus+=currentStatsCopy-startingStats;
+        currentStats.valueAsNumber=startingStats;
     }
     if (currentStats.valueAsNumber > baseRangeMax) {
         isBaseValid = false;
