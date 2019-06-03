@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +39,11 @@
 
             <button id="fetch-btn">Fetch Comments</button>
             
-            <p id="fetch-error-msg" class="error-msg show"></p>
+            <p id="fetch-error-msg" class="error-msg"></p>
+
+            <button id="remove-btn">Filter Removed Comments</button> 
+
+            <p id="remove-error-msg" class="error-msg"></p>
 
             <!-- Stat Calculations -->
             <!--
@@ -67,16 +72,16 @@
                 <li>
                     <label class="base-level">Base Level</label>
                     <select id="base-level" >
-                        <option value="base_0">0</option>
-                        <option value="base_1" selected="selected">1</option>
-                        <option value="base_2">2</option>
-                        <option value="base_3">3</option>
-                        <option value="base_4">4</option>
-                        <option value="base_5">5</option>
-                        <option value="base_6">6</option>
-                        <option value="base_7">7</option>
-                        <option value="base_8">8</option>
-                        <option value="base_9">9</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2" selected="selected">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
                     </select>
                 </li>
             </ul>

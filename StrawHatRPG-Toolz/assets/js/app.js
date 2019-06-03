@@ -422,7 +422,7 @@ function countWords(str) {
         percent: 0.40
     }], //DONE
     
-    base_1: [
+    1: [
     { //1
         threshold: 0,
         percent: 2.0
@@ -448,7 +448,7 @@ function countWords(str) {
         percent: 0.40
     }], //DONE
     
-    base_2: [
+    2: [
     { //1
         threshold: 0,
         percent: 3.0
@@ -478,7 +478,7 @@ function countWords(str) {
         percent: 0.40
     }], //DONE
     
-    base_3: [
+    3: [
     { //1
         threshold: 0,
         percent: 4.0
@@ -512,7 +512,7 @@ function countWords(str) {
         percent: 0.40
     }], //DONE
         
-    base_4: [
+    4: [
     { //1
         threshold: 0,
         percent: 5.0
@@ -550,7 +550,7 @@ function countWords(str) {
         percent: 0.40
     }], //DONE
     
-    base_5: [
+    5: [
     { //1
         threshold: 0,
         percent: 6.0
@@ -592,7 +592,7 @@ function countWords(str) {
         percent: 0.40
     }], //DONE
     
-    base_6: [
+    6: [
     { //1
         threshold: 0,
         percent: 7.0
@@ -638,7 +638,7 @@ function countWords(str) {
         percent: 0.40
     }], //DONE
     
-    base_7: [
+    7: [
     { //1
         threshold: 0,
         percent: 8.0
@@ -688,7 +688,7 @@ function countWords(str) {
         percent: 0.40
     }], //DONE
     
-    base_8: [
+    8: [
     { //1
         threshold: 0,
         percent: 9.0
@@ -742,7 +742,7 @@ function countWords(str) {
         percent: 0.40
     }], //DONE
     
-    base_9: [
+    9: [
     { //1
         threshold: 0,
         percent: 10.0
@@ -840,11 +840,11 @@ function calculate() {
     let isBaseValid, isBottomRange;
     let tempStatsEarned = 0;
     let startingStatBonus = 0;
-    let currentStatsCopy=currentStats.valueAsNumber;
-    let startingStats=50+baseLevel.value*25;
+    let currentStatsCopy = currentStats.valueAsNumber;
+    let startingStats =50+(baseLevel.value * 25);
 
-    if (currentStatsCopy<startingStats) {
-        startingStatBonus+=currentStatsCopy-startingStats;
+    if (currentStats.valueAsNumber<startingStats) {
+        startingStatBonus+=startingStats-currentStats.valueAsNumber;
         currentStats.valueAsNumber=startingStats;
     }
     if (currentStats.valueAsNumber > baseRangeMax) {
