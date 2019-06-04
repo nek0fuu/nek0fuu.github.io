@@ -843,7 +843,7 @@ function calculate() {
     let currentStatsCopy = currentStats.valueAsNumber;
     let startingStats =50+(baseLevel.value * 25);
 
-    if (currentStats.valueAsNumber<startingStats) {
+    if ((currentStats.valueAsNumber<startingStats)&&(tempScore>=20)) {
         startingStatBonus+=startingStats-currentStats.valueAsNumber;
         currentStats.valueAsNumber=startingStats;
     }
