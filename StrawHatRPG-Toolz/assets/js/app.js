@@ -92,7 +92,9 @@ manualScore.addEventListener('change', () => {
     tempScore = manualScore.value;
     calculate();
 });
-
+baseLevel.addEventListener('change', () => {
+    currentStats.valueAsNumber=50+(baseLevel.value * 25);
+});
 function logError(element, message) {
     element.textContent = message;
     element.classList.add('show');
