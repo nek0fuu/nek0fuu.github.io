@@ -595,23 +595,23 @@ function countWords(str) {
     },
     { //5
         threshold: 1051,
-        percent: 0.90
+        percent: 1.00
     },
     { //6
         threshold: 1101,
-        percent: 0.70
+        percent: 0.85
     },
     { //7
         threshold: 1151,
-        percent: 0.50
+        percent: 0.70
     },
     { //8
         threshold: 1201,
-        percent: 0.40
+        percent: 0.55
     },
     { //9
         threshold: 1251,
-        percent: 0.30
+        percent: 0.40
     }], //DONE
     
     base_5: [
