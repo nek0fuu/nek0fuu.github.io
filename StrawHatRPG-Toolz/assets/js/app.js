@@ -118,12 +118,14 @@ function timerInit() {
 
 // Change starting Stats based on base
 function changeStartingStats() {
+    //Calculate Max Stats since base is changed
+    calculateMaxStats();
     currentStats.value = 50 + (25 * parseInt(baseLevel.options[baseLevel.selectedIndex].textContent));
 }
 
 function calculateMaxStats() {
     let calc = {newBase: 0};
-    let tempBase = 0;
+    let tempBase =  baseLevel.selectedIndex;
     do {
         calc = calculate(maxStats.valueAsNumber, 50, true, tempBase);
         if (calc.newBase > tempBase) {
@@ -132,9 +134,11 @@ function calculateMaxStats() {
     } while (calc.newStats === 0 && calc.newBase <= 9);
 
     if (calc.newBase > 9) {
+        maxStatsLabelNew.textContent = '0';
         logError(statsErrorMsg, "Need more bases!");
         return;
     } else if (calc.newBase !== baseLevel.selectedIndex) {
+        maxStatsLabelNew.textContent = '0';
         logError(statsErrorMsg, 'Incorrect Base; Change Base or Max!');
     } else {
         maxNewStats = calc.newStats;
