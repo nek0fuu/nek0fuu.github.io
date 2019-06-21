@@ -236,6 +236,7 @@ function fetchUserStats() {
                 });
                 if (entry) {
                     currentStats.value = entry.gsx$totalbasestats.$t;
+                    fetchComments();
                 } else {
                     logError(statsErrorMsg, "Error Fetching User's Stats. Check spelling or enter stats manually");
                 }
