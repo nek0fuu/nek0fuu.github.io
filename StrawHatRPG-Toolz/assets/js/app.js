@@ -60,6 +60,7 @@ fetchBtn.addEventListener("click", fetchComments);
 removeBtn.addEventListener("click", removeComments);
 username.addEventListener('change', () => {
     usernameHeader.textContent = username.value;
+    fetchBtn.disabled = true;
     fetchUserStats();
 });
 window.addEventListener('load', winLoad);
@@ -121,7 +122,7 @@ function timerInit() {
 function changeStartingStats() {
     //Calculate Max Stats since base is changed
     calculateMaxStats();
-    currentStats.value = 50 + (25 * parseInt(baseLevel.options[baseLevel.selectedIndex].textContent));
+    currentStats.value = 50 * (parseInt(baseLevel.options[baseLevel.selectedIndex].textContent) + 1);
 }
 
 function calculateMaxStats() {
@@ -217,6 +218,7 @@ function fetchUserStats() {
     
     request.ontimeout = () => {
         logError(statsErrorMsg, `Error - Timed Out while fetching user's stats. Please manually input current stats.`);
+        fetchBtn.disabled = false;
     };
 
     request.open('GET', url);
@@ -239,10 +241,12 @@ function fetchUserStats() {
                     fetchComments();
                 } else {
                     logError(statsErrorMsg, "Error Fetching User's Stats. Check spelling or enter stats manually");
+                    fetchBtn.disabled = false;
                 }
                 return;
             } else {
                 logError(statsErrorMsg, "Error Fetching User's Stats from Google");
+                fetchBtn.disabled = false;
                 return;
             }
         }
@@ -251,6 +255,7 @@ function fetchUserStats() {
     request.onabort = function() {
         logError(statsErrorMsg, "Fetching User's Stats Aborted");
         calculateMaxStats();
+        fetchBtn.disabled = false;
         return;
     }
 
@@ -258,6 +263,7 @@ function fetchUserStats() {
         logError(statsErrorMsg, "Error Fetching User's Stats from Google");
         console.log(`Error ${request.status}: ${request.statusText}`);
         calculateMaxStats();
+        fetchBtn.disabled = false;
         return;
     }
 }
@@ -1058,7 +1064,7 @@ function calculate(stats, score, getMax = false, base = baseLevel.selectedIndex,
 
     // Change starting stats based on what base we're on
     let tempCurrentStats = 0;
-    let startingStats = 50 + (25 * parseInt(baseLevel.options[base].textContent));
+    let startingStats = 50 * (parseInt(baseLevel.options[base].textContent) + 1);
     tempCurrentStats = stats < startingStats ? startingStats : stats;
     
     let isMax = tempCurrentStats >= max;
