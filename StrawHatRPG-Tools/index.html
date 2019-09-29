@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,11 +12,14 @@
     <div id="filters-col">
         <div id="controls">
             <h1 class="col-headers">StrawHatRPG Tools</h1>
+            <p id="timer-label">Time Left</p>
+            <p id="timer-counter">0d 0h 0m 0s</p>
+            <a href="https://docs.google.com/spreadsheets/d/11DBV69f-U9T1EXbdI_AvjHpp7XzSs38fH9eKqdx2sUw">Stats Sheet</a>
             <!-- Posts Collector Inputs -->
             <ul id="posts-inputs-list">
                 <li>
                     <label class="username">Reddit Username</label>
-                    <input type="text" placeholder="username" class="username" id="username">
+                    <input type="text" placeholder="username" class="username" id="username" autocomplete="off">
                 </li>
 
                 <li>
@@ -38,7 +42,11 @@
 
             <button id="fetch-btn">Fetch Comments</button>
             
-            <p id="fetch-error-msg" class="error-msg show"></p>
+            <p id="fetch-error-msg" class="error-msg"></p>
+
+            <button id="remove-btn">Filter Removed Comments</button> 
+
+            <p id="remove-error-msg" class="error-msg"></p>
 
             <!-- Stat Calculations -->
             <!--
@@ -61,15 +69,15 @@
             <ul id="calcs-inputs-list">
                 <li>
                     <label class="current-stats-total">Current Stats</label>
-                    <input type="number" class="current-stats" id="current-stats" value="50">
+                    <input type="number" class="current-stats" id="current-stats" value="50" autocomplete="off">
                 </li>
 
                 <li>
                     <label class="base-level">Base Level</label>
-                    <select id="base-level" >
+                    <select id="base-level" autocomplete="off">
                         <option value="base_0">0</option>
-                        <option value="base_1" selected="selected">1</option>
-                        <option value="base_2">2</option>
+                        <option value="base_1">1</option>
+                        <option value="base_2" selected="selected">2</option>
                         <option value="base_3">3</option>
                         <option value="base_4">4</option>
                         <option value="base_5">5</option>
@@ -79,6 +87,11 @@
                         <option value="base_9">9</option>
                     </select>
                 </li>
+
+                <li>
+                    <label class="max-stats-total">Max Stats (<span id="max-stats-label-new">0</span>)</label>
+                    <input type="number" class="max-stats" id="max-stats" value="751" autocomplete="off">
+                </li>
             </ul>
 
             <!-- Results -->
@@ -87,7 +100,7 @@
                     <p>
                         Score
                         <span id="score">0</span>
-                        <input type="number" id="manual-score" value="0">
+                        <input type="number" id="manual-score" value="0" autocomplete="off">
                     </p>
                 </li>
                 <li>
@@ -107,7 +120,8 @@
             
             <button id="calc-btn">Calculate Stats</button>
 
-            <p id="stats-error-msg" class="error-msg show"></p>
+            <p id="max-error-msg" class="error-msg"></p>
+            <p id="stats-error-msg" class="error-msg"></p>
             
         </div>
     </div>

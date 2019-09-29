@@ -11,17 +11,16 @@ body {
     margin: 0;
 }
 
-/* Responsive Columns layout */
-@media only screen and (max-width: 800px) {
-    #filters-col {
-
-    }
-
-    #posts-col {
-
-    }
+#timer-label, #timer-counter {
+    margin: 5px 0;
 }
 
+#timer-counter {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Responsive Columns layout */
 @media only screen and (min-width: 800px) {
     #filters-col {
         position: fixed;
@@ -58,6 +57,16 @@ body {
     border-radius: 5px;
     border: 1px #8f8f8f solid;
     text-align: center;
+}
+
+#controls a, #control a:visited {
+    color: #3457f0;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+#controls a:hover {
+    text-decoration: underline;
 }
 
 #controls ul {
@@ -117,7 +126,7 @@ body {
 #calcs-inputs-list li {
     padding: 5px;
     width: 20%;
-    min-width: 100px;
+    min-width: 125px;
     max-width: 150px;
 }
 
@@ -158,6 +167,7 @@ body {
 #controls button {
     font-size: 1em;
     padding: 10px 0;
+    margin: 5px 0;
     width: 80%;
     border: none;
     border-radius: 5px;
@@ -175,6 +185,7 @@ body {
 
 .error-msg {
     color: #c00;
+    margin: 2px 5px;
     display: none;
 }
 
@@ -197,6 +208,10 @@ body {
     border-radius: 5px;
     margin: 10px auto;
     padding: 10px;
+}
+
+.comment.filtered {
+    background-color: #8e4646;
 }
 
 .comment-title {

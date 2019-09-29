@@ -1,4 +1,7 @@
 // Elements
+// Countdown Timer
+let timerLabel = document.getElementById('timer-label');
+let timerCounter = document.getElementById('timer-counter');
 // Posts collector inputs
 let username = document.getElementById('username');
 let subreddit = document.getElementById('subreddit');
@@ -10,6 +13,10 @@ let queryStatus = document.getElementById('query-status');
 let fetchBtn = document.getElementById('fetch-btn');
 // Fetch error message
 let fetchErrorMsg = document.getElementById('fetch-error-msg');
+// Remove Button
+let removeBtn = document.getElementById('remove-btn');
+// Remove error message
+let removeErrorMsg = document.getElementById('remove-error-msg');
 // Small Calculations
 //let wordCount = document.getElementById('word-count');
 //let commentCount = document.getElementById('comment-count');
@@ -17,6 +24,8 @@ let fetchErrorMsg = document.getElementById('fetch-error-msg');
 // Stat Calculation Inputs
 let currentStats = document.getElementById('current-stats');
 let baseLevel = document.getElementById('base-level');
+let maxStatsLabelNew = document.getElementById('max-stats-label-new');
+let maxStats = document.getElementById('max-stats');
 // Results
 let score = document.getElementById('score');
 let manualScore = document.getElementById('manual-score');
@@ -25,6 +34,8 @@ let earnedSplit = document.getElementById('earned-split');
 let newStats = document.getElementById('new-stats');
 // Calculate Button
 let calcBtn = document.getElementById('calc-btn');
+// Max Error Message
+let maxErrorMsg = document.getElementById('max-error-msg');
 // Stats Error Message
 let statsErrorMsg = document.getElementById('stats-error-msg');
 // Username Header
@@ -35,17 +46,238 @@ let postsCol = document.getElementById('posts-col');
 // Global Variables
 const QUERY_LIMIT = 50;
 let processingComments = false;
+let filteringComments = false;
+let filterIndex = 0;
+let maxNewStats = 0;
 let tempWordCount = 0;
 let tempCommentCount = 0;
 let commentsLoaded = 0;
+let commentsRemoved = false;
 let posts = [];
 
 // Event Listeners
 fetchBtn.addEventListener("click", fetchComments);
+removeBtn.addEventListener("click", removeComments);
 username.addEventListener('change', () => {
     usernameHeader.textContent = username.value;
+    fetchBtn.disabled = true;
+    fetchUserStats();
 });
-startDate.addEventListener('change', () => {
+window.addEventListener('load', winLoad);
+baseLevel.addEventListener('change', changeStartingStats);
+maxStats.addEventListener('change', calculateMaxStats);
+
+// Window Load Function
+function winLoad() {
+    timerInit();
+    changeStartingStats();
+    fetchMaxStats();
+}
+
+// Initiate the countdown timer and automatically set the start date and end date
+function timerInit() {
+    let currentTime = new Date();
+    let year = currentTime.getUTCFullYear();
+    let month = (`0${currentTime.getUTCMonth() + 1}`).slice(-2);
+
+    if ((currentTime.getUTCDate() < 15 || (currentTime.getUTCDate() === 15 && currentTime.getUTCHours() < 12)) &&
+        (currentTime.getUTCDate() > 1 || (currentTime.getUTCDate() === 1 && currentTime.getUTCHours() >= 12))) {
+        let day = '01';
+        let startTime = `${year}-${month}-${day}`;
+        startDate.value = startTime;
+        
+    } else {
+        if (currentTime.getUTCDate() === 1) {
+            month = (`0${currentTime.getUTCMonth()}`).slice(-2);
+        }
+        let day = '15';
+        let startTime = `${year}-${month}-${day}`;
+        startDate.value = startTime;
+    }
+    changeDate();
+
+    let end = new Date(endDate.valueAsNumber);
+    end.setUTCHours(12);
+    let countdown = setInterval(function() {
+        let now = new Date().getTime();
+        let distance = end.getTime() - now;
+
+        if (distance < 0) {
+            clearInterval(countdown);
+            timerCounter.innerHTML = "EXPIRED";
+        } else {
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            timerCounter.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+        }
+
+        
+    }, 1000)
+}
+
+// Change starting Stats based on base
+function changeStartingStats() {
+    //Calculate Max Stats since base is changed
+    calculateMaxStats();
+    currentStats.value = 50 * (parseInt(baseLevel.options[baseLevel.selectedIndex].textContent) + 1);
+}
+
+function calculateMaxStats() {
+    let calc = {newBase: 0};
+    let tempBase =  baseLevel.selectedIndex;
+    do {
+        calc = calculate(maxStats.valueAsNumber, 50, true, tempBase);
+        if (calc.newBase > tempBase) {
+            tempBase++;
+        }
+    } while (calc.newStats === 0 && calc.newBase <= 9);
+
+    if (calc.newBase > 9) {
+        maxStatsLabelNew.textContent = '0';
+        logError(statsErrorMsg, "Need more bases!");
+        return;
+    } else if (calc.newBase !== baseLevel.selectedIndex) {
+        maxStatsLabelNew.textContent = '0';
+        logError(statsErrorMsg, 'Incorrect Base; Change Base or Max!');
+    } else {
+        maxNewStats = calc.newStats;
+        maxStatsLabelNew.textContent = maxNewStats;
+    }
+}
+
+// Automatically fetch the max stats from the stats sheet
+function fetchMaxStats() {
+
+    // GET PAGE ID FROM HERE WHEN PUBLISHED
+    // https://spreadsheets.google.com/feeds/cells/SHEET_ID/od6/public/full?alt=json
+    
+    // OFFICIAL STAT SHEET
+    let sheetID = "1dFMZyDocinowOFWw1g4n7uo-JE6oPAujVLIWwHJ75l0";
+    
+    // JOEY'S SHEET FOR DEBUGGING
+    //let sheetID = "10bBzQNryutYgx49QEb2Vz19alL55lS_hEJ-FrJTOIFE";
+    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
+
+    let request = new XMLHttpRequest();
+    
+    request.ontimeout = () => {
+        logError(statsErrorMsg, `Error - Timed Out while fetching max stats. Please manually input max stats.`);
+    };
+
+    request.open('GET', url);
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    request.timeout = 5000;
+
+    request.send();
+    
+    request.onreadystatechange = function() {
+        if (request.readyState == XMLHttpRequest.DONE) {
+            if (request.status === 200) {
+                // Good response
+                let data = JSON.parse(request.response);
+                maxStats.valueAsNumber = data.feed.entry[0].gsx$currentmax.$t;
+                calculateMaxStats();
+                return;
+            } else {
+                logError(maxErrorMsg, "Error Fetching Max from Google - Using Default");
+                calculateMaxStats();
+                return;
+            }
+        }
+    }
+    
+    request.onabort = function() {
+        logError(maxErrorMsg, "Fetching Stats Aborted - Using Default");
+        calculateMaxStats();
+        return;
+    }
+
+    request.onerror = function() {
+        logError(maxErrorMsg, "Error Fetching Max from Google - Using Default");
+        console.log(`Error ${request.status}: ${request.statusText}`);
+        calculateMaxStats();
+        return;
+    }
+}
+
+// Attempt to fetch user's stats when a new username is entered
+function fetchUserStats() {
+    // Remove stats error because we're getting a new username and new stats
+    statsErrorMsg.classList.remove('show');
+
+    // GET PAGE ID FROM HERE WHEN PUBLISHED
+    // https://spreadsheets.google.com/feeds/cells/SHEET_ID/od6/public/full?alt=json
+    let sheetID = "1dFMZyDocinowOFWw1g4n7uo-JE6oPAujVLIWwHJ75l0";
+
+    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
+
+    let request = new XMLHttpRequest();
+    
+    request.ontimeout = () => {
+        logError(statsErrorMsg, `Error - Timed Out while fetching user's stats. Please manually input current stats.`);
+        fetchBtn.disabled = false;
+    };
+
+    request.open('GET', url);
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    request.timeout = 5000;
+
+    request.send();
+    
+    request.onreadystatechange = function() {
+        if (request.readyState == XMLHttpRequest.DONE) {
+            if (request.status === 200) {
+                // Good response
+                let data = JSON.parse(request.response);
+                let entry = data.feed.entry.find((e) => {
+                    return (e.gsx$username.$t.localeCompare(username.value, 'en', {sensitivity: 'base'}) === 0)
+                });
+                if (entry) {
+                    currentStats.value = entry.gsx$totalbasestats.$t;
+                    fetchComments();
+                } else {
+                    logError(statsErrorMsg, "Error Fetching User's Stats. Check spelling or enter stats manually");
+                    fetchBtn.disabled = false;
+                }
+                return;
+            } else {
+                logError(statsErrorMsg, "Error Fetching User's Stats from Google");
+                fetchBtn.disabled = false;
+                return;
+            }
+        }
+    }
+    
+    request.onabort = function() {
+        logError(statsErrorMsg, "Fetching User's Stats Aborted");
+        calculateMaxStats();
+        fetchBtn.disabled = false;
+        return;
+    }
+
+    request.onerror = function() {
+        logError(statsErrorMsg, "Error Fetching User's Stats from Google");
+        console.log(`Error ${request.status}: ${request.statusText}`);
+        calculateMaxStats();
+        fetchBtn.disabled = false;
+        return;
+    }
+}
+
+function updateCalcValues(calc) {
+    earnedStats.textContent = calc.earnedStats;
+    earnedSplit.textContent = calc.earnedSplit;
+    newStats.textContent = calc.newStats;
+}
+
+startDate.addEventListener('change', changeDate);
+
+function changeDate() {
     // Every time the start date is changed, check to see if
     // the new Start Date is either the 1st or the 15th of a month
     let start = new Date(startDate.value);
@@ -69,7 +301,7 @@ startDate.addEventListener('change', () => {
         let endString = `${year}-${month}-${day}`;
         endDate.value = endString;
     }
-});
+}
 
 manualScore.addEventListener('change', () => {
     // Anytime the manual input changes, update the score field accordingly
@@ -81,8 +313,7 @@ manualScore.addEventListener('change', () => {
         manualScore.value = 0;
     }
 
-    tempScore = manualScore.value;
-    calculate();
+    updateCalcValues(calculate(currentStats.valueAsNumber, manualScore.valueAsNumber));
 });
 
 function logError(element, message) {
@@ -95,6 +326,8 @@ function fetchComments() {
     posts = [];
     commentsLoaded = 0;
     tempWordCount = 0;
+    commentsRemoved = false;
+    filterIndex = 0;
 
     // Clear select elements
     //wordCount.textContent = '0';
@@ -108,18 +341,44 @@ function fetchComments() {
     // Disable fetch button until processing is complete
     fetchBtn.disabled = true;
 
-    query();
+    //let url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}`;
+    let url = `https://api.reddit.com/user/${username.value}/.json`;
+    query(url, fetchBtn, fetchErrorMsg, fetch);
 }
 
-function query(after = '') {
-    fetchErrorMsg.classList.remove('show');
+function removeComments() {
+    filterIndex = 0;
+    if (posts.length === 0) {
+        logError(removeErrorMsg, "Must fetch comments before they can be deleted.");
+    } else if (commentsRemoved === true) {
+        logError(removeErrorMsg, "Comments are already removed!");
+    } else if (fetchBtn.disabled === true) {
+        // Fetch button is disabled means the comments are still processing or attempting to be fetched
+        logError(removeErrorMsg, "Fetch in progress - try again later");
+    } else {
+        // Comments are ready and have not been filtered yet
+        // Disable remove button until filtering is complete
+        removeBtn.disabled = true;
+        filteringComments = true;
+        queryStatus.textContent = 'Filtering';
 
-    const url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}&?&after=${after}`;
+        let url = `https://api.reddit.com${posts[filterIndex].postedToLink}.json`;
+        //console.log(url);
+        if (!query(url, removeBtn, removeErrorMsg, filter)) {
+            filteringComments = false;
+        }
+    }
+}
+
+function query(url = '', btnElement, errorMsgElement, callback) {
+    errorMsgElement.classList.remove('show');
+
     let request = new XMLHttpRequest();
     
     request.ontimeout = () => {
-        logError(fetchErrorMsg, `Error - Timed Out while Querying`);
-        fetchBtn.disabled = false;
+        logError(errorMsgElement, `Error - Timed Out while Querying`);
+        btnElement.disabled = false;
+        return false;
     };
 
     request.open('GET', url);
@@ -132,45 +391,101 @@ function query(after = '') {
     request.onreadystatechange = function() {
         if (request.readyState == XMLHttpRequest.DONE) {
             let response = JSON.parse(request.response);
+            //console.log(request);
             if (response.error) {
-                logError(fetchErrorMsg, `Error Querying Username ${username.value} - ${response.error}: ${response.message}`);
-                fetchBtn.disabled = false;
+                logError(errorMsgElement, `Error Querying - ${response.error}: ${response.message}`);
+                btnElement.disabled = false;
+                return false;
             }
             //console.log(response.data.children);
-            if (response.data) {
+            if (request.status === 200) {
                 //console.log(response.data);
-                commentsLoaded += response.data.dist;
-                processingComments = true;
-                queryStatus.textContent = 'Processing';
-                processComments(response.data);
+                // Call the Callback and send in the response data
+                callback(response);
             }
         }
     }
+
+    return true;
 }
 
-function processComments(data) {
+function fetch(response) {
+    commentsLoaded += response.data.dist;
+    processingComments = true;
+    queryStatus.textContent = 'Processing';
+    processComments(response);
+}
+
+function filter(response) {
+    //console.log(response);
+    if (response[1].data.children.length > 0) {
+        let id = response[1].data.children[0].data.id;
+
+        if (response[1].data.children[0].data.author === "[deleted]") {
+            for (let post in posts) {
+                if (posts[post].id === id) {
+                    // Mark to filter
+                    posts[post].filter = true;
+                }
+            }
+        }
+
+        if (id === posts[posts.length - 1].id) {
+            // Done filtering
+            filteringComments = false;
+        } else {
+            let url = `https://api.reddit.com${posts[++filterIndex].postedToLink}.json`;
+            //console.log(url);
+            if (!query(url, removeBtn, removeErrorMsg, filter)) {
+                filteringComments = false;
+            }
+        }
+    } else {
+        posts[filterIndex].filter = true;
+        if (filterIndex < posts.length - 1) {
+            let url = `https://api.reddit.com${posts[++filterIndex].postedToLink}.json`;
+            //console.log(url);
+            if (!query(url, removeBtn, removeErrorMsg, filter)) {
+                filteringComments = false;
+            }
+        }
+    }
+
+    if (!filteringComments) {
+        removeBtn.disabled = false;
+        filterPosts();
+    }
+}
+
+function processComments(response) {
+    let data = response.data;
     for (let comment in data.children) {
-        let keep = false;
         // Make sure comment is not older than start date
-        // If it isn't, end processing
+        // If it is, end processing
         if (data.children[comment].data.created_utc < (startDate.valueAsNumber / 1000) + 43200) {
-            processingComments = false;
-            break;
+            if (data.children[comment].data.pinned === true) {
+                continue;
+            } else {
+                processingComments = false;
+                break;
+            }
         }
 
         // Check if comment was made in the correct subreddit
         // and if it was made later than end-date
         // if so, continue to next comment
-        if (data.children[comment].data.subreddit.localeCompare(subreddit.value, 'en', {sensitivity: 'base'}) !== 0 ||
-            data.children[comment].data.created_utc > (endDate.valueAsNumber / 1000) + 43200) {
+        if (data.children[comment].data.created_utc > (endDate.valueAsNumber / 1000) + 43200) {
+            continue;
+        }
+
+        if (data.children[comment].data.subreddit.localeCompare(subreddit.value, 'en', {sensitivity: 'base'}) !== 0) {
             if (subreddit.value.localeCompare('StrawHatRPG', 'en', {sensitivity: 'base'}) === 0) {
                 // If the subreddit is set to StrawHatRPG, then it checks if the comment was made in
                 // any of the subs within the StrawHatRPG Community
-                if (data.children[comment].data.subreddit.localeCompare('StrawHatRPGShops', 'en', {sensitivity: 'base'}) == 0) {
-                    keep = true;
+                if (data.children[comment].data.subreddit.localeCompare('StrawHatRPGShops', 'en', {sensitivity: 'base'}) !== 0) {
+                    continue;
                 } 
-            }
-            if (!keep) {
+            } else {
                 continue;
             }
         }
@@ -181,13 +496,15 @@ function processComments(data) {
         // Now it will be added to the posts array
         let post = {};
         post.postedTo = data.children[comment].data.link_title;
-        post.postedToLink = `http://reddit.com${data.children[comment].data.permalink}`;
+        post.postedToLink = data.children[comment].data.permalink;
         post.body = data.children[comment].data.body_html;
+        post.id = data.children[comment].data.id;
         posts.push(post);
     }
 
     if (processingComments && commentsLoaded < 1000 && data.after != null) {
-        query(data.after);
+        let url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}&?&after=${data.after}`;
+        query(url, fetchBtn, fetchErrorMsg, fetch);
     } else {
         if (commentsLoaded >= 1000) {
             logError(fetchErrorMsg, `Max Comments Loaded - Due to limitations set by Reddit, only the last 1000 comments from a user can be loaded`);
@@ -206,7 +523,6 @@ function displayPosts() {
     while (postsCol.lastChild.id !== 'posts-col-header') {
         postsCol.removeChild(postsCol.lastChild);
     }
-
     // Iterate through posts array
     for (let i in posts) {
         let commentDiv = document.createElement('div');
@@ -214,7 +530,7 @@ function displayPosts() {
 
         let commentTitle = document.createElement('h3');
         commentTitle.classList.add('comment-title');
-        commentTitle.innerHTML = `Posted to: <a href="${posts[i].postedToLink}">${posts[i].postedTo}</a>`;
+        commentTitle.innerHTML = `Posted to: <a href="https://www.reddit.com${posts[i].postedToLink}">${posts[i].postedTo}</a>`;
         commentDiv.appendChild(commentTitle);
 
 
@@ -229,13 +545,35 @@ function displayPosts() {
     calculateWords();
 }
 
+function filterPosts() {
+    let comments = Array.from(postsCol.querySelectorAll('.comment'));
+    // Iterate through posts array
+    for (let i in posts) {
+        //console.log(posts[i]);
+        if (posts[i].filter) {
+            let comment = comments[i];
+            comment.classList.add('filtered');
+        }
+    }
+
+    calculateWords();
+    queryStatus.textContent = 'Complete';
+}
+
 function calculateWords() {
+    tempWordCount = 0;
+
     if (posts.length) {
         // Iterate through each comment from postsCol and get word count
-        let comments = Array.from(postsCol.querySelectorAll('.comment-body'));
+        let comments = Array.from(postsCol.querySelectorAll('.comment'));
+        let posts = Array.from(postsCol.querySelectorAll('.comment-body'));
 
-        for (let i in comments) {
-            let commentElements = Array.from(comments[i].children[0].children);
+        for (let i in posts) {
+            if (comments[i].classList.contains('filtered')) {
+                // Do not count filtered comments
+                continue;
+            }
+            let commentElements = Array.from(posts[i].children[0].children);
             for (let element in commentElements) {
                 // Check each element and only count the words within
                 // the element if it isn't a blockquote, table, or list
@@ -251,9 +589,10 @@ function calculateWords() {
         }
         // Calculate score as soon as word counting is done
         updateScore();
-        calculate();
+
+        updateCalcValues(calculate(currentStats.valueAsNumber, manualScore.valueAsNumber));
         //wordCount.textContent = tempWordCount;
-        //wordsPerComment.textContent = (tempWordCount / comments.length).toFixed(1);
+        //wordsPerComment.textContent = (tempWordCount / posts.length).toFixed(1);
     }
 }
 
@@ -266,7 +605,8 @@ function decodeHTML(html) {
 function countWords(str) {
     // Use regular expression to replace things we don't want
     // counted as words with empty spaces, then extract all non-whitespace sequences
-    str = str.replace(/[.,?!()<>{}[\]/\\+=~'`|:;0-9-_]/g, '');
+    str = str.replace(/[.,?!()<>{}[\]/\\+=~'`|:;_-]/g, '');
+    str = str.replace(/-/g, ' ');
     let exp = /\S+/ig;
     let tmp, words = 0;
     while ((tmp = exp.exec(str)) != null) {
@@ -288,7 +628,7 @@ function countWords(str) {
     base_0: [
     { //1
         threshold: 0,
-        percent: 1.0
+        percent: 1.00
     },
     { //2
         threshold: 101,
@@ -314,7 +654,7 @@ function countWords(str) {
     },
     { //2
         threshold: 301,
-        percent: 1.0
+        percent: 1.00
     },
     { //3
         threshold: 351,
@@ -339,28 +679,28 @@ function countWords(str) {
         percent: 3.0
     },
     { //2
-        threshold: 351,
+        threshold: 301,
         percent: 2.0
     },
     { //3
         threshold: 551,
-        percent: 1.0
+        percent: 0.90
     },
     { //4
         threshold: 601,
-        percent: 0.85
+        percent: 0.70
     },
     { //5
         threshold: 651,
-        percent: 0.70
+        percent: 0.50
     },
     { //6
-        threshold: 700,
-        percent: 0.55
+        threshold: 701,
+        percent: 0.40
     },
     { //7
         threshold: 751,
-        percent: 0.40
+        percent: 0.30
     }], //DONE
     
     base_3: [
@@ -369,32 +709,32 @@ function countWords(str) {
         percent: 4.0
     },
     { //2
-        threshold: 401,
+        threshold: 301,
         percent: 3.0
     },
     { //3
-        threshold: 601,
+        threshold: 551,
         percent: 2.0
     },
     { //4
         threshold: 801,
-        percent: 1.0
+        percent: 0.90
     },
     { //5
         threshold: 851,
-        percent: 0.85
+        percent: 0.70
     },
     { //6
         threshold: 901,
-        percent: 0.70
+        percent: 0.50
     },
     { //7
         threshold: 951,
-        percent: 0.55
+        percent: 0.40
     },
     { //8
         threshold: 1001,
-        percent: 0.40
+        percent: 0.30
     }], //DONE
         
     base_4: [
@@ -403,15 +743,15 @@ function countWords(str) {
         percent: 5.0
     },
     { //2
-        threshold: 351,
+        threshold: 301,
         percent: 4.0
     },
     { //3
-        threshold: 651,
+        threshold: 551,
         percent: 3.0
     },
     { //4
-        threshold: 851,
+        threshold: 801,
         percent: 2.0
     },
     { //5
@@ -420,8 +760,7 @@ function countWords(str) {
     },
     { //6
         threshold: 1101,
-        percent: 0.85
-    },
+        percent: 0.85    },
     { //7
         threshold: 1151,
         percent: 0.70
@@ -441,11 +780,11 @@ function countWords(str) {
         percent: 6.0
     },
     { //2
-        threshold: 351,
+        threshold: 301,
         percent: 5.0
     },
     { //3
-        threshold: 601,
+        threshold: 551,
         percent: 4.0
     },
     { //4
@@ -686,20 +1025,22 @@ const MAX_SCORE = 50;
 const MIN_SCORE = 20;
 const WORD_REQUIREMENT = 100;
 const WORDS_PER_POINT = 170;
-let tempScore = 0;
 
-calcBtn.addEventListener('click', calculate);
+calcBtn.addEventListener('click', () => {
+    updateCalcValues(calculate(currentStats.valueAsNumber, manualScore.valueAsNumber));
+});
 
 function updateScore() {
     // Get a temporary score by dividing word count by WORDS_PER_POINT
     //tempScore = Math.floor(tempWordCount / WORDS_PER_POINT);
     // If the player has written at least 100 words, they can get the minimum score of 20
+    let tempScore = 0;
     if (tempWordCount >= WORD_REQUIREMENT) {
         // Calculate Score
-        tempScore=20+digitSum(tempWordCount);
+        tempScore = MIN_SCORE + Math.floor(tempWordCount / WORDS_PER_POINT);
         // If score is above MAX_SCORE, set it equal to max score
         if (tempScore > MAX_SCORE) {
-            tempScore = digitSum(tempWordCount);
+            tempScore = MAX_SCORE;
         }
     } else {
         logError(statsErrorMsg, 'Player did not write 100 words, 0 points awarded!');
@@ -710,60 +1051,66 @@ function updateScore() {
     manualScore.value = tempScore;
 }
 
-function digitSum(arg)
-{
- let sum=0;    
-            for(lvar=0;lvar<4;lvar++){
-                 sum+=arg%9;
-                 arg/=10;
-            }
-         arg=Math.floor(sum);
-    if (arg%2==0) {arg*=2;}
-    return arg;
-}
-function calculate() {
+function calculate(stats, score, getMax = false, base = baseLevel.selectedIndex, max = maxStats.valueAsNumber, maxNew = Number(maxStatsLabelNew.textContent), logErrors = true) {
+    // Return value with all the different information we may need
+    let returnVal = {
+        earnedStats: 0,
+        earnedSplit: "",
+        newStats: 0,
+        newBase: base
+    }
+
     // Whenever the Calculate Stats button is pressed
     // Clear error message
     statsErrorMsg.classList.remove('show');
 
-    tempScore = manualScore.value;
-
+    // Change starting stats based on what base we're on
+    let tempCurrentStats = 0;
+    let startingStats = 50 * (parseInt(baseLevel.options[base].textContent) + 1);
+    tempCurrentStats = stats < startingStats ? startingStats : stats;
+    
+    let isMax = tempCurrentStats >= max;
     let rangeLevel = 0;
-    let baseArray = baseLevels[baseLevel.value];
-    let baseRangeMin = baseArray[Object.keys(baseArray).length - 1].threshold;
+    let baseArray = baseLevels[`base_${base}`];
+    let baseRangeMin = baseArray[baseArray.length - 1].threshold;
     let baseRangeMax = baseRangeMin + 49;
     let percent;
-    let isBaseValid, isBottomRange;
+    let isBottomRange;
     let tempStatsEarned = 0;
-
-    if (currentStats.valueAsNumber > baseRangeMax) {
-        isBaseValid = false;
-        logError(statsErrorMsg, 'Current Stat Total outside of Base Range!');
-        return;
-    } else {
-        isBaseValid = true;
-    }
 
     // If the current stat total is outside of the range, set the rangeLevel
     // to the size of the array
-    if (currentStats.valueAsNumber >= baseRangeMin) {
-        rangeLevel = Object.keys(baseArray).length - 1;
+    if (tempCurrentStats >= baseRangeMin) {
+        rangeLevel = baseArray.length - 1;
     } else {
         // Iterate through the baseArray to find what rangeLevel we're at
         for (let lvl in baseArray) {
             lvl = Number(lvl);
-            if (currentStats.valueAsNumber >= baseArray[lvl].threshold &&
-                currentStats.valueAsNumber < baseArray[lvl+1].threshold) {
+            if (tempCurrentStats >= baseArray[lvl].threshold &&
+                tempCurrentStats < baseArray[lvl+1].threshold) {
                 rangeLevel = lvl;
                 break;
             }
         }
     }
 
+    let tempScore = score;
     while (tempScore > 0) {
+        // Set to the currect percent
         percent = baseArray[rangeLevel].percent;
+        // Catch up system
+        // If percent is less than 1.0 and score is multiple of 50
+        if (percent < 1.0 && score % 50 === 0 && isMax === false) {
+            if (percent === 0.90) {
+                percent = 1.0;
+            } else {
+                // Give them a small boost equal to the midway percent value
+                // of their correct range and the range above theirs
+                percent = (percent + baseArray[rangeLevel - 1].percent) / 2;
+            }
+        }
 
-        if (rangeLevel === (Object.keys(baseArray).length - 1)) {
+        if (rangeLevel === (baseArray.length - 1)) {
             isBottomRange = true;
         } else {
             isBottomRange = false;
@@ -772,13 +1119,14 @@ function calculate() {
         let temp = tempScore * percent; //ROUNDED
         let statsNeeded = 0;
         if (isBottomRange) {
-            statsNeeded = baseRangeMax - currentStats.valueAsNumber; //ROUNDED
+            statsNeeded = baseRangeMax - tempCurrentStats; //ROUNDED
             if (temp > statsNeeded) {
                 logError(statsErrorMsg, 'You need to Base Up!');
-                return;
+                returnVal.newBase += 1;
+                return returnVal;
             }
         } else {
-            statsNeeded = (baseArray[rangeLevel+1].threshold - 1) - (currentStats.valueAsNumber + tempStatsEarned);
+            statsNeeded = (baseArray[rangeLevel+1].threshold - 1) - (tempCurrentStats + tempStatsEarned);
         }
 
         if (temp > statsNeeded) {
@@ -791,19 +1139,27 @@ function calculate() {
             tempScore = 0;
         }
     }
-    let earnedRounded = Math.round(tempStatsEarned);
-    earnedStats.textContent = earnedRounded;
-    earnedSplit.textContent = `(${Math.round(earnedRounded * 0.6)}/${Math.round(earnedRounded * 0.4)})`;
-    newStats.textContent = currentStats.valueAsNumber + earnedRounded;
-}
 
-Object.size = function(obj) {
-    var size = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
+    let earnedRounded = Math.round(tempStatsEarned);
+    if (tempCurrentStats > stats) {
+        earnedRounded += tempCurrentStats - stats;
     }
-    return size;
-};
+    
+    if (!getMax) {
+        if (stats + earnedRounded > maxNew) {
+            returnVal.earnedStats = maxNew - stats;
+            returnVal.earnedSplit = `(${Math.round(returnVal.earnedStats * 0.6)}/${Math.round(returnVal.earnedStats * 0.4)})`;
+            returnVal.newStats = stats + returnVal.earnedStats;
+
+            return returnVal;
+        }
+    }
+
+    returnVal.earnedStats = earnedRounded;
+    returnVal.earnedSplit = `(${Math.round(earnedRounded * 0.6)}/${Math.round(earnedRounded * 0.4)})`;
+    returnVal.newStats = stats + earnedRounded;
+    return returnVal;
+}
 
 function resetStatValues() {
     score.textContent = '0';
@@ -821,10 +1177,15 @@ function resetStatValues() {
 /
 */
 
-function catchUp(testFirst, newb = 50) {
-    let first = testFirst;
-    let newbie = newb;
+function catchUp(first, newbie, max = 0) {
+    let firstNew = 0;
+    let newbieNew = 0;
+    let maxNew = 0;
     let testBase = 0;
+
+    if (first > max) {
+        max = first;
+    }
 
     let results = {};
 
@@ -833,113 +1194,136 @@ function catchUp(testFirst, newb = 50) {
     console.log(`${iterations}: First: ${first} | Newbie: ${newbie}`);
 
     while(newbie < first) {
-        if (testBase > 9) break;
-        results = catchUpCalc(first, testBase);
-        if (results.Base !== testBase) {
-            testBase += 1;
-            continue;
+        // Should have hit max stats, set first to stat limit
+        if (testBase > 9) {
+            firstNew = 2500;
+            maxNew = 2500;
         } else {
-            first += results.Earned;
-            results = catchUpCalc(newbie, testBase);
-            if (results.Base !== testBase) {
-                testBase += 1;
-                continue;
+            // First do max
+            if (max > first) {
+                results = calculate(max, 50, true, testBase, max, null, false);
+                if (results.newBase !== testBase) {
+                    testBase += 1;
+                    continue;
+                }
+                maxNew = results.newStats;
+            }
+
+            if (first === max) {
+                // First and Max are the same, so don't calculate max twice dummy
+                results = calculate(first, 50, true, testBase, max, null, false);
+                if (results.newBase !== testBase) {
+                    testBase += 1;
+                    continue;
+                }
+                firstNew = results.newStats;
+                maxNew = firstNew;
+            } else if (first < max) {
+                // First less than max, proceed as normal
+                results = calculate(first, 50, false, testBase, max, maxNew, false);
+                if (results.newBase !== testBase) {
+                    // This probably shouldn't happen but if it does I'd like to know
+                    console.log("Base up on first when not max?");
+                    break;
+                }
+                firstNew = results.newStats;
             } else {
-                newbie += results.Earned;
+                // This probably won't ever happen.
+                console.log("First is somehow greater than max.");
+                break;
             }
         }
+
+        // Do newbie stats outside of the if/else in case the limit is hit
+        if (testBase > 9) {
+            results = calculate(newbie, 50, false, 9, max, maxNew, false);
+            if (results.newBase > 9) {
+                newbieNew = 2500;
+            } else {
+                newbieNew = results.newStats;
+            }
+        } else {
+            results = calculate(newbie, 50, false, testBase, max, maxNew, false);
+            if (results.newBase !== testBase) {
+                console.log("Base up as newbie?");
+            }
+            newbieNew = results.newStats;
+        }
+
+        max = maxNew;
+        first = firstNew;
+        newbie = newbieNew;
 
         console.log(`${++iterations}: First: ${first} | Newbie: ${newbie}`);
     }
 }
 
-function catchUpToMax(testFirst) {
-    let first = testFirst;
-    let testBase = 0;
+let thread = {}
+let fakeElement = document.createElement('p');
+// Take a link to a thread and count the number of words total in the thread
+function checkThread(link) {
+    thread = {
+        link: "",
+        words: 0,
+        comments: 0,
+        participants: {},
+        posts: []
+    }
+    thread.link = link + ".json";
+    
+    query(thread.link, fakeElement, fakeElement, processThread);
+}
 
-    let results = {};
+function processThread(response) {
+    let comment = response[1].data.children[0].data;
 
-    let iterations = 0;
+    let post = {};
+    post.html = document.createElement('div');
+    post.html.innerHTML = decodeHTML(comment.body_html);
+    post.author = comment.author;
+    thread.posts.push(post);
 
-    console.log(`${iterations}: Stats: ${first}`);
-
-    while(first < 2500) {
-        if (testBase > 9) break;
-        results = catchUpCalc(first, testBase);
-        if (results.Base !== testBase) {
-            testBase += 1;
-            continue;
-        } else {
-            first += results.Earned;
-        }
-
-        console.log(`${++iterations}: Stats: ${first}`);
+    thread.comments++;
+    
+    if (comment.replies !== "") {
+        let url = "https://api.reddit.com" + comment.replies.data.children[0].data.permalink + ".json";
+        query(url, fakeElement, fakeElement, processThread);
+    } else {
+        countThread();
     }
 }
 
-function catchUpCalc(testStats, testBase) {
-    let returnVal = {
-        "Base": testBase,
-        "Earned": 0
-    }
+function countThread() {
+    // Iterate through each comment from thread object and get word count
+    
+    for (let i in thread.posts) {
+        let commentElements = Array.from(thread.posts[i].html.children[0].children);
+        let author = thread.posts[i].author;
+        for (let element in commentElements) {
+            
+            // Check each element and only count the words within
+            // the element if it isn't a blockquote, table, or list
+            if (commentElements[element].tagName.toLowerCase() != 'blockquote' &&
+                commentElements[element].tagName.toLowerCase() != 'table' &&
+                commentElements[element].tagName.toLowerCase() != 'code' &&
+                commentElements[element].tagName.toLowerCase() != 'ul' &&
+                commentElements[element].tagName.toLowerCase() != 'ol')
+            {
+                let tempWords = countWords(commentElements[element].textContent);
+                thread.words += tempWords;
+                
+                if (author in thread.participants) {
+                    thread.participants[author].words += tempWords;
+                } else {
+                    thread.participants[author] = {};
+                    thread.participants[author].words = tempWords;
+                    thread.participants[author].comments = 0;
 
-    let testScore = 50;
-
-    let rangeLevel = 0;
-    let baseArray = baseLevels[`base_${testBase}`];
-    let baseRangeMin = baseArray[Object.keys(baseArray).length - 1].threshold;
-    let baseRangeMax = baseRangeMin + 49;
-    let percent;
-    let isBottomRange;
-    let tempStatsEarned = 0;
-
-    // If the current stat total is outside of the range, set the rangeLevel
-    // to the size of the array
-    if (testStats >= baseRangeMin) {
-        rangeLevel = Object.keys(baseArray).length - 1;
-    } else {
-        // Iterate through the baseArray to find what rangeLevel we're at
-        for (let lvl in baseArray) {
-            lvl = Number(lvl);
-            if (testStats >= baseArray[lvl].threshold &&
-                testStats < baseArray[lvl+1].threshold) {
-                rangeLevel = lvl;
-                break;
+                }
             }
         }
+        thread.participants[author].comments += 1;
     }
-
-    while (testScore > 0) {
-        percent = baseArray[rangeLevel].percent;
-
-        if (rangeLevel === (Object.keys(baseArray).length - 1)) {
-            isBottomRange = true;
-        } else {
-            isBottomRange = false;
-        }
-
-        let temp = testScore * percent; //ROUNDED
-        let statsNeeded = 0;
-        if (isBottomRange) {
-            statsNeeded = baseRangeMax - testStats; //ROUNDED
-            if (temp > statsNeeded) {
-                returnVal.Base += 1;
-                return returnVal;
-            }
-        } else {
-            statsNeeded = (baseArray[rangeLevel+1].threshold - 1) - (testStats + tempStatsEarned);
-        }
-
-        if (temp > statsNeeded) {
-            let tmp = (statsNeeded / percent); //ROUNDED
-            testScore -= tmp;
-            tempStatsEarned += statsNeeded;
-            rangeLevel++;
-        } else {
-            tempStatsEarned += temp;
-            testScore = 0;
-        }
-    }
-    returnVal.Earned = Math.round(tempStatsEarned);
-    return returnVal;
+    
+    console.log("Thread processed!");
 }
