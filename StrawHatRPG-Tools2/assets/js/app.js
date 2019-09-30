@@ -170,7 +170,7 @@ function mainCalcFunction()
             totalWillBoost=1+(tempwillBoost+stancewillBoost)/100; //Each Should be Less than 1.40
             totalStanceBoost=1+(stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost)/100; //Should be less than 1.20
             totalBoost=1+((tempstamBoost+tempstrBoost+tempspdBoost+tempdexBoost+tempwillBoost)+(stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost)*statLossReduction/100)/100 //Should be less than 1.75
-            document.getElementById("maxBoost").value=(totalBoost-1)*100;
+            document.getElementById("maxBoost").value=Math.round((totalBoost-1)*100);
     
             if(totalStamBoost>1.40)
                 {
