@@ -243,7 +243,7 @@ function mainCalcFunction()
             if(stancespdBoost)
                 {
                     stancespdLoss=0;
-                    document.getElementById("spdStancesLossIPF").value=stancestpdLoss;
+                    document.getElementById("spdStancesLossIPF").value=stancespdLoss;
                     document.getElementById("spdStancesLossIPF").disabled=true;
                 }
             if(stancedexBoost)
