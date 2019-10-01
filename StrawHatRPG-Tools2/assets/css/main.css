@@ -11,6 +11,9 @@ input:disabled{
     opacity: 0.5;
     cursor: not-allowed;
 }
+ul, li{
+    padding: 0px;
+}
 body {
     margin: 0;
 }
