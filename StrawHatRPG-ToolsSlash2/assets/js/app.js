@@ -19,7 +19,9 @@ function mainCalcFunction()
     var attackLevel=document.getElementById("attackLevel").value;
     var slashLevel=document.getElementById("slashLevel").value;
     var meitoGrade=document.getElementById("bladeGrade").value;
-    var DFUA=document.getElementById("DFUACheck").checked;
+    var DFCheck=document.getElementById("DFCheck").checked;
+    var UACheck=document.getElementById("UACheck").checked;
+    var NACheck=document.getElementById("NACheck").checked;
     var strReq,spdReq,dexReq,willReq,meitoReq;
     var attackMult,slashMult,gradeMult,slashPower,attackPower,attackResult,slashResult,threshold;
     var strFactor=1.5;
@@ -63,9 +65,13 @@ function mainCalcFunction()
             
             default:slashMult=0;dexReq=0;break;
         }
-    if((DFUA)&&(slashLevel>0))
+    if((DFCheck)&&(slashLevel))
         {
             slashMult-=0.075;
+        }
+    if((UACheck)&&(slashLevel))
+        {
+            slashMult-=0.050;
         }
     willReq=dexReq;
     
