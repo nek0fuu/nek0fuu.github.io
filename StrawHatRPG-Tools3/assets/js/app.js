@@ -323,6 +323,27 @@ function mainCalcFunction()
             finalspd=Math.round(racebasespd+basespd*totalSpdBoost-stancespdLoss);
             finaldex=Math.round(racebasedex+basedex*totalDexBoost-stancedexLoss);
             finalwill=Math.round(racebasewill+basewill*totalWillBoost-stancewillLoss);
+    
+            if(finalstam>650)
+                {
+                    finalstam=650;
+                }
+            if(finalstr>650)
+                {
+                    finalstr=650;
+                }
+            if(finalspd>650)
+                {
+                    finalspd=650;
+                }
+            if(finaldex>650)
+                {
+                    finaldex=650;
+                }
+            if(finalwill>650)
+                {
+                    finalwill=650;
+                }        
             finaltotal=finalstam+finalstr+finalspd+finaldex+finalwill;
             
             document.getElementById("new-stam").textContent=finalstam;
