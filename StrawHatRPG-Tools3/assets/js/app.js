@@ -326,23 +326,33 @@ function mainCalcFunction()
     
             if(finalstam>650)
                 {
+                    document.getElementById("statCap-warn-msg").style.visibility="visible";
                     finalstam=650;
+                    document.getElementById("new-stam").style.color="yellow";
                 }
             if(finalstr>650)
                 {
+                    document.getElementById("statCap-warn-msg").style.visibility="visible";
                     finalstr=650;
+                    document.getElementById("new-str").style.color="yellow";
                 }
             if(finalspd>650)
                 {
+                    document.getElementById("statCap-warn-msg").style.visibility="visible";
                     finalspd=650;
+                    document.getElementById("new-spd").style.color="yellow";
                 }
             if(finaldex>650)
                 {
+                    document.getElementById("statCap-warn-msg").style.visibility="visible";
                     finaldex=650;
+                    document.getElementById("new-dex").style.color="yellow";
                 }
             if(finalwill>650)
                 {
+                    document.getElementById("statCap-warn-msg").style.visibility="visible";
                     finalwill=650;
+                    document.getElementById("new-will").style.color="yellow";
                 }        
             finaltotal=finalstam+finalstr+finalspd+finaldex+finalwill;
             

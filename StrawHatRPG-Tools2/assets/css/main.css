@@ -209,6 +209,11 @@ body {
     margin: 2px 5px;
     visibility: hidden;
 }
+.warn-msg {
+    color: yellow;
+    margin: 2px 5px;
+    visibility: hidden;
+}
 
 .show {
     display: block!important;
