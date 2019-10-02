@@ -57,8 +57,8 @@ function mainCalcFunction()
     switch(slashLevel)
         {
             case '0':slashMult=1.00;dexReq=0;meitoReq=0;break;
-            case '1':slashMult=0.30;dexReq=50;meitoReq=1;break;
-            case '2':slashMult=0.45;dexReq=75;meitoReq=1;break;
+            case '1':slashMult=0.30;dexReq=50;meitoReq=0;break;
+            case '2':slashMult=0.45;dexReq=75;meitoReq=0;break;
             case '3':slashMult=0.60;dexReq=100;meitoReq=1;break;
             case '4':slashMult=0.75;dexReq=125;meitoReq=2;break;
             case '5':slashMult=0.90;dexReq=150;meitoReq=3;break;
