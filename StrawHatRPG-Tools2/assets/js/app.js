@@ -82,6 +82,8 @@ function mainCalcFunction()
         }
     
     var errors=document.getElementsByClassName("error-msg");
+    var warns=document.getElementsByClassName("warn-msg");
+    var newStats=document.getElementsByClassName("new-stats");
     var racestam=document.getElementById("stamRIPF").valueAsNumber;
     var basestam=document.getElementById("stamIPF").valueAsNumber;
     var tempstamBoost=document.getElementById("stamTempBoostIPF").valueAsNumber;
@@ -131,6 +133,14 @@ function mainCalcFunction()
     for(i=0;i<errors.length;i++)
         {
             errors[i].style.visibility="hidden";  //Hide Errors by Default
+        }
+    for(i=0;i<warns.length;i++)
+        {
+            warns[i].style.visibility="hidden";  //Hide Warns by Default
+        }
+    for(i=0;i<newStats.length;i++)
+        {
+            newStats[i].style.color=""; //Unhighlight Final Stats
         }
     for(i=0;i<boosts.length;i++)
         {
