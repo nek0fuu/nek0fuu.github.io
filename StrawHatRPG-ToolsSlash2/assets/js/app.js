@@ -65,11 +65,11 @@ function mainCalcFunction()
             
             default:slashMult=0;dexReq=0;break;
         }
-    if((DFCheck)&&(slashLevel))
+    if((DFCheck)&&(slashLevel>0))
         {
             slashMult-=0.075;
         }
-    if((UACheck)&&(slashLevel))
+    if((UACheck)&&(slashLevel>0))
         {
             slashMult-=0.050;
         }
@@ -221,11 +221,11 @@ function mainCalcFunction()
     
     for(var threshold in powerScale)
         {
-            if(attackPower>threshold)
+            if(attackPower>=threshold)
                 {
                     attackResult=powerScale[threshold];
                 }
-           if(slashPower>threshold)
+           if(slashPower>=threshold)
                 {
                     slashResult=powerScale[threshold];
                 }
