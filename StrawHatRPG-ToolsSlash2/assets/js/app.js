@@ -131,7 +131,7 @@ function mainCalcFunction()
                                         slashPower=205;
                                     }
                             }
-                        if((slashPower>250)&&(meitoGrade>=2))
+                        if((slashPower>250)&&(meitoGrade>=1))
                             {
                                 slashPower=250+(slashPower-250)/2;
                             }
@@ -140,7 +140,7 @@ function mainCalcFunction()
                                 slashPower=250;
                             }
                     }
-                    if((slashPower>380)&&(meitoGrade>=3))
+                    if((slashPower>380)&&(meitoGrade>=2))
                         {
                             slashPower=380+(slashPower-380)/2;
                         }
@@ -149,11 +149,11 @@ function mainCalcFunction()
                             slashPower=380;
                         }
                 }
-            if((slashPower>685)&&(meitoGrade==5))
+            if((slashPower>685)&&(meitoGrade==4))
                 {
                     slashPower=685+(slashPower-685)/2;
                 }
-            else if((slashPower>560)&&(meitoGrade>=4))
+            else if((slashPower>560)&&(meitoGrade>=3))
                 {
                     slashPower=560+(slashPower-560)/2;
                 }
