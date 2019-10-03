@@ -103,6 +103,102 @@ function mainCalcFunction()
     attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/4*attackMult;
     slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/4*slashMult*gradeMult;
     
+    if((slashLevel!=0)&&(slashLevel<=5))
+        {
+            if(slashLevel<=4)
+                {
+                    if(slashLevel<=3)
+                    {
+                        if(slashLevel<=2)
+                            {
+                                if(slashLevel==1)
+                                    {
+                                        if((slashPower>160)&&(meitoGrade>=1))
+                                            {
+                                                slashPower=160+(slashPower-160)/2;
+                                            }
+                                        else if(slashPower>160)
+                                            {
+                                                slashPower=160;
+                                            }
+                                    }
+                                if((slashPower>205)&&(meitoGrade>=1))
+                                    {
+                                        slashPower=205+(slashPower-205)/2;
+                                    }
+                                else if(slashPower>205)
+                                    {
+                                        slashPower=205;
+                                    }
+                            }
+                        if((slashPower>250)&&(meitoGrade>=2))
+                            {
+                                slashPower=250+(slashPower-250)/2;
+                            }
+                        else if(slashPower>250)
+                            {
+                                slashPower=250;
+                            }
+                    }
+                    if((slashPower>380)&&(meitoGrade>=3))
+                        {
+                            slashPower=380+(slashPower-380)/2;
+                        }
+                    else if(slashPower>380)
+                        {
+                            slashPower=380;
+                        }
+                }
+            if((slashPower>685)&&(meitoGrade==5))
+                {
+                    slashPower=685+(slashPower-685)/2;
+                }
+            else if((slashPower>560)&&(meitoGrade>=4))
+                {
+                    slashPower=560+(slashPower-560)/2;
+                }
+            else if(slashPower>560)
+                {
+                    slashPower=560;
+                }
+        }
+    if((attackLevel!=0)&&(attackLevel<=5))
+        {
+            if(attackLevel<=4)
+                {
+                    if(attackLevel<=3)
+                        {
+                            if(attackLevel<=2)
+                                {
+                                    if(attackLevel==1)
+                                        {
+                                            if(attackPower>160)
+                                                {
+                                                    attackPower=160;
+                                                }
+                                        }
+                                    if(attackPower>205)
+                                        {
+                                            attackPower=205;
+                                        }
+                                }
+                            if(attackPower>250)
+                                {
+                                    attackPower=250;
+                                }
+                        }
+                    if(attackPower>315)
+                        {
+                            attackPower=315;
+                        }
+                }
+            if(attackPower>380)
+                {
+                    attackPower=380;
+                }
+            
+        }
+    
     powerScale=
     {
         560:"2Diamond",
