@@ -218,7 +218,8 @@ function mainCalcFunction()
         10:"2Wood",
         5:"1Wood",
     }
-    
+    attackPower=Math.round(attackPower);
+    slashPower=Math.round(slashPower);
     for(var threshold in powerScale)
         {
             if(attackPower>=threshold)
