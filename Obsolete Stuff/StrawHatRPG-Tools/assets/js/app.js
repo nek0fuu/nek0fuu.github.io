@@ -155,7 +155,8 @@ function fetchMaxStats() {
     // https://spreadsheets.google.com/feeds/cells/SHEET_ID/od6/public/full?alt=json
     
     // OFFICIAL STAT SHEET
-    let sheetID = "11DBV69f-U9T1EXbdI_AvjHpp7XzSs38fH9eKqdx2sUw";
+    let sheetID = "1dFMZyDocinowOFWw1g4n7uo-JE6oPAujVLIWwHJ75l0";
+    
     // JOEY'S SHEET FOR DEBUGGING
     //let sheetID = "10bBzQNryutYgx49QEb2Vz19alL55lS_hEJ-FrJTOIFE";
     let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
@@ -210,7 +211,7 @@ function fetchUserStats() {
 
     // GET PAGE ID FROM HERE WHEN PUBLISHED
     // https://spreadsheets.google.com/feeds/cells/SHEET_ID/od6/public/full?alt=json
-    let sheetID = "11DBV69f-U9T1EXbdI_AvjHpp7XzSs38fH9eKqdx2sUw";
+    let sheetID = "1dFMZyDocinowOFWw1g4n7uo-JE6oPAujVLIWwHJ75l0";
 
     let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
 
@@ -341,7 +342,7 @@ function fetchComments() {
     fetchBtn.disabled = true;
 
     //let url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}`;
-    let url = `https://api.reddit.com/user/${username.value}/comments/.json`;
+    let url = `https://api.reddit.com/user/${username.value}/.json`;
     query(url, fetchBtn, fetchErrorMsg, fetch);
 }
 
@@ -458,7 +459,6 @@ function filter(response) {
 
 function processComments(response) {
     let data = response.data;
-    //console.log(data);
     for (let comment in data.children) {
         // Make sure comment is not older than start date
         // If it is, end processing
@@ -504,7 +504,6 @@ function processComments(response) {
 
     if (processingComments && commentsLoaded < 1000 && data.after != null) {
         let url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}&?&after=${data.after}`;
-        //console.log(url);
         query(url, fetchBtn, fetchErrorMsg, fetch);
     } else {
         if (commentsLoaded >= 1000) {
