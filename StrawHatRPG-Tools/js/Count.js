@@ -164,7 +164,10 @@ function countThread() {
                 }
             }
         }
-        thread.participants[author].comments += 1;
+        if(thread.participants[author])
+        {
+            thread.participants[author].comments += 1;
+        }
     }
     
     console.log("Thread processed!");
