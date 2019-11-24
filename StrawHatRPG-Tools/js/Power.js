@@ -119,38 +119,38 @@ function mainCalcFunction()
                             {
                                 if(slashLevel==1)
                                     {
-                                        if((slashPower>160)&&(meitoGrade>=1))
+                                        /*if((slashPower>160)&&(meitoGrade>=1))
                                             {
                                                 slashPower=160+(slashPower-160)*.35;
                                             }
-                                        else if(slashPower>160)
+                                        else*/ if(slashPower>160)
                                             {
                                                 slashPower=160+(slashPower-160)*.35;
                                             }
                                     }
-                                if((slashPower>205)&&(meitoGrade>=1))
+                                /*if((slashPower>205)&&(meitoGrade>=1))
                                     {
                                         slashPower=205+(slashPower-205)*.35;
                                     }
-                                else if(slashPower>205)
+                                else*/ if(slashPower>205)
                                     {
                                         slashPower=205+(slashPower-205)*.35;
                                     }
                             }
-                        if((slashPower>250)&&(meitoGrade>=1))
+                        /*if((slashPower>250)&&(meitoGrade>=1))
                             {
                                 slashPower=250+(slashPower-250)*.35;
                             }
-                        else if(slashPower>250)
+                        else*/ if(slashPower>250)
                             {
                                 slashPower=250+(slashPower-250)*.35;
                             }
                     }
-                    if((slashPower>380)&&(meitoGrade>=2))
+                    /*if((slashPower>380)&&(meitoGrade>=2))
                         {
                             slashPower=380+(slashPower-380)*.35;
                         }
-                    else if(slashPower>380)
+                    else*/ if(slashPower>380)
                         {
                             slashPower=380+(slashPower-380)*.35;
                         }
@@ -163,10 +163,10 @@ function mainCalcFunction()
                 {
                     //Do nothing if its a Saijo and its lower than 660
                 }
-            else if((slashPower>560)&&(meitoGrade>=3))
+            /*else if((slashPower>560)&&(meitoGrade>=3))
                 {
                     slashPower=560+(slashPower-560)*.35;
-                }
+                }*/
             else if(slashPower>560)
                 {
                     slashPower=560+(slashPower-560)*.35;
