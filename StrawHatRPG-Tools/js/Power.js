@@ -50,10 +50,10 @@ function mainCalcFunction()
         {
             case '0':attackMult=0.95;strReq=0;spdReq=0;break;
             case '1':attackMult=0.600;strReq=50;spdReq=50;break;
-            case '2':attackMult=0.650;strReq=90;spdReq=60;break;
-            case '3':attackMult=0.700;strReq=130;spdReq=70;break;
-            case '4':attackMult=0.750;strReq=170;spdReq=80;break;
-            case '5':attackMult=0.800;strReq=210;spdReq=90;break;
+            case '2':attackMult=0.675;strReq=90;spdReq=60;break;
+            case '3':attackMult=0.750;strReq=130;spdReq=70;break;
+            case '4':attackMult=0.825;strReq=170;spdReq=80;break;
+            case '5':attackMult=0.000;strReq=210;spdReq=90;break;
         }
     switch(slashLevel)
         {
