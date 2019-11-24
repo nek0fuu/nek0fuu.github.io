@@ -49,30 +49,30 @@ function mainCalcFunction()
     switch(attackLevel)
         {
             case '0':attackMult=0.95;strReq=0;spdReq=0;break;
-            case '1':attackMult=0.30;strReq=50;spdReq=50;break;
-            case '2':attackMult=0.43;strReq=90;spdReq=60;break;
-            case '3':attackMult=0.56;strReq=130;spdReq=70;break;
-            case '4':attackMult=0.69;strReq=170;spdReq=80;break;
-            case '5':attackMult=0.82;strReq=210;spdReq=90;break;
+            case '1':attackMult=0.445;strReq=50;spdReq=50;break;
+            case '2':attackMult=0.545;strReq=90;spdReq=60;break;
+            case '3':attackMult=0.645;strReq=130;spdReq=70;break;
+            case '4':attackMult=0.745;strReq=170;spdReq=80;break;
+            case '5':attackMult=0.845;strReq=210;spdReq=90;break;
         }
     switch(slashLevel)
         {
             case '0':slashMult=1.00;dexReq=0;meitoReq=0;break;
-            case '1':slashMult=0.30;dexReq=50;meitoReq=0;break;
-            case '2':slashMult=0.45;dexReq=75;meitoReq=1;break;
-            case '3':slashMult=0.60;dexReq=100;meitoReq=1;break;
-            case '4':slashMult=0.75;dexReq=125;meitoReq=2;break;
-            case '5':slashMult=0.90;dexReq=150;meitoReq=3;break;
+            case '1':slashMult=0.5;dexReq=50;meitoReq=0;break;
+            case '2':slashMult=0.6;dexReq=75;meitoReq=1;break;
+            case '3':slashMult=0.7;dexReq=100;meitoReq=1;break;
+            case '4':slashMult=0.8;dexReq=125;meitoReq=2;break;
+            case '5':slashMult=0.9;dexReq=150;meitoReq=3;break;
             
             default:slashMult=0;dexReq=0;break;
         }
     if((DFCheck)&&(slashLevel>0))
         {
-            slashMult-=0.075;
+            slashMult-=0.05;
         }
     if((UACheck)&&(slashLevel>0))
         {
-            slashMult-=0.050;
+            slashMult-=0.0375;
         }
     willReq=dexReq;
     
