@@ -53,7 +53,7 @@ function mainCalcFunction()
             case '2':attackMult=0.675;strReq=90;spdReq=60;break;
             case '3':attackMult=0.750;strReq=130;spdReq=70;break;
             case '4':attackMult=0.825;strReq=170;spdReq=80;break;
-            case '5':attackMult=0.000;strReq=210;spdReq=90;break;
+            case '5':attackMult=0.900;strReq=210;spdReq=90;break;
         }
     switch(slashLevel)
         {
