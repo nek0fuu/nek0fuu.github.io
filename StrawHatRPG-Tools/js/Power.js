@@ -103,6 +103,11 @@ function mainCalcFunction()
         }
     attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/4*attackMult;
     slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/4*slashMult*gradeMult;
+        if(PowCheck)
+        {
+            attackPower*=1.20;
+            slashPower*=1.20;
+        }
     
     if((slashLevel!=0)&&(slashLevel<=5))
         {
@@ -171,7 +176,7 @@ function mainCalcFunction()
         {
             if(slashPower>745) //Arbitrary Threshold to control number inflation
                 {
-                    slashPower=745+(slashPower-745)/2;
+                    slashPower=745+(slashPower-745)/1.5;
                 }
         }
     if((attackLevel!=0)&&(attackLevel<=5))
@@ -186,27 +191,27 @@ function mainCalcFunction()
                                         {
                                             if(attackPower>180)
                                                 {
-                                                    attackPower=180;
+                                                    attackPower=180+(attackPower-180)/3;
                                                 }
                                         }
                                     if(attackPower>230)
                                         {
-                                            attackPower=230;
+                                            attackPower=230+(attackPower-230)/3;
                                         }
                                 }
                             if(attackPower>280)
                                 {
-                                    attackPower=280;
+                                    attackPower=280+(attackPower-280)/3;
                                 }
                         }
                     if(attackPower>355)
                         {
-                            attackPower=355;
+                            attackPower=355+(attackPower-355)/3;
                         }
                 }
             if(attackPower>430)
                 {
-                    attackPower=430;
+                    attackPower=430+(attackPower-430)/3;
                 }
             
         }
@@ -214,13 +219,8 @@ function mainCalcFunction()
         {
             if(attackPower>745)  //Arbitrary Threshold to control number inflation
                 {
-                    attackPower=745+(attackPower-745)/2;
+                    attackPower=745+(attackPower-745)/1.5;
                 }
-        }
-    if(PowCheck)
-        {
-            attackPower*=1.20;
-            slashPower*=1.20;
         }
     
     powerScale=
