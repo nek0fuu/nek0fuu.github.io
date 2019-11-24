@@ -1,69 +1,28 @@
 // Elements
-// Countdown Timer
-let timerLabel = document.getElementById('timer-label');
-let timerCounter = document.getElementById('timer-counter');
-// Posts collector inputs
-let username = document.getElementById('username');
-let subreddit = document.getElementById('subreddit');
-let startDate = document.getElementById('start-date');
-let endDate = document.getElementById('end-date');
-// Query Status
-let queryStatus = document.getElementById('query-status');
-// Fetch Button
-let fetchBtn = document.getElementById('fetch-btn');
-// Fetch error message
-let fetchErrorMsg = document.getElementById('fetch-error-msg');
-// Remove Button
-let removeBtn = document.getElementById('remove-btn');
-// Remove error message
-let removeErrorMsg = document.getElementById('remove-error-msg');
-// Small Calculations
-//let wordCount = document.getElementById('word-count');
-//let commentCount = document.getElementById('comment-count');
-//let wordsPerComment = document.getElementById('words-per-comment');
-// Stat Calculation Inputs
-let currentStats = document.getElementById('current-stats');
-let baseLevel = document.getElementById('base-level');
-let maxStatsLabelNew = document.getElementById('max-stats-label-new');
-let maxStats = document.getElementById('max-stats');
-// Results
-let score = document.getElementById('score');
-let manualScore = document.getElementById('manual-score');
-let earnedStats = document.getElementById('earned-stats');
-let earnedSplit = document.getElementById('earned-split');
-let newStats = document.getElementById('new-stats');
-// Calculate Button
-let calcBtn = document.getElementById('calc-btn');
-// Max Error Message
-let maxErrorMsg = document.getElementById('max-error-msg');
-// Stats Error Message
-let statsErrorMsg = document.getElementById('stats-error-msg');
-// Username Header
-let usernameHeader = document.getElementById('username-header');
+// Link input
+let countBtn = document.getElementById('count-btn');
+// Thread Error Msg
+let threadErrorMsg = document.getElementById('thread-error-msg')
 // Posts Column
-let postsCol = document.getElementById('posts-col');
-//Participants Column
-let partCol = document.getElementById('participant-col');
+let postsCol = document.getElementById('thread-posts-col');
+// Total Word Count
+let totalWordCount = document.getElementById('word-count');
+// Total Comment Count
+let totalCommentCount = document.getElementById('comment-count');
+//Participants Table
+let participantsTable = document.getElementById('participants-table');
 // Global Variables
-const QUERY_LIMIT = 50;
-let processingComments = false;
-let filteringComments = false;
-let filterIndex = 0;
-let tempWordCount = 0;
-let tempCommentCount = 0;
-let commentsLoaded = 0;
-let commentsRemoved = false;
 let posts = [];
-let sans={"NPC-senpai":1,"NPC-san":2,"Rewards-san":3,"Stats-san":4,"Shoppe-san":5,"DavyJones-san":6,"Newscoo-san":7};
-    
-calcBtn.addEventListener('click', () => {
-    checkThread(document.getElementById("Link").value);
-});
+let filteredAccounts = ["npc-senpai", "npc-san", "rewards-san", "stats-san", "shoppe-san", "davyjones-san", "newscoo-san", "tempnpc", "[deleted]"]
 let thread = {}
-let fakeElement = document.createElement('p');
+    
+countBtn.addEventListener('click', () => {
+    checkThread(document.getElementById("thread-input").value);
+});
+
 // Take a link to a thread and count the number of words total in the thread    
 function checkThread(link) {
-    calcBtn.disabled=true;
+    countBtn.disabled=true;
     thread = {
         link: "",
         words: 0,
@@ -72,10 +31,14 @@ function checkThread(link) {
         posts: []
     }
     thread.link = link + ".json";
+
+    totalWordCount.textContent = "0";
+    totalCommentCount.textContent = "0";
+    participantsTable.children[1].innerHTML = "";
     
-    query(thread.link, fakeElement, fakeElement, processThread);
+    query(thread.link, countBtn, threadErrorMsg, processThread);
 }
-function query(url = '', btnElement, errorMsgElement, callback) {
+function query(url, btnElement, errorMsgElement, callback) {
     errorMsgElement.classList.remove('show');
 
     let request = new XMLHttpRequest();
@@ -95,7 +58,16 @@ function query(url = '', btnElement, errorMsgElement, callback) {
 
     request.onreadystatechange = function() {
         if (request.readyState == XMLHttpRequest.DONE) {
-            let response = JSON.parse(request.response);
+            let response = {};
+            try {
+                response = JSON.parse(request.response);
+            } catch (e) {
+                if (e instanceof SyntaxError) {
+                    logError(errorMsgElement, e);
+                    btnElement.disabled = false;
+                    return false;
+                }
+            }
             //console.log(request);
             if (response.error) {
                 logError(errorMsgElement, `Error Querying - ${response.error}: ${response.message}`);
@@ -125,10 +97,11 @@ function processThread(response) {
     thread.posts.push(post);
 
     thread.comments++;
+    totalCommentCount.textContent = parseInt(totalCommentCount.textContent) + 1;
     
     if (comment.replies !== "") {
         let url = "https://api.reddit.com" + comment.replies.data.children[0].data.permalink + ".json";
-        query(url, fakeElement, fakeElement, processThread);
+        query(url, countBtn, threadErrorMsg, processThread);
     } else {
         countThread();
     }
@@ -141,7 +114,7 @@ function countThread() {
         let commentElements = Array.from(thread.posts[i].html.children[0].children);
         let author = thread.posts[i].author;
         for (let element in commentElements) {
-            
+            let tempWords = 0;
             // Check each element and only count the words within
             // the element if it isn't a blockquote, table, or list
             if (commentElements[element].tagName.toLowerCase() != 'blockquote' &&
@@ -150,27 +123,28 @@ function countThread() {
                 commentElements[element].tagName.toLowerCase() != 'ul' &&
                 commentElements[element].tagName.toLowerCase() != 'ol')
             {
-                let tempWords = countWords(commentElements[element].textContent);
+                tempWords = countWords(commentElements[element].textContent);
                 thread.words += tempWords;
-                
-                if (author in thread.participants) {
-                    thread.participants[author].words += tempWords;
-                } else {
-                    thread.participants[author] = {};
-                    thread.participants[author].name = author;
-                    thread.participants[author].words = tempWords;
-                    thread.participants[author].comments = 0;
+            }
 
+            if (author in thread.participants) {
+                thread.participants[author].words += tempWords;
+            } else {
+                //thread.participants[author] = {};
+                //thread.participants[author].name = author;
+                //thread.participants[author].words = tempWords;
+                //thread.participants[author].comments = 0;
+                thread.participants[author] = {
+                    name: author,
+                    words: tempWords,
+                    comments: 0
                 }
+
             }
         }
-        if(thread.participants[author])
-        {
-            thread.participants[author].comments += 1;
-        }
+        thread.participants[author].comments++;
     }
     
-    console.log("Thread processed!");
     display();
 }
 function countWords(str) {
@@ -220,77 +194,51 @@ function display() {
         postsCol.appendChild(commentDiv);
     }
 
-    // Delete all Participants from webpage to make room for the new ones
-    while (partCol.lastChild.id !== 'participants-header') {
-        partCol.removeChild(partCol.lastChild);
-    }
     // Iterate through Participants
-    for(i in thread.participants) {
-        let participantDiv = document.createElement('div');
-        participantDiv.classList.add('participant');
+    for(p in thread.participants) {
+        let row = document.createElement('tr');
+        let nameCell = document.createElement('td');
+        let wordCell = document.createElement('td');
+        let commentCell = document.createElement('td');
+        let checkCell = document.createElement('td');
 
-        let linebreak1=document.createElement("BR");
-        let linebreak2=document.createElement("BR");
-        let participantName = document.createElement('h3');
-        participantName.classList.add('participant-name');
-        participantName.innerHTML=`Participant`;
-        participantName.innerHTML = `<a href="https://www.reddit.com/user/${thread.participants[i].name}">${thread.participants[i].name}: `;
-        participantDiv.appendChild(participantName);
-        
-        let participantWordCount = document.createElement('input');
-        participantWordCount.setAttribute('type','number');
-        participantWordCount.classList.add('participant-word-count');
-        participantWordCount.setAttribute('disabled','false');
-        participantWordCount.setAttribute('value',thread.participants[i].words);
-        let participantWordCountLabel = document.createElement('label');
-        participantWordCountLabel.innerHTML=`Words`;
-        participantDiv.appendChild(participantWordCount);
-        participantDiv.appendChild(participantWordCountLabel)
-        participantDiv.appendChild(linebreak1);
+        nameCell.appendChild(document.createTextNode(thread.participants[p].name));
+        wordCell.appendChild(document.createTextNode(thread.participants[p].words));
+        commentCell.appendChild(document.createTextNode(thread.participants[p].comments));
 
-        let participantCommentCount = document.createElement('input');
-        participantCommentCount.setAttribute('type','number');
-        participantCommentCount.classList.add('participant-comment-count');
-        participantCommentCount.setAttribute('disabled','false');
-        participantCommentCount.setAttribute('value',thread.participants[i].comments);
-        let participantCommentCountLabel = document.createElement('label');
-        participantCommentCountLabel.innerHTML=`Comments`;
-        participantDiv.appendChild(participantCommentCount);
-        participantDiv.appendChild(participantCommentCountLabel);
-        participantDiv.appendChild(linebreak2);
+        let checkBox = document.createElement('input');
+        checkBox.setAttribute('type', 'checkbox');
+        if (filteredAccounts.indexOf(thread.participants[p].name.toLowerCase()) === -1) {
+            checkBox.checked = true;
+        }
 
-        
-        let participantCheck = document.createElement('input');
-        participantCheck.classList.add('participant-checkbox')
-        participantCheck.setAttribute('type','checkbox');
-        if(thread.participants[i].name in sans)
-        {participantCheck.setAttribute('unchecked','true');}
-        else
-            {
-                participantCheck.setAttribute('checked','true');
-            }
-        participantCheck.addEventListener('change', () => {
-    displayResults();;
-});
-        participantDiv.appendChild(participantCheck);
-        
-        partCol.appendChild(participantDiv);
+        checkBox.addEventListener('change', displayResults);
+
+        checkCell.appendChild(checkBox);
+
+        row.appendChild(nameCell);
+        row.appendChild(wordCell);
+        row.appendChild(commentCell);
+        row.appendChild(checkCell);
+
+       participantsTable.children[1].appendChild(row);
     }
+
     displayResults();
 }
+
 function displayResults() {
-    calcBtn.disabled=true;
-    let totalWC=0
-    let parArray=document.getElementsByClassName("participant"); //Array of All Participants
-    for (i=0;i<parArray.length;i++)
-        {
-            if(parArray[i].getElementsByClassName("participant-checkbox")[0].checked==true)
-                {
-                    totalWC+=parArray[i].getElementsByClassName("participant-word-count")[0].valueAsNumber;                
-                }
+    countBtn.disabled=true;
+    let totalWC = 0
+
+    let tableData = participantsTable.children[1].children;
+    // For participant in tableData
+    for (let p = 0; p < tableData.length; p++) {
+        if(tableData[p].children[3].children[0].checked === true) {
+            totalWC += parseInt(tableData[p].children[1].textContent);
         }
-    newStats.textContent=totalWC;
-    calcBtn.disabled=false;
+    }
+    
+    totalWordCount.textContent=totalWC;
+    countBtn.disabled=false;
 }
-
-

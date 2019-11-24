@@ -5,67 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="assets/css/main.css">
-    <title>StrawHatRPG Tools</title>
+    <link rel="stylesheet" href="css/Count.css">
+    <title>SHRPG: Word Counter</title>
 </head>
 <body>
-    <div id="filters-col">
+    <div id="controls-col">
         <div id="controls">
             <h1 class="col-headers">StrawHatRPG Word Count Tools</h1>
-            <!-- Posts Collector Inputs -->
-            <ul id="posts-inputs-list">
-                <li>
-                    <label class="link">Thread Link</label>
-                    <input type="text" placeholder="Link" class="Link" id="Link" autocomplete="off">
-                </li>
 
-            </ul>
+            <!-- Thread Input -->
+            <p id="thread-input-text">Thread Link</p>
+            <input type="text" placeholder="Link" id="thread-input" autocomplete="off">
             
-            <p id="fetch-error-msg" class="error-msg"></p>
+            <p id="thread-error-msg" class="error-msg"></p>
 
-            <p id="remove-error-msg" class="error-msg"></p>
-
-            <!-- Stat Calculations -->
-            <!--
-            <ul id="calcs-list">
-                <li>
-                    <p class="word-count"><span id="word-count">0</span> words counted</p>
-                </li>
-
-                <li>
-                    <p class="comment-count"><span id="comment-count">0</span> comments loaded</p>
-                </li>
-
-                <li>
-                    <p class="words-per-comment">Average of <span id="words-per-comment">0</span> words per comment</p>
-                </li>
-            </ul>
-            -->
-
-            <!-- Stat Calculation Inputs -->
+            <button id="count-btn">Count</button>
 
             <!-- Results -->
-            <ul id="participant-col">
-            <h2 id="participants-header">Participants</h2>
-                
-            </ul>
-            <ul id="results-list">
+            <h2>Results</h2>
+            <ul id="total-results">
                 <li>
                     <p>
                         Total Word Count
-                        <span id="new-stats">0</span>
+                        <span id="word-count">0</span>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Total Comment Count
+                        <span id="comment-count">0</span>
                     </p>
                 </li>
             </ul>
-            
-            <button id="calc-btn">Count</button>
 
-            <p id="max-error-msg" class="error-msg"></p>
-            <p id="stats-error-msg" class="error-msg"></p>
-            
+            <table id="participants-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Words</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>           
         </div>
     </div>
 
-    <div id="posts-col">
+    <div id="thread-posts-col">
         <h1 class="col-headers" id="posts-col-header">Thread Comments</h1>
 
         <!-- Comments Go Here-->

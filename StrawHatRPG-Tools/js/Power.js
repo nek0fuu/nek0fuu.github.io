@@ -22,6 +22,7 @@ function mainCalcFunction()
     var DFCheck=document.getElementById("DFCheck").checked;
     var UACheck=document.getElementById("UACheck").checked;
     var NACheck=document.getElementById("NACheck").checked;
+    var PowCheck=document.getElementById("PowCheck").checked;
     var strReq,spdReq,dexReq,willReq,meitoReq;
     var attackMult,slashMult,gradeMult,slashPower,attackPower,attackResult,slashResult,threshold;
     var strFactor=1.5;
@@ -113,57 +114,64 @@ function mainCalcFunction()
                             {
                                 if(slashLevel==1)
                                     {
-                                        if((slashPower>160)&&(meitoGrade>=1))
+                                        if((slashPower>180)&&(meitoGrade>=1))
                                             {
-                                                slashPower=160+(slashPower-160)/2;
+                                                slashPower=180+(slashPower-180)/2;
                                             }
-                                        else if(slashPower>160)
+                                        else if(slashPower>180)
                                             {
-                                                slashPower=160;
+                                                slashPower=180;
                                             }
                                     }
-                                if((slashPower>205)&&(meitoGrade>=1))
+                                if((slashPower>230)&&(meitoGrade>=1))
                                     {
-                                        slashPower=205+(slashPower-205)/2;
+                                        slashPower=230+(slashPower-230)/2;
                                     }
-                                else if(slashPower>205)
+                                else if(slashPower>230)
                                     {
-                                        slashPower=205;
+                                        slashPower=230;
                                     }
                             }
-                        if((slashPower>250)&&(meitoGrade>=1))
+                        if((slashPower>280)&&(meitoGrade>=1))
                             {
-                                slashPower=250+(slashPower-250)/2;
+                                slashPower=280+(slashPower-280)/2;
                             }
-                        else if(slashPower>250)
+                        else if(slashPower>280)
                             {
-                                slashPower=250;
+                                slashPower=280;
                             }
                     }
-                    if((slashPower>380)&&(meitoGrade>=2))
+                    if((slashPower>430)&&(meitoGrade>=2))
                         {
-                            slashPower=380+(slashPower-380)/2;
+                            slashPower=430+(slashPower-430)/2;
                         }
-                    else if(slashPower>380)
+                    else if(slashPower>430)
                         {
-                            slashPower=380;
+                            slashPower=430;
                         }
                 }
-            if((slashPower>685)&&(meitoGrade==4))
+            if((slashPower>790)&&(meitoGrade==4))
                 {
-                    slashPower=685+(slashPower-685)/2;
+                    slashPower=790+(slashPower-790)/2;
                 }
             else if (meitoGrade==4)
                 {
-                    //Do nothing if its a Saijo and its lower than 685
+                    //Do nothing if its a Saijo and its lower than 790
                 }
-            else if((slashPower>560)&&(meitoGrade>=3))
+            else if((slashPower>640)&&(meitoGrade>=3))
                 {
-                    slashPower=560+(slashPower-560)/2;
+                    slashPower=620+(slashPower-640)/2;
                 }
-            else if(slashPower>560)
+            else if(slashPower>640)
                 {
-                    slashPower=560;
+                    slashPower=640;
+                }
+        }
+    if(slashLevel==0)
+        {
+            if(slashPower>745) //Arbitrary Threshold to control number inflation
+                {
+                    slashPower=745+(slashPower-745)/2;
                 }
         }
     if((attackLevel!=0)&&(attackLevel<=5))
@@ -176,45 +184,57 @@ function mainCalcFunction()
                                 {
                                     if(attackLevel==1)
                                         {
-                                            if(attackPower>160)
+                                            if(attackPower>180)
                                                 {
-                                                    attackPower=160;
+                                                    attackPower=180;
                                                 }
                                         }
-                                    if(attackPower>205)
+                                    if(attackPower>230)
                                         {
-                                            attackPower=205;
+                                            attackPower=230;
                                         }
                                 }
-                            if(attackPower>250)
+                            if(attackPower>280)
                                 {
-                                    attackPower=250;
+                                    attackPower=280;
                                 }
                         }
-                    if(attackPower>315)
+                    if(attackPower>355)
                         {
-                            attackPower=315;
+                            attackPower=355;
                         }
                 }
-            if(attackPower>380)
+            if(attackPower>430)
                 {
-                    attackPower=380;
+                    attackPower=430;
                 }
             
+        }
+    if(attackLevel==0)
+        {
+            if(attackPower>745)  //Arbitrary Threshold to control number inflation
+                {
+                    attackPower=745+(attackPower-745)/2;
+                }
+        }
+    if(PowCheck)
+        {
+            attackPower*=1.20;
+            slashPower*=1.20;
         }
     
     powerScale=
     {
-        560:"2Diamond",
-        470:"1Diamond",
-        380:"2Titanium",
-        315:"1Titanium",
-        250:"2Steel",
-        205:"1Steel",
-        160:"2Iron",
-        130:"1Iron",
-        100:"2Bronze",
-        80:"1Bronze",
+        640:"2Diamond",
+        535:"1Diamond",
+        430:"2Titanium",
+        355:"1Titanium",
+        280:"2Steel",
+        230:"1Steel",
+        180:"2Iron",
+        145:"1Iron",
+        110:"2Bronze",
+        85:"1Bronze",
         60:"2Stone",
         45:"1Stone",
         30:"2Bone",

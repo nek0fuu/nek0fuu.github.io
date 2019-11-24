@@ -151,15 +151,23 @@ function mainCalcFunction()
     document.getElementById("spdStancesLossIPF").disabled=false;  //Manually Re-enable Stat Loss Fields for physicals, not dex cause duh
     if(!strongWill)
         {
+            document.getElementById("dexStancesIPF").value=0;
+            document.getElementById("dexStancesLossIPF").value=0;
+            stancedexBoost=0;
+            stancedexLoss=0;
+            document.getElementById("dexStancesIPF").disabled=true;
+            document.getElementById("dexStancesLossIPF").disabled=true; 
             document.getElementById("willStancesIPF").value=0;
             document.getElementById("willStancesLossIPF").value=0;
             stancewillBoost=0;
             stancewillLoss=0;
             document.getElementById("willStancesIPF").disabled=true;
-            document.getElementById("willStancesLossIPF").disabled=true; //Disable Will from Stances by default
+            document.getElementById("willStancesLossIPF").disabled=true; //Disable Mental from Stances by default
         }
     else
         {
+            document.getElementById("dexStancesIPF").disabled=false;
+            document.getElementById("dexStancesLossIPF").disabled=false;
             document.getElementById("willStancesIPF").disabled=false;
             document.getElementById("willStancesLossIPF").disabled=false;
         }
