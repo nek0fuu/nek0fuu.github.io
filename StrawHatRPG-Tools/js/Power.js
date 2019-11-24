@@ -49,30 +49,22 @@ function mainCalcFunction()
     switch(attackLevel)
         {
             case '0':attackMult=0.95;strReq=0;spdReq=0;break;
-            case '1':attackMult=0.445;strReq=50;spdReq=50;break;
-            case '2':attackMult=0.545;strReq=90;spdReq=60;break;
-            case '3':attackMult=0.645;strReq=130;spdReq=70;break;
-            case '4':attackMult=0.745;strReq=170;spdReq=80;break;
-            case '5':attackMult=0.845;strReq=210;spdReq=90;break;
+            case '1':attackMult=0.600;strReq=50;spdReq=50;break;
+            case '2':attackMult=0.650;strReq=90;spdReq=60;break;
+            case '3':attackMult=0.700;strReq=130;spdReq=70;break;
+            case '4':attackMult=0.750;strReq=170;spdReq=80;break;
+            case '5':attackMult=0.800;strReq=210;spdReq=90;break;
         }
     switch(slashLevel)
         {
             case '0':slashMult=1.00;dexReq=0;meitoReq=0;break;
-            case '1':slashMult=0.5;dexReq=50;meitoReq=0;break;
-            case '2':slashMult=0.6;dexReq=75;meitoReq=1;break;
-            case '3':slashMult=0.7;dexReq=100;meitoReq=1;break;
-            case '4':slashMult=0.8;dexReq=125;meitoReq=2;break;
-            case '5':slashMult=0.9;dexReq=150;meitoReq=3;break;
+            case '1':slashMult=0.700;dexReq=50;meitoReq=0;break;
+            case '2':slashMult=0.750;dexReq=75;meitoReq=1;break;
+            case '3':slashMult=0.800;dexReq=100;meitoReq=1;break;
+            case '4':slashMult=0.850;dexReq=125;meitoReq=2;break;
+            case '5':slashMult=0.900;dexReq=150;meitoReq=3;break;
             
             default:slashMult=0;dexReq=0;break;
-        }
-    if((DFCheck)&&(slashLevel>0))
-        {
-            slashMult-=0.05;
-        }
-    if((UACheck)&&(slashLevel>0))
-        {
-            slashMult-=0.0375;
         }
     willReq=dexReq;
     
@@ -103,6 +95,14 @@ function mainCalcFunction()
         }
     attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/4*attackMult;
     slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/4*slashMult*gradeMult;
+    if((DFCheck)&&(slashLevel>0))
+        {
+            slashPower*=0.90;
+        }
+    if((UACheck)&&(slashLevel>0))
+        {
+            slashPower*=0.925;
+        }
         /*if(PowCheck)
         {
             attackPower*=1.20;
@@ -121,43 +121,43 @@ function mainCalcFunction()
                                     {
                                         if((slashPower>160)&&(meitoGrade>=1))
                                             {
-                                                slashPower=160+(slashPower-160)/2;
+                                                slashPower=160+(slashPower-160)*.35;
                                             }
                                         else if(slashPower>160)
                                             {
-                                                slashPower=160+(slashPower-160)/3;
+                                                slashPower=160+(slashPower-160)*.1;
                                             }
                                     }
                                 if((slashPower>205)&&(meitoGrade>=1))
                                     {
-                                        slashPower=205+(slashPower-205)/2;
+                                        slashPower=205+(slashPower-205)*.35;
                                     }
                                 else if(slashPower>205)
                                     {
-                                        slashPower=205;
+                                        slashPower=205+(slashPower-205)*.1;
                                     }
                             }
                         if((slashPower>250)&&(meitoGrade>=1))
                             {
-                                slashPower=250+(slashPower-250)/2;
+                                slashPower=250+(slashPower-250)*.35;
                             }
                         else if(slashPower>250)
                             {
-                                slashPower=250+(slashPower-250)/3;
+                                slashPower=250+(slashPower-250)*.1;
                             }
                     }
                     if((slashPower>380)&&(meitoGrade>=2))
                         {
-                            slashPower=380+(slashPower-380)/2;
+                            slashPower=380+(slashPower-380)*.35;
                         }
                     else if(slashPower>380)
                         {
-                            slashPower=380+(slashPower-380)/3;
+                            slashPower=380+(slashPower-380)*.1;
                         }
                 }
             if((slashPower>660)&&(meitoGrade==4))
                 {
-                    slashPower=660+(slashPower-660)/2;
+                    slashPower=660+(slashPower-660)*.35;
                 }
             else if (meitoGrade==4)
                 {
@@ -165,18 +165,18 @@ function mainCalcFunction()
                 }
             else if((slashPower>560)&&(meitoGrade>=3))
                 {
-                    slashPower=560+(slashPower-560)/2;
+                    slashPower=560+(slashPower-560)*.35;
                 }
             else if(slashPower>560)
                 {
-                    slashPower=560+(slashPower-560)/3;
+                    slashPower=560+(slashPower-560)*.1;
                 }
         }
     if(slashLevel==0)
         {
             if(slashPower>680) //Arbitrary Threshold to control number inflation
                 {
-                    slashPower=680+(slashPower-680)/1.5;
+                    slashPower=680+(slashPower-680)*.5;
                 }
         }
     if((attackLevel!=0)&&(attackLevel<=5))
@@ -191,27 +191,27 @@ function mainCalcFunction()
                                         {
                                             if(attackPower>160)
                                                 {
-                                                    attackPower=160+(attackPower-160)/3;
+                                                    attackPower=160+(attackPower-160)*.1;
                                                 }
                                         }
                                     if(attackPower>205)
                                         {
-                                            attackPower=205+(attackPower-205)/3;
+                                            attackPower=205+(attackPower-205)*.1;
                                         }
                                 }
                             if(attackPower>250)
                                 {
-                                    attackPower=250+(attackPower-250)/3;
+                                    attackPower=250+(attackPower-250)*.1;
                                 }
                         }
                     if(attackPower>315)
                         {
-                            attackPower=315+(attackPower-315)/3;
+                            attackPower=315+(attackPower-315)*.1;
                         }
                 }
             if(attackPower>380)
                 {
-                    attackPower=380+(attackPower-380)/3;
+                    attackPower=380+(attackPower-380)*.1;
                 }
             
         }
@@ -219,7 +219,7 @@ function mainCalcFunction()
         {
             if(attackPower>680)  //Arbitrary Threshold to control number inflation
                 {
-                    attackPower=680+(attackPower-680)/1.5;
+                    attackPower=680+(attackPower-680)*.5;
                 }
         }
     
@@ -231,7 +231,7 @@ function mainCalcFunction()
         315:"1Titanium",
         250:"2Steel",
         205:"1Steel",
-        150:"2Iron",
+        160:"2Iron",
         130:"1Iron",
         100:"2Bronze",
         80:"1Bronze",
