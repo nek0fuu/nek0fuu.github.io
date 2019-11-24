@@ -22,7 +22,7 @@ function mainCalcFunction()
     var DFCheck=document.getElementById("DFCheck").checked;
     var UACheck=document.getElementById("UACheck").checked;
     var NACheck=document.getElementById("NACheck").checked;
-    var PowCheck=document.getElementById("PowCheck").checked;
+    //var PowCheck=document.getElementById("PowCheck").checked;
     var strReq,spdReq,dexReq,willReq,meitoReq;
     var attackMult,slashMult,gradeMult,slashPower,attackPower,attackResult,slashResult,threshold;
     var strFactor=1.5;
@@ -49,11 +49,11 @@ function mainCalcFunction()
     switch(attackLevel)
         {
             case '0':attackMult=0.95;strReq=0;spdReq=0;break;
-            case '1':attackMult=0.225;strReq=50;spdReq=50;break;
-            case '2':attackMult=0.350;strReq=90;spdReq=60;break;
-            case '3':attackMult=0.475;strReq=130;spdReq=70;break;
-            case '4':attackMult=0.600;strReq=170;spdReq=80;break;
-            case '5':attackMult=0.725;strReq=210;spdReq=90;break;
+            case '1':attackMult=0.30;strReq=50;spdReq=50;break;
+            case '2':attackMult=0.43;strReq=90;spdReq=60;break;
+            case '3':attackMult=0.56;strReq=130;spdReq=70;break;
+            case '4':attackMult=0.69;strReq=170;spdReq=80;break;
+            case '5':attackMult=0.82;strReq=210;spdReq=90;break;
         }
     switch(slashLevel)
         {
@@ -103,11 +103,11 @@ function mainCalcFunction()
         }
     attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/4*attackMult;
     slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/4*slashMult*gradeMult;
-        if(PowCheck)
+        /*if(PowCheck)
         {
             attackPower*=1.20;
             slashPower*=1.20;
-        }
+        }*/
     
     if((slashLevel!=0)&&(slashLevel<=5))
         {
@@ -119,64 +119,64 @@ function mainCalcFunction()
                             {
                                 if(slashLevel==1)
                                     {
-                                        if((slashPower>180)&&(meitoGrade>=1))
+                                        if((slashPower>160)&&(meitoGrade>=1))
                                             {
-                                                slashPower=180+(slashPower-180)/2;
+                                                slashPower=160+(slashPower-160)/2;
                                             }
-                                        else if(slashPower>180)
+                                        else if(slashPower>160)
                                             {
-                                                slashPower=180;
+                                                slashPower=160+(slashPower-160)/3;
                                             }
                                     }
-                                if((slashPower>230)&&(meitoGrade>=1))
+                                if((slashPower>205)&&(meitoGrade>=1))
                                     {
-                                        slashPower=230+(slashPower-230)/2;
+                                        slashPower=205+(slashPower-205)/2;
                                     }
-                                else if(slashPower>230)
+                                else if(slashPower>205)
                                     {
-                                        slashPower=230;
+                                        slashPower=205;
                                     }
                             }
-                        if((slashPower>280)&&(meitoGrade>=1))
+                        if((slashPower>250)&&(meitoGrade>=1))
                             {
-                                slashPower=280+(slashPower-280)/2;
+                                slashPower=250+(slashPower-250)/2;
                             }
-                        else if(slashPower>280)
+                        else if(slashPower>250)
                             {
-                                slashPower=280;
+                                slashPower=250+(slashPower-250)/3;
                             }
                     }
-                    if((slashPower>430)&&(meitoGrade>=2))
+                    if((slashPower>380)&&(meitoGrade>=2))
                         {
-                            slashPower=430+(slashPower-430)/2;
+                            slashPower=380+(slashPower-380)/2;
                         }
-                    else if(slashPower>430)
+                    else if(slashPower>380)
                         {
-                            slashPower=430;
+                            slashPower=380+(slashPower-380)/3;
                         }
                 }
-            if((slashPower>790)&&(meitoGrade==4))
+            if((slashPower>660)&&(meitoGrade==4))
                 {
-                    slashPower=790+(slashPower-790)/2;
+                    slashPower=660+(slashPower-660)/2;
                 }
             else if (meitoGrade==4)
                 {
-                    //Do nothing if its a Saijo and its lower than 790
+                    //Do nothing if its a Saijo and its lower than 660
                 }
-            else if((slashPower>640)&&(meitoGrade>=3))
+            else if((slashPower>560)&&(meitoGrade>=3))
                 {
-                    slashPower=620+(slashPower-640)/2;
+                    slashPower=560+(slashPower-560)/2;
                 }
-            else if(slashPower>640)
+            else if(slashPower>560)
                 {
-                    slashPower=640;
+                    slashPower=560+(slashPower-560)/3;
                 }
         }
     if(slashLevel==0)
         {
-            if(slashPower>745) //Arbitrary Threshold to control number inflation
+            if(slashPower>680) //Arbitrary Threshold to control number inflation
                 {
-                    slashPower=745+(slashPower-745)/1.5;
+                    slashPower=680+(slashPower-680)/1.5;
                 }
         }
     if((attackLevel!=0)&&(attackLevel<=5))
@@ -189,52 +189,52 @@ function mainCalcFunction()
                                 {
                                     if(attackLevel==1)
                                         {
-                                            if(attackPower>180)
+                                            if(attackPower>160)
                                                 {
-                                                    attackPower=180+(attackPower-180)/3;
+                                                    attackPower=160+(attackPower-160)/3;
                                                 }
                                         }
-                                    if(attackPower>230)
+                                    if(attackPower>205)
                                         {
-                                            attackPower=230+(attackPower-230)/3;
+                                            attackPower=205+(attackPower-205)/3;
                                         }
                                 }
-                            if(attackPower>280)
+                            if(attackPower>250)
                                 {
-                                    attackPower=280+(attackPower-280)/3;
+                                    attackPower=250+(attackPower-250)/3;
                                 }
                         }
-                    if(attackPower>355)
+                    if(attackPower>315)
                         {
-                            attackPower=355+(attackPower-355)/3;
+                            attackPower=315+(attackPower-315)/3;
                         }
                 }
-            if(attackPower>430)
+            if(attackPower>380)
                 {
-                    attackPower=430+(attackPower-430)/3;
+                    attackPower=380+(attackPower-380)/3;
                 }
             
         }
     if(attackLevel==0)
         {
-            if(attackPower>745)  //Arbitrary Threshold to control number inflation
+            if(attackPower>680)  //Arbitrary Threshold to control number inflation
                 {
-                    attackPower=745+(attackPower-745)/1.5;
+                    attackPower=680+(attackPower-680)/1.5;
                 }
         }
     
     powerScale=
     {
-        640:"2Diamond",
-        535:"1Diamond",
-        430:"2Titanium",
-        355:"1Titanium",
-        280:"2Steel",
-        230:"1Steel",
-        180:"2Iron",
-        145:"1Iron",
-        110:"2Bronze",
-        85:"1Bronze",
+        560:"2Diamond",
+        470:"1Diamond",
+        380:"2Titanium",
+        315:"1Titanium",
+        250:"2Steel",
+        205:"1Steel",
+        150:"2Iron",
+        130:"1Iron",
+        100:"2Bronze",
+        80:"1Bronze",
         60:"2Stone",
         45:"1Stone",
         30:"2Bone",
