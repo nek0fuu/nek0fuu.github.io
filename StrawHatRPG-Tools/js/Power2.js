@@ -197,9 +197,9 @@ function mainCalcFunction()
                 {
                     //Do nothing if its a Saijo and its lower than max
                 }
-            else if((slashPower>560)&&(meitoGrade>=3))
+            else if((slashPower>dia2)&&(meitoGrade>=3))
                 {
-                    slashPower=560+(slashPower-560)*overflow;
+                    slashPower=dia2+(slashPower-dia2)*overflow;
                 }
             else if(slashPower>dia2)
                 {
@@ -208,7 +208,15 @@ function mainCalcFunction()
         }
     if(slashLevel==0)
         {
-            if(slashPower>dia2)
+            if((slashPower>max)&&(meitoGrade==4))
+                {
+                    slashPower=max+(slashPower-max)*overflow;
+                }
+            else if (meitoGrade==4)
+                {
+                    //Do nothing if its a Saijo and its lower than max
+                }
+            else if(slashPower>dia2)
                 {
                     slashPower=dia2+(slashPower-dia2)*overflow;
                 }
