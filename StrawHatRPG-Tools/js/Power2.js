@@ -1,3 +1,5 @@
+/* Difference from the new calculator 1: Reduce Meito Importance: Boosts from 10/20/30/45>7.5/15/22.5/35. For normal slashes Meito boost is halved May make Meito too weak tho. Test the numbers*/
+
 window.onload=function(){
     mainCalcFunction();
 }
@@ -66,10 +68,10 @@ function mainCalcFunction()
             
             default:slashMult=0;dexReq=0;break;
         }
-    /*if(slashLevel==0)
+    if(slashLevel==0)
         {
             gradeMult=(gradeMult-1)/2+1;
-        }*/
+        }
     willReq=dexReq;
     
     if(basestr<strReq)
@@ -178,9 +180,9 @@ function mainCalcFunction()
         }
     if(slashLevel==0)
         {
-            if(slashPower>740)
+            if(slashPower>560)
                 {
-                    slashPower=740+(slashPower-740)*.35;
+                    slashPower=560+(slashPower-560)*.35;
                 }
         }
     if((attackLevel!=0)&&(attackLevel<=5))
@@ -221,9 +223,9 @@ function mainCalcFunction()
         }
     if(attackLevel==0)
         {
-            if(attackPower>740)  
+            if(attackPower>560)  
                 {
-                    attackPower=740+(attackPower-740)*.35;
+                    attackPower=560+(attackPower-560)*.35;
                 }
         }
     
