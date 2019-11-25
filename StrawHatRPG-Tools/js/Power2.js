@@ -15,9 +15,9 @@ window.onload=function(){
 
 function mainCalcFunction()
 {
-    var max=650;
-    var dia2=560;
-    var dia1=470;
+    var max=665;
+    var dia2=570;
+    var dia1=475;
     var tit2=380;
     var tit1=315;
     var ste2=250;
