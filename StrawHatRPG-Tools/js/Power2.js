@@ -34,6 +34,7 @@ function mainCalcFunction()
     var woo2=10;
     var woo1=10;
     var overflow=.4;
+    var sloverflow=.2;
     var ipfields=document.getElementsByClassName("IP");
     for(var i=0;i<ipfields.length;i++)
         {
@@ -153,38 +154,38 @@ function mainCalcFunction()
                             {
                                 if(slashLevel==1)
                                     {
-                                        /*if((slashPower>iro2)&&(meitoGrade>=1))
+                                        if((slashPower>iro2)&&(meitoGrade>=1))
                                             {
-                                                slashPower=iro2+(slashPower-iro2)*overflow;
+                                                slashPower=iro2+(slashPower-iro2)*sloverflow;
                                             }
-                                        else*/ if(slashPower>iro2)
+                                        else if(slashPower>iro2)
                                             {
                                                 slashPower=iro2+(slashPower-iro2)*overflow;
                                             }
                                     }
-                                /*if((slashPower>ste1)&&(meitoGrade>=1))
+                                if((slashPower>ste1)&&(meitoGrade>=1))
                                     {
-                                        slashPower=ste1+(slashPower-ste1)*overflow;
+                                        slashPower=ste1+(slashPower-ste1)*sloverflow;
                                     }
-                                else*/ if(slashPower>ste1)
+                                else if(slashPower>ste1)
                                     {
                                         slashPower=ste1+(slashPower-ste1)*overflow;
                                     }
                             }
-                        /*if((slashPower>ste2)&&(meitoGrade>=1))
+                        if((slashPower>ste2)&&(meitoGrade>=1))
                             {
-                                slashPower=ste2+(slashPower-ste2)*overflow;
+                                slashPower=ste2+(slashPower-ste2)*sloverflow;
                             }
-                        else*/ if(slashPower>ste2)
+                        else if(slashPower>ste2)
                             {
                                 slashPower=ste2+(slashPower-ste2)*overflow;
                             }
                     }
-                    /*if((slashPower>tit2)&&(meitoGrade>=2))
+                    if((slashPower>tit2)&&(meitoGrade>=2))
                         {
-                            slashPower=tit2+(slashPower-tit2)*overflow;
+                            slashPower=tit2+(slashPower-tit2)*sloverflow;
                         }
-                    else*/ if(slashPower>tit2)
+                    else if(slashPower>tit2)
                         {
                             slashPower=tit2+(slashPower-tit2)*overflow;
                         }
@@ -195,15 +196,15 @@ function mainCalcFunction()
                 }
             else if (meitoGrade==4)
                 {
-                    //Do nothing if its a Saijo and its lower than 650
+                    //Do nothing if its a Saijo and its lower than max
                 }
-            /*else if((slashPower>560)&&(meitoGrade>=3))
+            else if((slashPower>560)&&(meitoGrade>=3))
                 {
                     slashPower=560+(slashPower-560)*overflow;
-                }*/
+                }
             else if(slashPower>dia2)
                 {
-                    slashPower=dia2+(slashPower-dia2)*overflow;
+                    slashPower=dia2+(slashPower-dia2)*sloverflow;
                 }
         }
     if(slashLevel==0)
@@ -225,27 +226,27 @@ function mainCalcFunction()
                                         {
                                             if(attackPower>iro2)
                                                 {
-                                                    attackPower=iro2+(attackPower-iro2)*overflow;
+                                                    attackPower=iro2+(attackPower-iro2)*sloverflow;
                                                 }
                                         }
                                     if(attackPower>ste1)
                                         {
-                                            attackPower=ste1+(attackPower-ste1)*overflow;
+                                            attackPower=ste1+(attackPower-ste1)*sloverflow;
                                         }
                                 }
                             if(attackPower>ste2)
                                 {
-                                    attackPower=ste2+(attackPower-ste2)*overflow;
+                                    attackPower=ste2+(attackPower-ste2)*sloverflow;
                                 }
                         }
                     if(attackPower>tit1)
                         {
-                            attackPower=tit1+(attackPower-tit1)*overflow;
+                            attackPower=tit1+(attackPower-tit1)*sloverflow;
                         }
                 }
             if(attackPower>tit2)
                 {
-                    attackPower=tit2+(attackPower-tit2)*overflow;
+                    attackPower=tit2+(attackPower-tit2)*sloverflow;
                 }
             
         }
