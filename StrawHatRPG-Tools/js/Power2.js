@@ -17,12 +17,12 @@ window.onload=function(){
 function mainCalcFunction()
 {
     var max=630;
-    var dia2=540;
-    var dia1=450;
-    var tit2=360;
-    var tit1=300;
-    var ste2=240;
-    var ste1=200;
+    var dia2=560;
+    var dia1=470;
+    var tit2=380;
+    var tit1=315;
+    var ste2=250;
+    var ste1=205;
     var iro2=160;
     var iro1=130;
     var bro2=100;
