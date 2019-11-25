@@ -1,5 +1,5 @@
 /*V1:
-Updated overflow 35% for all
+Updated overflow 35% for all,sloverflow 15%
 Increased str rate for waves and slashes
 In this version melee slashes are always stronger than any flying slash.
 Threshold on normal attacks is 740

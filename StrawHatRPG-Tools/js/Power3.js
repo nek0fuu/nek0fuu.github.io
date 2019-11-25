@@ -1,6 +1,6 @@
 /*V3:
 Updated material hardness scaling diamond upto 650
-Updated overflow 50% for all
+Updated overflow 50%, sloverflow 25%
 Increased str rate for waves and slashes
 Reduced Meito Bonuses from 10/20/30/45 to 5/10/15/25 or 7.5/15/22.5/35
 DF Reduction changed from -7.5%/-5% on multipliers to 90%/92.5% overall

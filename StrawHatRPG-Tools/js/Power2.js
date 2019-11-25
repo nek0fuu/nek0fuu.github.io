@@ -1,13 +1,12 @@
 /*V2:
-Updated overflow 40% for all
+Updated overflow 35%,sloverflow 15%
 Increased str rate for waves and slashes
-Spaced out str rate even further
-Meito only give half the boost on Normal Slashes
+Meito give less boost on Normal Slashes
 Reduced Meito boost from 10/20/30/45 to 7.5/15/22.5/35
 In this version flying slashes lvl 5 are always stronger than any melee slash.
 Threshold on normal attacks is dia2
 Compatible with the 12/01/2019 Patch (Progressive Stamina Costs)
-May Reduce material tiers to bring diamond lower(520,540 ot 560)
+May Reduce material tiers to bring diamond lower(520,540 ot 560) actually that's probably not necessary since FS5 is even stronger now
 */
 
 window.onload=function(){
@@ -33,8 +32,8 @@ function mainCalcFunction()
     var bon1=20;
     var woo2=10;
     var woo1=10;
-    var overflow=.4;
-    var sloverflow=.2;
+    var overflow=.3;
+    var sloverflow=.15;
     var ipfields=document.getElementsByClassName("IP");
     for(var i=0;i<ipfields.length;i++)
         {
