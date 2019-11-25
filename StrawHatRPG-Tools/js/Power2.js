@@ -78,21 +78,21 @@ function mainCalcFunction()
         }
     switch(attackLevel)
         {
-            case '0':attackMult=0.95;strReq=0;spdReq=0;break;
-            case '1':attackMult=0.32;strReq=50;spdReq=50;break;
-            case '2':attackMult=0.47;strReq=90;spdReq=60;break;
-            case '3':attackMult=0.62;strReq=130;spdReq=70;break;
-            case '4':attackMult=0.77;strReq=170;spdReq=80;break;
-            case '5':attackMult=0.92;strReq=210;spdReq=90;break;
+            case '0':attackMult=0.950;strReq=0;spdReq=0;break;
+            case '1':attackMult=0.250;strReq=50;spdReq=50;break;
+            case '2':attackMult=0.425;strReq=90;spdReq=60;break;
+            case '3':attackMult=0.600;strReq=130;spdReq=70;break;
+            case '4':attackMult=0.775;strReq=170;spdReq=80;break;
+            case '5':attackMult=0.950;strReq=210;spdReq=90;break;
         }
     switch(slashLevel)
         {
-            case '0':slashMult=1.00;dexReq=0;meitoReq=0;break;
-            case '1':slashMult=0.40;dexReq=50;meitoReq=0;break;
-            case '2':slashMult=0.55;dexReq=75;meitoReq=1;break;
-            case '3':slashMult=0.70;dexReq=100;meitoReq=1;break;
-            case '4':slashMult=0.85;dexReq=125;meitoReq=2;break;
-            case '5':slashMult=1.00;dexReq=150;meitoReq=3;break;
+            case '0':slashMult=1.000;dexReq=0;meitoReq=0;break;
+            case '1':slashMult=0.325;dexReq=50;meitoReq=0;break;
+            case '2':slashMult=0.500;dexReq=75;meitoReq=1;break;
+            case '3':slashMult=0.675;dexReq=100;meitoReq=1;break;
+            case '4':slashMult=0.850;dexReq=125;meitoReq=2;break;
+            case '5':slashMult=1.025;dexReq=150;meitoReq=3;break;
             
             default:slashMult=0;dexReq=0;break;
         }
