@@ -5,7 +5,7 @@ Increased str rate for waves and slashes
 Reduced Meito Bonuses from 10/20/30/45 to 5/10/15/25 or 7.5/15/22.5/35
 DF Reduction changed from -7.5%/-5% on multipliers to 90%/92.5% overall
 In this version melee slashes are always stronger than any flying slash.
-Threshold on normal attacks is 870
+Threshold on normal attacks is 760
 Compatible with the 12/01/2019 Patch (Power Attack)
 */
 
@@ -15,6 +15,24 @@ window.onload=function(){
 
 function mainCalcFunction()
 {
+    var max=760;
+    var dia2=650;
+    var dia1=540;
+    var tit2=430;
+    var tit1=355;
+    var ste2=280;
+    var ste1=230;
+    var iro2=180;
+    var iro1=145;
+    var bro2=110;
+    var bro1=85;
+    var sto2=60;
+    var sto1=45;
+    var bon2=30;
+    var bon1=20;
+    var woo2=10;
+    var woo1=10;
+    var overflow=.50;
     var ipfields=document.getElementsByClassName("IP");
     for(var i=0;i<ipfields.length;i++)
         {
@@ -124,7 +142,7 @@ function mainCalcFunction()
             slashPower*=1.20;
         }
     
-    if((slashLevel!=0)&&(slashLevel<=5))
+ if((slashLevel!=0)&&(slashLevel<=5))
         {
             if(slashLevel<=4)
                 {
@@ -134,45 +152,45 @@ function mainCalcFunction()
                             {
                                 if(slashLevel==1)
                                     {
-                                        /*if((slashPower>160)&&(meitoGrade>=1))
+                                        /*if((slashPower>iro2)&&(meitoGrade>=1))
                                             {
-                                                slashPower=160+(slashPower-160)*.5;
+                                                slashPower=iro2+(slashPower-iro2)*overflow;
                                             }
-                                        else*/ if(slashPower>180)
+                                        else*/ if(slashPower>iro2)
                                             {
-                                                slashPower=180+(slashPower-180)*.5;
+                                                slashPower=iro2+(slashPower-iro2)*overflow;
                                             }
                                     }
-                                /*if((slashPower>205)&&(meitoGrade>=1))
+                                /*if((slashPower>ste1)&&(meitoGrade>=1))
                                     {
-                                        slashPower=205+(slashPower-205)*.5;
+                                        slashPower=ste1+(slashPower-ste1)*overflow;
                                     }
-                                else*/ if(slashPower>230)
+                                else*/ if(slashPower>ste1)
                                     {
-                                        slashPower=230+(slashPower-230)*.5;
+                                        slashPower=ste1+(slashPower-ste1)*overflow;
                                     }
                             }
-                        /*if((slashPower>250)&&(meitoGrade>=1))
+                        /*if((slashPower>ste2)&&(meitoGrade>=1))
                             {
-                                slashPower=250+(slashPower-250)*.5;
+                                slashPower=ste2+(slashPower-ste2)*overflow;
                             }
-                        else*/ if(slashPower>280)
+                        else*/ if(slashPower>ste2)
                             {
-                                slashPower=280+(slashPower-280)*.5;
+                                slashPower=ste2+(slashPower-ste2)*overflow;
                             }
                     }
-                    /*if((slashPower>380)&&(meitoGrade>=2))
+                    /*if((slashPower>tit2)&&(meitoGrade>=2))
                         {
-                            slashPower=380+(slashPower-380)*.5;
+                            slashPower=tit2+(slashPower-tit2)*overflow;
                         }
-                    else*/ if(slashPower>430)
+                    else*/ if(slashPower>tit2)
                         {
-                            slashPower=430+(slashPower-430)*.5;
+                            slashPower=tit2+(slashPower-tit2)*overflow;
                         }
                 }
-            if((slashPower>760)&&(meitoGrade==4))
+            if((slashPower>max)&&(meitoGrade==4))
                 {
-                    slashPower=760+(slashPower-760)*.5;
+                    slashPower=max+(slashPower-max)*overflow;
                 }
             else if (meitoGrade==4)
                 {
@@ -180,18 +198,18 @@ function mainCalcFunction()
                 }
             /*else if((slashPower>560)&&(meitoGrade>=3))
                 {
-                    slashPower=560+(slashPower-560)*.5;
+                    slashPower=560+(slashPower-560)*overflow;
                 }*/
-            else if(slashPower>650)
+            else if(slashPower>dia2)
                 {
-                    slashPower=650+(slashPower-650)*.5;
+                    slashPower=dia2+(slashPower-dia2)*overflow;
                 }
         }
     if(slashLevel==0)
         {
-            if(slashPower>870)
+            if(slashPower>dia2)
                 {
-                    slashPower=870+(slashPower-870)*.5;
+                    slashPower=dia2+(slashPower-dia2)*overflow;
                 }
         }
     if((attackLevel!=0)&&(attackLevel<=5))
@@ -204,73 +222,56 @@ function mainCalcFunction()
                                 {
                                     if(attackLevel==1)
                                         {
-                                            if(attackPower>180)
+                                            if(attackPower>iro2)
                                                 {
-                                                    attackPower=180+(attackPower-180)*.5;
+                                                    attackPower=iro2+(attackPower-iro2)*overflow;
                                                 }
                                         }
-                                    if(attackPower>230)
+                                    if(attackPower>ste1)
                                         {
-                                            attackPower=230+(attackPower-230)*.5;
+                                            attackPower=ste1+(attackPower-ste1)*overflow;
                                         }
                                 }
-                            if(attackPower>280)
+                            if(attackPower>ste2)
                                 {
-                                    attackPower=280+(attackPower-280)*.5;
+                                    attackPower=ste2+(attackPower-ste2)*overflow;
                                 }
                         }
-                    if(attackPower>355)
+                    if(attackPower>tit1)
                         {
-                            attackPower=355+(attackPower-355)*.5;
+                            attackPower=tit1+(attackPower-tit1)*overflow;
                         }
                 }
-            if(attackPower>430)
+            if(attackPower>tit2)
                 {
-                    attackPower=430+(attackPower-430)*.5;
+                    attackPower=tit2+(attackPower-tit2)*overflow;
                 }
             
         }
     if(attackLevel==0)
         {
-            if(attackPower>870)  
+            if(attackPower>dia2)  
                 {
-                    attackPower=870+(attackPower-870)*.5;
+                    attackPower=dia2+(attackPower-dia2)*overflow;
                 }
         }
-    
-    powerScale=
-    {
-        650:"2Diamond",
-        540:"1Diamond",
-        430:"2Titanium",
-        355:"1Titanium",
-        280:"2Steel",
-        230:"1Steel",
-        180:"2Iron",
-        145:"1Iron",
-        110:"2Bronze",
-        85:"1Bronze",
-        60:"2Stone",
-        45:"1Stone",
-        30:"2Bone",
-        20:"1Bone",
-        10:"2Wood",
-        5:"1Wood",
-    }
+
+    powerScaleThreshold=[dia2,dia1,tit2,tit1,ste2,ste1,iro2,iro1,bro2,bro1,sto2,sto1,bon2,bon1,woo2,woo1];
+    powerScaleMaterial=["2Diamond","1Diamond","2Titanium","1Titanium","2Steel","1Steel","2Iron","1Iron","2Bronze","1Bronze","2Stone","1Stone","2Bone","1Bone","2Wood","1Wood"];
     attackPower=Math.round(attackPower);
     slashPower=Math.round(slashPower);
-    for(var threshold in powerScale)
+    for(var index in powerScaleThreshold)
         {
-            if(attackPower>=threshold)
+            if((attackPower>=powerScaleThreshold[index])&&(!attackResult))
                 {
-                    attackResult=powerScale[threshold];
+                    attackResult=powerScaleMaterial[index];
+                    
                 }
-           if(slashPower>=threshold)
+           if((slashPower>=powerScaleThreshold[index])&&(!slashResult))
                 {
-                    slashResult=powerScale[threshold];
+                    slashResult=powerScaleMaterial[index];
                 }
-        }
-    if(attackResult[0]=="2")
+        }    if(attackResult[0]=="2")
         {
             attackResult=attackResult.replace("2","Can Smash ");
         }
