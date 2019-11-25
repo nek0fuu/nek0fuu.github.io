@@ -79,11 +79,11 @@ function mainCalcFunction()
     switch(attackLevel)
         {
             case '0':attackMult=0.95;strReq=0;spdReq=0;break;
-            case '1':attackMult=0.32;strReq=50;spdReq=50;break;
-            case '2':attackMult=0.47;strReq=90;spdReq=60;break;
-            case '3':attackMult=0.62;strReq=130;spdReq=70;break;
-            case '4':attackMult=0.77;strReq=170;spdReq=80;break;
-            case '5':attackMult=0.92;strReq=210;spdReq=90;break;
+            case '1':attackMult=0.325;strReq=50;spdReq=50;break;
+            case '2':attackMult=0.475;strReq=90;spdReq=60;break;
+            case '3':attackMult=0.625;strReq=130;spdReq=70;break;
+            case '4':attackMult=0.775;strReq=170;spdReq=80;break;
+            case '5':attackMult=0.925;strReq=210;spdReq=90;break;
         }
     switch(slashLevel)
         {
