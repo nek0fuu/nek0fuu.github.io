@@ -1,3 +1,12 @@
+/*V1:
+Updated overflow 35% for all
+Increased str rate for waves and slashes
+In this version melee slashes are always stronger than any flying slash.
+Threshold on normal attacks is 740
+DF Reduction changed from -7.5%/-5% on multipliers to 90%/92.5% overall 
+Compatible with the 12/01/2019 Patch (Progressive Stamina Costs)
+*/
+
 window.onload=function(){
     mainCalcFunction();
 }
