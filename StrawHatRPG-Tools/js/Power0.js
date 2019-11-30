@@ -56,10 +56,10 @@ function mainCalcFunction()
     var PowCheck=document.getElementById("PowCheck").checked;
     var strReq,spdReq,dexReq,willReq,meitoReq;
     var attackMult,slashMult,slashPower,attackPower,attackResult,slashResult,threshold;
-    var strFactor=1.5;
-    var spdFactor=0.5;
-    var dexFactor=1;
-    var willFactor=1;
+    var strFactor=1.33;
+    var spdFactor=0.67;
+    var dexFactor=1.25;
+    var willFactor=.75;
     var powerScale;
     var i; //Initializing
     //var waveReq=document.getElementsByClassName("waveReq");
