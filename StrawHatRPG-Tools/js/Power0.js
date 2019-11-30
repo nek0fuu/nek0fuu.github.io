@@ -6,7 +6,7 @@ Increased str rate for waves and slashes
 Reduced Meito Bonuses from 10/20/30/45 to 5/10/15/25
 DF Reduction changed from -7.5%/-5% on multipliers to 10%/7.5%
 In this version melee slashes are always stronger than any flying slash.
-Threshold on normal attacks is 665
+Threshold on normal attacks is 705
 Compatible with the 12/01/2019 Patch (Power Attack)
 */
 
@@ -16,7 +16,7 @@ window.onload=function(){
 
 function mainCalcFunction()
 {
-    var max=570;
+    var max=705;
     var dia2=570;
     var dia1=475;
     var tit2=380;
@@ -33,7 +33,7 @@ function mainCalcFunction()
     var bon1=20;
     var woo2=10;
     var woo1=5;
-    var overflow=.5;
+    var overflow=.4;
     //var overflow=.25;
     var ipfields=document.getElementsByClassName("IP");
     for(var i=0;i<ipfields.length;i++)
@@ -47,6 +47,7 @@ function mainCalcFunction()
     var basespd=document.getElementById("spdIPF").valueAsNumber;
     var basedex=document.getElementById("dexIPF").valueAsNumber;
     var basewill=document.getElementById("willIPF").valueAsNumber;
+    var basetotal=document.getElementById("totalIPF").valueAsNumber;
     var attackLevel=document.getElementById("attackLevel").value;
     var slashLevel=document.getElementById("slashLevel").value;
     var meitoGrade=document.getElementById("bladeGrade").value;
@@ -59,7 +60,8 @@ function mainCalcFunction()
     var strFactor=30;
     var spdFactor=15;
     var dexFactor=30;
-    var willFactor=25;
+    var willFactor=20;
+    var totalFactor=1;
     var powerScale;
     var i; //Initializing
     //var waveReq=document.getElementsByClassName("waveReq");
@@ -141,8 +143,8 @@ function mainCalcFunction()
             attackMult+=.25;
             slashMult+=.25;
         }
-    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/100*attackMult;
-    slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/100*slashMult;
+    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+basetotal*totalFactor)/100*attackMult;
+    slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+basetotal*totalFactor)/100*slashMult;
     
     if((slashLevel!=0)&&(slashLevel<=5))
         {
@@ -192,15 +194,15 @@ function mainCalcFunction()
                 }
             if((slashPower>max)&&(meitoGrade==4))
                 {
-                    slashPower=dia2+(slashPower-dia2)*overflow;
+                    slashPower=max+(slashPower-max)*overflow;
                 }
             else if (meitoGrade==4)
                 {
                     //Do nothing if its a Saijo and its lower than max
                 }
-            else if((slashPower>560)&&(meitoGrade>=3))
+            else if((slashPower>dia2)&&(meitoGrade>=3))
                 {
-                    slashPower=560+(slashPower-560)*overflow;
+                    slashPower=dia2+(slashPower-dia2)*overflow;
                 }
             else if(slashPower>dia2)
                 {
