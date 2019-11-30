@@ -16,7 +16,7 @@ window.onload=function(){
 
 function mainCalcFunction()
 {
-    var max=665;
+    var max=570;
     var dia2=570;
     var dia1=475;
     var tit2=380;
@@ -192,7 +192,7 @@ function mainCalcFunction()
                 }
             if((slashPower>max)&&(meitoGrade==4))
                 {
-                    slashPower=max+(slashPower-max)*overflow;
+                    slashPower=dia2+(slashPower-dia2)*overflow;
                 }
             else if (meitoGrade==4)
                 {
