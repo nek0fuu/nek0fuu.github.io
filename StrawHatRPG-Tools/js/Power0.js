@@ -47,7 +47,7 @@ function mainCalcFunction()
     var basespd=document.getElementById("spdIPF").valueAsNumber;
     var basedex=document.getElementById("dexIPF").valueAsNumber;
     var basewill=document.getElementById("willIPF").valueAsNumber;
-    var basetotal=document.getElementById("totalIPF").valueAsNumber;
+    //var basetotal=document.getElementById("totalIPF").valueAsNumber;
     var attackLevel=document.getElementById("attackLevel").value;
     var slashLevel=document.getElementById("slashLevel").value;
     var meitoGrade=document.getElementById("bladeGrade").value;
@@ -57,11 +57,11 @@ function mainCalcFunction()
     var PowCheck=document.getElementById("PowCheck").checked;
     var strReq,spdReq,dexReq,willReq,meitoReq;
     var attackMult,slashMult,slashPower,attackPower,attackResult,slashResult,threshold;
-    var strFactor=30;
+    var strFactor=35;
     var spdFactor=15;
-    var dexFactor=30;
-    var willFactor=20;
-    var totalFactor=1;
+    var dexFactor=35;
+    var willFactor=15;
+    //var totalFactor=1;
     var powerScale;
     var i; //Initializing
     //var waveReq=document.getElementsByClassName("waveReq");
@@ -143,8 +143,8 @@ function mainCalcFunction()
             attackMult+=.25;
             slashMult+=.25;
         }
-    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+basetotal*totalFactor)/100*attackMult;
-    slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+basetotal*totalFactor)/100*slashMult;
+    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/100*attackMult;
+    slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/100*slashMult;
     
     if((slashLevel!=0)&&(slashLevel<=5))
         {
