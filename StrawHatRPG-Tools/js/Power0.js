@@ -318,7 +318,7 @@ function adjStat(basestat)
         {
             res+=increment*multiplier;
             basestat-=increment;
-            multiplier-=0.025;
+            multiplier-=0.0255;
         }
     res+=basestat*multiplier;
     return res;
