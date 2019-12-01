@@ -59,8 +59,8 @@ function mainCalcFunction()
     var attackMult,slashMult,slashPower,attackPower,attackResult,slashResult,threshold;
     var strFactor=3.5;
     var spdFactor=1.5;
-    var dexFactor=3.25;
-    var willFactor=1.75;
+    var dexFactor=3.5;
+    var willFactor=1.5;
     //var totalFactor=1;
     var powerScale;
     var i; //Initializing
