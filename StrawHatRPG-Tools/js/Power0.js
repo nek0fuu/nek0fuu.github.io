@@ -57,10 +57,10 @@ function mainCalcFunction()
     var PowCheck=document.getElementById("PowCheck").checked;
     var strReq,spdReq,dexReq,willReq,meitoReq;
     var attackMult,slashMult,slashPower,attackPower,attackResult,slashResult,threshold;
-    var strFactor=35;
-    var spdFactor=15;
-    var dexFactor=35;
-    var willFactor=15;
+    var strFactor=3.5;
+    var spdFactor=1.5;
+    var dexFactor=3.25;
+    var willFactor=1.75;
     //var totalFactor=1;
     var powerScale;
     var i; //Initializing
@@ -143,8 +143,8 @@ function mainCalcFunction()
             attackMult+=.25;
             slashMult+=.25;
         }
-    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/100*attackMult;
-    slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/100*slashMult;
+    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/10*attackMult;
+    slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/10*slashMult;
     
     if((slashLevel!=0)&&(slashLevel<=5))
         {
