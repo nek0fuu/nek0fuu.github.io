@@ -17,16 +17,16 @@ window.onload=function(){
 function mainCalcFunction()
 {
     var max=705;
-    var dia2=570, dia2t=290;
-    var dia1=475, dia1t=240;
-    var tit2=380, tit2t=190;
-    var tit1=315, tit1t=160;
-    var ste2=250, ste2t=130;
-    var ste1=205, ste1t=110;
-    var iro2=160, iro2t=90;
-    var iro1=130, iro1t=75;
-    var bro2=100, bro2t=60;
-    var bro1=80, bro1t=50;
+    var dia2=570, dia2t=325;
+    var dia1=475, dia1t=275;
+    var tit2=380, tit2t=230;
+    var tit1=315, tit1t=195;
+    var ste2=250, ste2t=160;
+    var ste1=205, ste1t=135;
+    var iro2=160, iro2t=110;
+    var iro1=130, iro1t=90;
+    var bro2=100, bro2t=70;
+    var bro1=80, bro1t=55;
     var sto2=60, sto2t=40;
     var sto1=45, sto1t=30;
     var bon2=30, bon2t=20;
