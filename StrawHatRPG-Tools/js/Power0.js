@@ -33,7 +33,7 @@ function mainCalcFunction()
     var bon1=20;
     var woo2=10;
     var woo1=5;
-    var overflow=.5;
+    var overflow=.4;
     //var overflow=.25;
     var ipfields=document.getElementsByClassName("IP");
     for(var i=0;i<ipfields.length;i++)
