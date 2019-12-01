@@ -1,13 +1,13 @@
 /*V3:
-Changed Stat Weightage (1.5,.5,1,1)
+Changed Stat Weightage (.35,.15,.325,.175)
 Updated material hardness scaling diamond upto 570
-Updated overflow 50%, overflow 25%
+Updated overflow 50%
 Increased str rate for waves and slashes
 Reduced Meito Bonuses from 10/20/30/45 to 5/10/15/25
-DF Reduction changed from -7.5%/-5% on multipliers to 10%/7.5%
+DF Reduction changed from -7.5%/-5% on multipliers to 10%/6.66%
 In this version melee slashes are always stronger than any flying slash.
 Threshold on normal attacks is 705
-Diminishing returns from stats (anti-minmax)
+Diminishing returns from speed (anti-minmax)
 Compatible with the 12/01/2019 Patch (Power Attack)
 */
 window.onload=function(){
@@ -137,7 +137,7 @@ function mainCalcFunction()
         }
     if((UACheck)&&(slashLevel>0))
         {
-            slashMult-=0.075;
+            slashMult-=0.066;
         }
     if(PowCheck)
         {
