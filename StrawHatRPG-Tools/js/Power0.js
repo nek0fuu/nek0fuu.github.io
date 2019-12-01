@@ -137,7 +137,7 @@ function mainCalcFunction()
         }
     if((UACheck)&&(slashLevel>0))
         {
-            slashMult-=0.066;
+            slashMult-=0.067;
         }
     if(PowCheck)
         {
