@@ -33,7 +33,7 @@ function mainCalcFunction()
     var bon1=20;
     var woo2=10;
     var woo1=5;
-    var overflow=.4;
+    var overflow=.5;
     //var overflow=.25;
     var ipfields=document.getElementsByClassName("IP");
     for(var i=0;i<ipfields.length;i++)
@@ -74,19 +74,19 @@ function mainCalcFunction()
     switch(attackLevel)
         {
             case '0':attackMult=0.975;strReq=0;spdReq=0;break;
-            case '1':attackMult=0.650;strReq=50;spdReq=50;break;
-            case '2':attackMult=0.700;strReq=90;spdReq=60;break;
-            case '3':attackMult=0.750;strReq=130;spdReq=70;break;
-            case '4':attackMult=0.800;strReq=170;spdReq=80;break;
+            case '1':attackMult=0.350;strReq=50;spdReq=50;break;
+            case '2':attackMult=0.400;strReq=90;spdReq=60;break;
+            case '3':attackMult=0.550;strReq=130;spdReq=70;break;
+            case '4':attackMult=0.700;strReq=170;spdReq=80;break;
             case '5':attackMult=0.850;strReq=210;spdReq=90;break;
         }
     switch(slashLevel)
         {
             case '0':slashMult=1.00;dexReq=0;meitoReq=0;break;
-            case '1':slashMult=0.750;dexReq=50;meitoReq=0;break;
-            case '2':slashMult=0.800;dexReq=75;meitoReq=1;break;
-            case '3':slashMult=0.850;dexReq=100;meitoReq=1;break;
-            case '4':slashMult=0.900;dexReq=125;meitoReq=2;break;
+            case '1':slashMult=0.350;dexReq=50;meitoReq=0;break;
+            case '2':slashMult=0.425;dexReq=75;meitoReq=1;break;
+            case '3':slashMult=0.600;dexReq=100;meitoReq=1;break;
+            case '4':slashMult=0.775;dexReq=125;meitoReq=2;break;
             case '5':slashMult=0.950;dexReq=150;meitoReq=3;break;
             
             default:slashMult=0;dexReq=0;break;
