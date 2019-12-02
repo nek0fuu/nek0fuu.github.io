@@ -55,6 +55,7 @@ function mainCalcFunction()
     var UACheck=document.getElementById("UACheck").checked;
     var NACheck=document.getElementById("NACheck").checked;
     var PowCheck=document.getElementById("PowCheck").checked;
+    var SpecBoost=document.getElementById("specBoost").valueAsNumber;
     var strReq,spdReq,dexReq,willReq,meitoReq,attackMult,slashMult,slashPower,attackPower,attackResult,slashResult,threshold,lowest=9999;
     var stats=[basestr,basespd,basedex,basewill];
     var strFactor=.35;
@@ -140,7 +141,7 @@ function mainCalcFunction()
                     lowest=stats[i];
                 }
         }
-    
+    slashMult+=SpecBoost/100;
     attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult;
     slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*slashMult;
     if((DFCheck)&&(slashLevel>0))
