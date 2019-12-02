@@ -55,15 +55,12 @@ function mainCalcFunction()
     var UACheck=document.getElementById("UACheck").checked;
     var NACheck=document.getElementById("NACheck").checked;
     var PowCheck=document.getElementById("PowCheck").checked;
-    var strReq,spdReq,dexReq,willReq,meitoReq;
-    var attackMult,slashMult,slashPower,attackPower,attackResult,slashResult,threshold;
-    var adjStr,adjSpd,adjDex,adjWill;
+    var strReq,spdReq,dexReq,willReq,meitoReq,attackMult,slashMult,slashPower,attackPower,attackResult,slashResult,threshold,lowest=9999;
+    var stats=[basestr,basespd,basedex,basewill];
     var strFactor=3.5;
     var spdFactor=1.5;
     var dexFactor=3.25;
     var willFactor=1.75;
-    //var totalFactor=1;
-    var powerScale;
     var i; //Initializing
     //var waveReq=document.getElementsByClassName("waveReq");
     //var slashReq=document.getElementsByClassName("slashReq");
@@ -137,17 +134,23 @@ function mainCalcFunction()
         }
     if((UACheck)&&(slashLevel>0))
         {
-            slashMult-=0.067;
+            slashMult-=0.05;
         }
     if(PowCheck)
         {
             attackMult+=.25;
             slashMult+=.25;
         }
-    adjSpd=adjStat(basespd);
-    attackPower=(strFactor*basestr+spdFactor*adjSpd+dexFactor*basedex+willFactor*basewill)/10*attackMult;
-    slashPower=(strFactor*basestr+spdFactor*adjSpd+dexFactor*basedex+willFactor*basewill)/10*slashMult;
-  
+    for(i=0;i<stats.length;i++)
+        {
+            if(stats[i]<=lowest)
+                {
+                    lowest=stats[i];
+                }
+        }
+    
+    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/10*attackMult;
+    slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/10*slashMult;
     /*if((slashLevel!=0)&&(slashLevel<=5))
         {
             if(slashLevel<=4)
@@ -213,67 +216,67 @@ function mainCalcFunction()
         }
     if(slashLevel==0)
         {*/
-            if((slashPower>woo1)&&(basestr<woo1t||basespd<woo1t2))
+            if((slashPower>woo1)&&(basestr<woo1t||lowest<woo1t2))
                 {
                     slashPower=woo1+(slashPower-woo1)*overflow;
                 }
-                if((slashPower>woo2)&&(basestr<woo2t||basespd<woo2t2))
+                if((slashPower>woo2)&&(basestr<woo2t||lowest<woo2t2))
                     {
                         slashPower=woo2+(slashPower-woo2)*overflow;
                     }
-                    if((slashPower>bon1)&&(basestr<bon1t||basespd<bon1t2))
+                    if((slashPower>bon1)&&(basestr<bon1t||lowest<bon1t2))
                         {
                             slashPower=bon1+(slashPower-bon1)*overflow;
                         }
-                        if((slashPower>bon2)&&(basestr<bon2t||basespd<bon2t2))
+                        if((slashPower>bon2)&&(basestr<bon2t||lowest<bon2t2))
                             {
                                 slashPower=bon2+(slashPower-bon2)*overflow;
                             }
-                            if((slashPower>sto1)&&(basestr<sto1||basespd<sto1t2))
+                            if((slashPower>sto1)&&(basestr<sto1||lowest<sto1t2))
                                 {
                                     slashPower=sto1+(slashPower-sto1)*overflow;
                                 }
-                                if((slashPower>sto2)&&(basestr<sto2t||basespd<sto2t2))
+                                if((slashPower>sto2)&&(basestr<sto2t||lowest<sto2t2))
                                     {
                                         slashPower=sto2+(slashPower-sto2)*overflow;
                                     }
-                                    if((slashPower>bro1)&&(basestr<bro1t||basespd<bro1t2))
+                                    if((slashPower>bro1)&&(basestr<bro1t||lowest<bro1t2))
                                         {
                                             slashPower=bro1+(slashPower-bro1)*overflow;
                                         }
-                                        if((slashPower>bro2)&&(basestr<bro2t||basespd<bro2t2))
+                                        if((slashPower>bro2)&&(basestr<bro2t||lowest<bro2t2))
                                             {
                                                 slashPower=bro2+(slashPower-bro2)*overflow;
                                             }
-                                            if((slashPower>iro1)&&(basestr<iro1t||basespd<iro1t2))
+                                            if((slashPower>iro1)&&(basestr<iro1t||lowest<iro1t2))
                                                 {
                                                     slashPower=iro1+(slashPower-iro1)*overflow;
                                                 }
-                                                if((slashPower>iro2)&&((basestr<iro2t||basespd<iro2t2)||(slashLevel==1)))
+                                                if((slashPower>iro2)&&((basestr<iro2t||lowest<iro2t2)||(slashLevel==1)))
                                                     {
                                                         slashPower=iro2+(slashPower-iro2)*overflow;
                                                     }
-                                                    if((slashPower>ste1)&&((basestr<ste1t||basespd<ste1t2)||((slashLevel>0)&&(slashLevel<=2))))
+                                                    if((slashPower>ste1)&&((basestr<ste1t||lowest<ste1t2)||((slashLevel>0)&&(slashLevel<=2))))
                                                         {
                                                             slashPower=ste1+(slashPower-ste1)*overflow;
                                                         }
-                                                        if((slashPower>ste2)&&((basestr<ste2t||basespd<ste2t2)||((slashLevel>0)&&(slashLevel<=3))))
+                                                        if((slashPower>ste2)&&((basestr<ste2t||lowest<ste2t2)||((slashLevel>0)&&(slashLevel<=3))))
                                                             {
                                                                 slashPower=ste2+(slashPower-ste2)*overflow;
                                                             }
-                                                            if((slashPower>tit1)&&((basestr<tit1t||basespd<tit1t2)||((slashLevel>0)&&(slashLevel<=3))))
+                                                            if((slashPower>tit1)&&((basestr<tit1t||lowest<tit1t2)||((slashLevel>0)&&(slashLevel<=3))))
                                                                 {
                                                                     slashPower=tit1+(slashPower-tit1)*overflow;
                                                                 }
-                                                                if((slashPower>tit2)&&((basestr<tit2t||basespd<tit2t2)||((slashLevel>0)&&(slashLevel<=4))))
+                                                                if((slashPower>tit2)&&((basestr<tit2t||lowest<tit2t2)||((slashLevel>0)&&(slashLevel<=4))))
                                                                     {
                                                                         slashPower=tit2+(slashPower-tit2)*overflow;
                                                                     }
-                                                                    if((slashPower>dia1)&&((basestr<dia1t||basespd<dia1t2)||((slashLevel>0)&&(slashLevel<=4))))
+                                                                    if((slashPower>dia1)&&((basestr<dia1t||lowest<dia1t2)||((slashLevel>0)&&(slashLevel<=4))))
                                                                         {
                                                                             slashPower=dia1+(slashPower-dia1)*overflow;
                                                                         }
-                                                                        if((slashPower>dia2)&&((basestr<dia2t||basespd<dia2t2)||(((slashLevel>0)&&(slashLevel<=5))&&(meitoGrade!=4))))
+                                                                        if((slashPower>dia2)&&((basestr<dia2t||lowest<dia2t2)||(((slashLevel>0)&&(slashLevel<=5))&&(meitoGrade!=4))))
                                                                             {
                                                                                 slashPower=dia2+(slashPower-dia2)*overflow;
                                                                             }
@@ -320,67 +323,67 @@ function mainCalcFunction()
         }
     if(attackLevel==0)
         {*/
-            if((attackPower>woo1)&&(basestr<woo1t||basespd<woo1t2))
+            if((attackPower>woo1)&&(basestr<woo1t||lowest<woo1t2))
                 {
                     attackPower=woo1+(attackPower-woo1)*overflow;
                 }
-                if((attackPower>woo2)&&(basestr<woo2t||basespd<woo2t2))
+                if((attackPower>woo2)&&(basestr<woo2t||lowest<woo2t2))
                     {
                         attackPower=woo2+(attackPower-woo2)*overflow;
                     }
-                    if((attackPower>bon1)&&(basestr<bon1t||basespd<bon1t2))
+                    if((attackPower>bon1)&&(basestr<bon1t||lowest<bon1t2))
                         {
                             attackPower=bon1+(attackPower-bon1)*overflow;
                         }
-                        if((attackPower>bon2)&&(basestr<bon2t||basespd<bon2t2))
+                        if((attackPower>bon2)&&(basestr<bon2t||lowest<bon2t2))
                             {
                                 attackPower=bon2+(attackPower-bon2)*overflow;
                             }
-                            if((attackPower>sto1)&&(basestr<sto1||basespd<sto1t2))
+                            if((attackPower>sto1)&&(basestr<sto1||lowest<sto1t2))
                                 {
                                     attackPower=sto1+(attackPower-sto1)*overflow;
                                 }
-                                if((attackPower>sto2)&&(basestr<sto2t||basespd<sto2t2))
+                                if((attackPower>sto2)&&(basestr<sto2t||lowest<sto2t2))
                                     {
                                         attackPower=sto2+(attackPower-sto2)*overflow;
                                     }
-                                    if((attackPower>bro1)&&(basestr<bro1t||basespd<bro1t2))
+                                    if((attackPower>bro1)&&(basestr<bro1t||lowest<bro1t2))
                                         {
                                             attackPower=bro1+(attackPower-bro1)*overflow;
                                         }
-                                        if((attackPower>bro2)&&(basestr<bro2t||basespd<bro2t2))
+                                        if((attackPower>bro2)&&(basestr<bro2t||lowest<bro2t2))
                                             {
                                                 attackPower=bro2+(attackPower-bro2)*overflow;
                                             }
-                                            if((attackPower>iro1)&&(basestr<iro1t||basespd<iro1t2))
+                                            if((attackPower>iro1)&&(basestr<iro1t||lowest<iro1t2))
                                                 {
                                                     attackPower=iro1+(attackPower-iro1)*overflow;
                                                 }
-                                                if((attackPower>iro2)&&((basestr<iro2t||basespd<iro2t2)||(attackLevel==1)))
+                                                if((attackPower>iro2)&&((basestr<iro2t||lowest<iro2t2)||(attackLevel==1)))
                                                     {
                                                         attackPower=iro2+(attackPower-iro2)*overflow;
                                                     }
-                                                    if((attackPower>ste1)&&((basestr<ste1t||basespd<ste1t2)||((attackLevel>0)&&(attackLevel<=2))))
+                                                    if((attackPower>ste1)&&((basestr<ste1t||lowest<ste1t2)||((attackLevel>0)&&(attackLevel<=2))))
                                                         {
                                                             attackPower=ste1+(attackPower-ste1)*overflow;
                                                         }
-                                                        if((attackPower>ste2)&&((basestr<ste2t||basespd<ste2t2)||((attackLevel>0)&&(attackLevel<=3))))
+                                                        if((attackPower>ste2)&&((basestr<ste2t||lowest<ste2t2)||((attackLevel>0)&&(attackLevel<=3))))
                                                             {
                                                                 attackPower=ste2+(attackPower-ste2)*overflow;
                                                             }
-                                                            if((attackPower>tit1)&&((basestr<tit1t||basespd<tit1t2)||((attackLevel>0)&&(attackLevel<=4))))
+                                                            if((attackPower>tit1)&&((basestr<tit1t||lowest<tit1t2)||((attackLevel>0)&&(attackLevel<=4))))
                                                                 {
                                                                     attackPower=tit1+(attackPower-tit1)*overflow;
                                                                 }
-                                                                if((attackPower>tit2)&&((basestr<tit2t||basespd<tit2t2)||((attackLevel>0)&&(attackLevel<=5))))
+                                                                if((attackPower>tit2)&&((basestr<tit2t||lowest<tit2t2)||((attackLevel>0)&&(attackLevel<=5))))
                                                                     {
                                                                         attackPower=tit2+(attackPower-tit2)*overflow;
                                                                     }
-                                                                    if((attackPower>dia1)&&((basestr<dia1t||basespd<dia1t2)||((attackLevel>0)&&(attackLevel<=5))))
+                                                                    if((attackPower>dia1)&&((basestr<dia1t||lowest<dia1t2)||((attackLevel>0)&&(attackLevel<=5))))
                                                                         {
                                                                             attackPower=dia1+(attackPower-dia1)*overflow;
                                                                         }
-                                                                        if((attackPower>dia2)&&((basestr<dia2t||basespd<dia2t2)||((attackLevel>0)&&(attackLevel<=5))))
+                                                                        if((attackPower>dia2)&&((basestr<dia2t||lowest<dia2t2)||((attackLevel>0)&&(attackLevel<=5))))
                                                                             {
                                                                                 attackPower=dia2+(attackPower-dia2)*overflow;
                                                                             }
@@ -438,7 +441,7 @@ function mainCalcFunction()
     
         
 }
-
+/*
 function adjStat(basestat)
 {
     var res=0,multiplier=1.35,increment=25;
@@ -450,4 +453,4 @@ function adjStat(basestat)
         }
     res+=basestat*multiplier;
     return res;
-}
+}*/
