@@ -57,10 +57,10 @@ function mainCalcFunction()
     var PowCheck=document.getElementById("PowCheck").checked;
     var strReq,spdReq,dexReq,willReq,meitoReq,attackMult,slashMult,slashPower,attackPower,attackResult,slashResult,threshold,lowest=9999;
     var stats=[basestr,basespd,basedex,basewill];
-    var strFactor=3.5;
-    var spdFactor=1.5;
-    var dexFactor=3.25;
-    var willFactor=1.75;
+    var strFactor=.35;
+    var spdFactor=.15;
+    var dexFactor=.325;
+    var willFactor=.175;
     var i; //Initializing
     //var waveReq=document.getElementsByClassName("waveReq");
     //var slashReq=document.getElementsByClassName("slashReq");
@@ -72,20 +72,20 @@ function mainCalcFunction()
     switch(attackLevel)
         {
             case '0':attackMult=0.975;strReq=0;spdReq=0;break;
-            case '1':attackMult=0.350;strReq=50;spdReq=50;break;
-            case '2':attackMult=0.400;strReq=90;spdReq=60;break;
-            case '3':attackMult=0.550;strReq=130;spdReq=70;break;
-            case '4':attackMult=0.700;strReq=170;spdReq=80;break;
-            case '5':attackMult=0.850;strReq=210;spdReq=90;break;
+            case '1':attackMult=0.65;strReq=50;spdReq=50;break;
+            case '2':attackMult=0.70;strReq=90;spdReq=60;break;
+            case '3':attackMult=0.75;strReq=130;spdReq=70;break;
+            case '4':attackMult=0.80;strReq=170;spdReq=80;break;
+            case '5':attackMult=0.85;strReq=210;spdReq=90;break;
         }
     switch(slashLevel)
         {
             case '0':slashMult=1.00;dexReq=0;meitoReq=0;break;
-            case '1':slashMult=0.350;dexReq=50;meitoReq=0;break;
-            case '2':slashMult=0.425;dexReq=75;meitoReq=1;break;
-            case '3':slashMult=0.600;dexReq=100;meitoReq=1;break;
-            case '4':slashMult=0.775;dexReq=125;meitoReq=2;break;
-            case '5':slashMult=0.950;dexReq=150;meitoReq=3;break;
+            case '1':slashMult=0.75;dexReq=50;meitoReq=0;break;
+            case '2':slashMult=0.80;dexReq=75;meitoReq=1;break;
+            case '3':slashMult=0.85;dexReq=100;meitoReq=1;break;
+            case '4':slashMult=0.90;dexReq=125;meitoReq=2;break;
+            case '5':slashMult=0.95;dexReq=150;meitoReq=3;break;
             
             default:slashMult=0;dexReq=0;break;
         }
@@ -128,14 +128,6 @@ function mainCalcFunction()
             document.getElementById("meitoGrade-error-msg").style.visibility="visible";
             document.getElementById("bladeGrade").style.border="2px solid red";
         }
-    if((DFCheck)&&(slashLevel>0))
-        {
-            slashMult-=0.10;
-        }
-    if((UACheck)&&(slashLevel>0))
-        {
-            slashMult-=0.05;
-        }
     if(PowCheck)
         {
             attackMult+=.25;
@@ -149,8 +141,16 @@ function mainCalcFunction()
                 }
         }
     
-    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/10*attackMult;
-    slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)/10*slashMult;
+    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult;
+    slashPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*slashMult;
+    if((DFCheck)&&(slashLevel>0))
+        {
+            slashPower*=0.90;
+        }
+    if((UACheck)&&(slashLevel>0))
+        {
+            slashPower*=0.95;
+        }
     /*if((slashLevel!=0)&&(slashLevel<=5))
         {
             if(slashLevel<=4)
