@@ -54,7 +54,6 @@ let tempCommentCount = 0;
 let commentsLoaded = 0;
 let commentsRemoved = false;
 let posts = [];
-let str,stm,spd,dex,will;
 
 // Event Listeners
 fetchBtn.addEventListener("click", fetchComments);
@@ -238,12 +237,7 @@ function fetchUserStats() {
                     return (e.gsx$username.$t.localeCompare(username.value, 'en', {sensitivity: 'base'}) === 0)
                 });
                 if (entry) {
-                    currentStats.value = Number(entry.gsx$totalbasestats.$t);
-                    stm=Number(entry.gsx$stamina.$t);
-                    str=Number(entry.gsx$strength.$t);
-                    spd=Number(entry.gsx$speed.$t);
-                    dex=Number(entry.gsx$dexterity.$t);
-                    will=Number(entry.gsx$willpower.$t);
+                    currentStats.value = entry.gsx$totalbasestats.$t;
                     fetchComments();
                 } else {
                     logError(statsErrorMsg, "Error Fetching User's Stats. Check spelling or enter stats manually");
@@ -1155,29 +1149,15 @@ function calculate(stats, score, getMax = false, base = baseLevel.selectedIndex,
     if (!getMax) {
         if (stats + earnedRounded > maxNew) {
             returnVal.earnedStats = maxNew - stats;
-            if(stm&&spd&&dex&&will)
-                {
-                    returnVal.earnedSplit=`(${Math.round((stats+returnVal.earnedStats) * 0.6-(stm+str+spd))}/${Math.round((stats+returnVal.earnedStats) * 0.4 - (dex+will))})`;
-                }
-            else
-                {
-                    returnVal.earnedSplit = `(${Math.round(returnVal.earnedStats * 0.6)}/${Math.round(returnVal.earnedStats * 0.4)})`;
-                }
+            returnVal.earnedSplit = `(${Math.round(returnVal.earnedStats * 0.6)}/${Math.round(returnVal.earnedStats * 0.4)})`;
             returnVal.newStats = stats + returnVal.earnedStats;
 
             return returnVal;
         }
     }
-    
+
     returnVal.earnedStats = earnedRounded;
-    if(stm&&spd&&dex&&will)
-        {
-            returnVal.earnedSplit=`(${Math.round((stats+returnVal.earnedStats)*.6-(stm+str+spd))}/${Math.round((stats+returnVal.earnedStats)*.4-(dex+will))})`;
-        }
-    else
-    {
-        returnVal.earnedSplit = `(${Math.round(earnedRounded * 0.6)}/${Math.round(earnedRounded * 0.4)})`;
-    }
+    returnVal.earnedSplit = `(${Math.round(earnedRounded * 0.6)}/${Math.round(earnedRounded * 0.4)})`;
     returnVal.newStats = stats + earnedRounded;
     return returnVal;
 }
