@@ -275,8 +275,8 @@ function calculateDefense()
     //TekkaiMin=TekkaiMult*600;
     //HakiMin=HakiMult*600;
     
-    HakiBoost=(willReq*2+(basewill-willReq))*HakiMult;
-    TekkaiBoost=(stamReq*2+(basestam-stamReq))*TekkaiMult;
+    HakiBoost=(willReq*2.5+(basewill-willReq))*HakiMult;
+    TekkaiBoost=(stamReq*2.5+(basestam-stamReq))*TekkaiMult;
     
     
     switch(armorPerk)
