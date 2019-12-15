@@ -146,7 +146,164 @@
                 
             </ul>
             <hr>
+            <ul id="posts-inputs-list">
+                <h2 class="col-headers">Defender</h2>
+                <!--<li>
+                    <label class="statIPL">Total HP</label>
+                    <input type="number" class="statIPF IP" id="defthpIPF" value="50" min="35" max="3250">
+                </li>
+                <li>
+                    <label class="statIPL">Current HP</label>
+                    <input type="number" class="statIPF IP" id="defchpIPF" value="50" min="35" max="3250">
+                </li><br><br>-->
+                <li>
+                    <label class="statIPL">Stamina</label>
+                    <input type="number" class="statIPF waveReq IP" id="defstmIPF" value="10" min="7" max="650">
+                </li>
+                <li>
+                    <label class="statIPL">Will</label>
+                    <input type="number" class="statIPF slashReq IP" id="defwillIPF" value="10" min="7" max="650">
+                </li>
+                <!--<li>
+                    <label class="statIPL">Total Stats</label>
+                    <input type="number" class="statIPF slashReq IP" id="totalIPF" value="50" min="50" max="2500">
+                </li>--><br>
+                </ul>
+            <ul id="posts-inputs-list">
+                <!--<li>
+                    <label class="statIPL">Hardness 2</label>
+                    <input type="number" class="statIPF slashReq IP" id="defhard2IPF" value="0" max="650">
+                </li>
+                <li>
+                    <label class="AttackIPL">Haki</label>
+                    <select class="HakiIPF IP" id="defHakiLevel2">
+                        <option value="NA">None</option>
+                        <option value="HC1">Haki Coating 1</option>
+                        <option value="HC2">Haki Coating 2</option>
+                        <option value="HC3">Haki Coating 3</option>
+                    </select>
+                </li>-->
+                <li>
+                    <label class="AttackIPL">Tekkai</label>
+                    <select class="AttackIPF IP" id="deftekkaiLevel">
+                        <option value="NA">None</option>
+                        <option value="TK1">Tekkai Level 1</option>
+                        <option value="TK2">Tekkai Level 2</option>
+                        <option value="TK3">Tekkai Level 3</option>
+                        <option value="TKS">Tekkai Specialization</option>
+                    </select>
+                </li>
+                <li>
+                    <label class="AttackIPL">Haki</label>
+                    <select class="HakiIPF IP" id="defHakiLevel">
+                        <option value="NA">None</option>
+                        <option value="HC1">Haki Coating 1</option>
+                        <option value="HC2">Haki Coating 2</option>
+                        <option value="HC3">Haki Coating 3</option>
+                        <option value="HCS">Haki Specialization</option>
+                    </select>
+                </li><br><br>
+                <li>
+                    <label class="statIPL">Tekkai Specialization</label>
+                    <input type="number" class="SlashIPF IP" id="defTekkaiSpecBoost" value="0" min="0" max="25">
+                </li>
+                <li>
+                    <label class="statIPL">Haki Specialzation</label>
+                    <input type="number" class="SlashIPF IP" id="defHakiSpecBoost" value="0" min="0" max="25">
+                </li><br><br>
+                <li>
+                    <label class="statIPL">Armor Hardness</label>
+                    <input type="number" class="statIPF waveReq IP" id="defarmIPF" value="0" max="650">
+                </li>
+                <li>
+                    <label class="AttackIPL">Armor Perk</label>
+                    <select class="HakiIPF IP" id="defArmorPerkLevel">
+                        <option value="AP0">Armour Perk 0</option>
+                        <option value="AP1">Armour Perk 1</option>
+                        <option value="AP2">Armour Perk 2</option>
+                        <option value="AP3">Armour Perk 3</option>
+                        <option value="AP4">Armour Perk 4</option>
+                    </select>
+                </li>
+                <!--<li>
+                    <label class="SlashIPL">Blood Lust</label>
+                    <input type="checkbox" class="SlashIPF IP" id="defBloodLust" name="BloodLust" value="BloodLust">
+                </li>
+                <br><br>-->                         
+            </ul>
             
+            <!--<p id="query-msg">Query Status: <span id="query-status">Idle</span></p>
+
+            <button id="fetch-btn">Fetch Comments</button>
+            
+            <p id="fetch-error-msg" class="error-msg"></p>
+
+            <button id="remove-btn">Filter Removed Comments</button> 
+
+            <p id="remove-error-msg" class="error-msg"></p>-->
+
+            <!-- Stat Calculations -->
+            <!--
+            <ul id="calcs-list">
+                <li>
+                    <p class="word-count"><span id="word-count">0</span> words counted</p>
+                </li>
+
+                <li>
+                    <p class="comment-count"><span id="comment-count">0</span> comments loaded</p>
+                </li>
+
+                <li>
+                    <p class="words-per-comment">Average of <span id="words-per-comment">0</span> words per comment</p>
+                </li>
+            </ul>
+            -->
+
+            <!-- Stat Calculation Inputs -->
+            <!--<ul id="calcs-inputs-list">
+                <li>
+                    <label class="current-stats-total">Current Stats</label>
+                    <input type="number" class="current-stats" id="current-stats" value="50" autocomplete="off">
+                </li>
+
+                <li>
+                    <label class="base-level">Base Level</label>
+                    <select id="base-level" autocomplete="off">
+                        <option value="base_0">0</option>
+                        <option value="base_1">1</option>
+                        <option value="base_2" selected="selected">2</option>
+                        <option value="base_3">3</option>
+                        <option value="base_4">4</option>
+                        <option value="base_5">5</option>
+                        <option value="base_6">6</option>
+                        <option value="base_7">7</option>
+                        <option value="base_8">8</option>
+                        <option value="base_9">9</option>
+                    </select>
+                </li>
+
+                <li>
+                    <label class="max-stats-total">Max Stats (<span id="max-stats-label-new">0</span>)</label>
+                    <input type="number" class="max-stats" id="max-stats" value="751" autocomplete="off">
+                </li>
+            </ul>-->
+
+            <!-- Results -->
+            <ul id="results-list">
+                <li>
+                    <p>
+                        <strong>Reduction</strong>
+                        <span class="power" id="totMit"><strong>0</strong></span>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <strong>Hardness</strong>
+                        <span class="power" id="IntMit"><strong>0</strong></span>
+                    </p>
+                </li>
+                
+            </ul>
             <!--<hr>
             <p id="slashReq-error-msg" class="error-msg">You do not have enough stats for the current level Flying Slash</p>
             <ul id="results-list">
@@ -162,172 +319,6 @@
             
             <!--<button id="calc-btn" onclick="mainCalcFunction()">Calculate Power</button>-->
             
-            <!--***************************************************
-            function calculateDefense()
-{
-    //var chp=document.getElementById("defchpIPF").valueAsNumber;
-    //var thp=document.getElementById("defthpIPF").valueAsNumber;
-    var basestam=document.getElementById("defstmIPF").valueAsNumber;
-    var basewill=document.getElementById("defwillIPF").valueAsNumber;
-    var tekkai=document.getElementById("deftekkaiLevel").value;
-    var haki=document.getElementById("defHakiLevel").value;
-    var tspec=document.getElementById("defTekkaiSpecBoost").valueAsNumber;
-    var hspec=document.getElementById("defHakiSpecBoost").valueAsNumber;
-    var armor=document.getElementById("defarmIPF").valueAsNumber;
-    var armorPerk=document.getElementById("defArmorPerkLevel").value;
-    var atthakiLevel=document.getElementById("attHakiLevel").value;
-    var attackLevel=document.getElementById("attattackLevel").value;
-    var totMit,defPower,maxArmor;
-    var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost
-    var stamFactor=.175,willFactor=0.075;
-    var overflow=.25;
-    
-    statDef=basestam*stamFactor+basewill*willFactor;
-    
-    if(statDef>basestam||(statDef>basewill*3))
-        {
-            if(basestam<basewill*3)
-                {
-                    statPower=(statDef-basestam)*overflow+basestam;
-                }
-            else
-                {
-                    statPower=(statDef-basewill*3)*overflow+basewill*3;
-                }
-        }
-    
-    if(tekkai!="TKS")
-        {
-            document.getElementById("defTekkaiSpecBoost").valueAsNumber=0;
-            document.getElementById("defTekkaiSpecBoost").disabled=true;
-        }
-    else
-        {   
-            document.getElementById("defTekkaiSpecBoost").disabled=false;
-        }
-    if(haki!="HCS")
-        {
-            document.getElementById("defHakiSpecBoost").valueAsNumber=0;
-            document.getElementById("defHakiSpecBoost").disabled=true;
-        }
-        else
-        {   
-            document.getElementById("defHakiSpecBoost").disabled=false;
-        }
-    switch(tekkai)
-        {
-            case "TK1":TekkaiMult=0.100;break;
-            case "TK2":TekkaiMult=0.175;break;
-            case "TK3":TekkaiMult=0.250;break;
-            case "TKS":TekkaiMult=0.250+tspec/100;break;
-            default:TekkaiMult=0;break;
-        }
-    switch(haki)
-        {
-            case "HC1":HakiMult=0.150;break;
-            case "HC2":HakiMult=0.200;break;
-            case "HC3":HakiMult=0.250;break;
-            case "HCS":HakiMult=0.250+hspec/100;break;    
-            default:HakiMult=0;break;
-        }
-    //TekkaiMin=TekkaiMult*600;
-    //HakiMin=HakiMult*600;
-    
-    HakiBoost=HakiMult*(basewill+900);
-    TekkaiBoost=TekkaiMult*(basestam+1000);
-    
-    
-    switch(armorPerk)
-        {
-            case "AP0":maxArmor=100;break;
-            case "AP1":maxArmor=200;break;
-            case "AP2":maxArmor=300;break;
-            case "AP3":maxArmor=400;break;
-            case "AP4":maxArmor=500;break;
-            default:maxArmor=0;
-        }
-    if(armor>maxArmor)
-        {
-            armor=(armor-maxArmor)*overflow+maxArmor;
-        }
-    defPower=statDef+HakiBoost+TekkaiBoost+armor;
-    
-    /*if((defPower<TekkaiMin)||(defPower<HakiMin))
-        {
-            if(TekkaiMin<HakiMin)
-                {
-                    defPower=HakiMin;
-                }
-            else
-            {
-                defPower=TekkaiMin;
-            }
-        }*/
-    
-    totMit=mitigate(attPow,adjStat(defPower));
-    switch(atthakiLevel)
-        {
-            case "HR1":totMit*=.80;break;
-            case "HR2":totMit*=.60;break;
-            default:break;
-        }
-    switch(attackLevel)
-        {           
-            case "RG7":totMit*=.95;break;
-            case "RG8":totMit*=.90;break;
-            case "RG9":totMit*=.825;break;
-            default:break;
-                
-        }
-
-    document.getElementById("totMit").textContent=Math.round((totMit/attPow)*100)+"%";
-    document.getElementById("IntMit").textContent=Math.round(adjStat(defPower));
-}
-
-function mitigate(power,hardness)
-{
-    var mitRate=0,mitAmt,maxblock,minblock;
-    
-    //hardness=adjStat(hardness);
-    minblock=.1+hardness/850*.3;
-    maxblock=.6+hardness/850*.3;
-    if(minblock>.4)
-        {
-            minblock=.4
-        }
-    if(maxblock>.9)
-        {
-            maxblock=.9;
-        }
-    mitRate=minblock+(1-(power/hardness)*(1-minblock));
-    if(mitRate<minblock)
-        {
-            mitRate=minblock
-        }
-    mitAmt=mitRate*hardness;
-    if(mitAmt>=power*maxblock)
-        {
-            mitAmt=power*maxblock;
-        }
-    return mitAmt;
-}
-function adjStat(basestat)
-{
-    var res=0,multiplier=1,increment=50,decreases=.005,decreasem=.99,decreaseincr=5;
-    while(basestat>=increment&&multiplier>0)
-        {
-            res+=increment*multiplier;
-            basestat-=increment;    
-            multiplier*=decreasem;
-            if(increment>10)
-                {
-                    increment-=decreaseincr;
-                }
-        }
-    res+=basestat*multiplier;
-    return res;
-}
-            *****************************-->
         </div>
     </div>
     <script type="text/javascript" src="js/Combat.js"></script>
