@@ -259,17 +259,17 @@ function calculateDefense()
     switch(tekkai)
         {
             case "TK1":TekkaiMult=0.225;stamReq=70;break;
-            case "TK2":TekkaiMult=0.300;stamReq=140;break;
-            case "TK3":TekkaiMult=0.375;stamReq=210;break;
-            case "TKS":TekkaiMult=0.375+tspec/100;stamReq=250;break;
+            case "TK2":TekkaiMult=0.325;stamReq=140;break;
+            case "TK3":TekkaiMult=0.425;stamReq=210;break;
+            case "TKS":TekkaiMult=0.425+tspec/100;stamReq=250;break;
             default:TekkaiMult=0;stamReq=0;break;
         }
     switch(haki)
         {
-            case "HC1":HakiMult=0.250;willReq=250;break;
-            case "HC2":HakiMult=0.325;willReq=300;break;
-            case "HC3":HakiMult=0.400;willReq=350;break;
-            case "HCS":HakiMult=0.400+hspec/100;willReq=375;break;    
+            case "HC1":HakiMult=0.275;willReq=250;break;
+            case "HC2":HakiMult=0.350;willReq=300;break;
+            case "HC3":HakiMult=0.425;willReq=350;break;
+            case "HCS":HakiMult=0.425+hspec/100;willReq=375;break;    
             default:HakiMult=0;willReq=0;break;
         }
     //TekkaiMin=TekkaiMult*600;
@@ -282,10 +282,10 @@ function calculateDefense()
     switch(armorPerk)
         {
             case "AP0":maxArmor=100;break;
-            case "AP1":maxArmor=200;break;
-            case "AP2":maxArmor=300;break;
-            case "AP3":maxArmor=400;break;
-            case "AP4":maxArmor=500;break;
+            case "AP1":maxArmor=175;break;
+            case "AP2":maxArmor=250;break;
+            case "AP3":maxArmor=325;break;
+            case "AP4":maxArmor=400;break;
             default:maxArmor=0;
         }
     if(armor>maxArmor)
