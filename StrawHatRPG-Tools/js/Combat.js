@@ -222,7 +222,7 @@ function calculateDefense()
     var totMit,defPower,maxArmor,armorSources;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
-    var overflow=.25;
+    var overflow=.25,sloverflow=.10;
     
     statDef=basestam*stamFactor+basewill*willFactor;
     
@@ -291,7 +291,7 @@ function calculateDefense()
     if(armor>maxArmor)
         {
             //armor=(armor-maxArmor)*overflow+maxArmor;
-            armor=(armor-maxArmor)*0+maxArmor;
+            armor=(armor-maxArmor)*sloverflow+maxArmor;
         }
     armorSources=[statDef,HakiBoost,TekkaiBoost,armor].sort();
     armorSources.reverse();
