@@ -84,11 +84,11 @@ function calculateAttack()
     switch(attackLevel)
         {
             case "NS9":attackMult=1.00;break;
-            case "IW1":attackMult=.35;break;
-            case "IW2":attackMult=.45;break;
-            case "IW3":attackMult=.55;break;
-            case "IW4":attackMult=.65;break;
-            case "IW5":attackMult=.75;break;
+            case "IW1":attackMult=.45;break;
+            case "IW2":attackMult=.56;break;
+            case "IW3":attackMult=.67;break;
+            case "IW4":attackMult=.78;break;
+            case "IW5":attackMult=.90;break;
             case "FS1":attackMult=.55;break;
             case "FS2":attackMult=.65;break;
             case "FS3":attackMult=.75;break;
@@ -104,9 +104,9 @@ function calculateAttack()
             case "RK4":attackMult=.70;break;
             case "RK5":attackMult=.70+SpecBoost/100;break;
             case "RG7":attackMult=1.1;break;
-            case "RG8":attackMult=1.25;break;
-            case "RG9":attackMult=1.4;break;
-            case "RGS":attackMult=1.4+SpecBoost/100;break;
+            case "RG8":attackMult=1.3;break;
+            case "RG9":attackMult=1.5;break;
+            case "RGS":attackMult=1.5+SpecBoost/100;break;
                 
             default:attackMult=0;break;
         }
@@ -220,7 +220,7 @@ function calculateDefense()
     var atthakiLevel=document.getElementById("attHakiLevel").value;
     var attackLevel=document.getElementById("attattackLevel").value;
     var totMit,defPower,maxArmor;
-    var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost
+    var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
     var overflow=.25;
     
@@ -258,25 +258,25 @@ function calculateDefense()
         }
     switch(tekkai)
         {
-            case "TK1":TekkaiMult=0.100;break;
-            case "TK2":TekkaiMult=0.175;break;
-            case "TK3":TekkaiMult=0.250;break;
-            case "TKS":TekkaiMult=0.250+tspec/100;break;
-            default:TekkaiMult=0;break;
+            case "TK1":TekkaiMult=0.225;stamReq=70;break;
+            case "TK2":TekkaiMult=0.300;stamReq=140;break;
+            case "TK3":TekkaiMult=0.375;stamReq=210;break;
+            case "TKS":TekkaiMult=0.375+tspec/100;stamReq=250;break;
+            default:TekkaiMult=0;stamReq=0;break;
         }
     switch(haki)
         {
-            case "HC1":HakiMult=0.150;break;
-            case "HC2":HakiMult=0.200;break;
-            case "HC3":HakiMult=0.250;break;
-            case "HCS":HakiMult=0.250+hspec/100;break;    
-            default:HakiMult=0;break;
+            case "HC1":HakiMult=0.250;willReq=250;break;
+            case "HC2":HakiMult=0.325;willReq=300;break;
+            case "HC3":HakiMult=0.400;willReq=350;break;
+            case "HCS":HakiMult=0.400+hspec/100;willReq=375;break;    
+            default:HakiMult=0;willReq=0;break;
         }
     //TekkaiMin=TekkaiMult*600;
     //HakiMin=HakiMult*600;
     
-    HakiBoost=HakiMult*(basewill+900);
-    TekkaiBoost=TekkaiMult*(basestam+1000);
+    HakiBoost=(willReq*2+(basewill-willReq))*HakiMult;
+    TekkaiBoost=(stamReq*2+(basestam-stamReq))*TekkaiMult;
     
     
     switch(armorPerk)
@@ -309,15 +309,15 @@ function calculateDefense()
     totMit=mitigate(attPow,adjStat(defPower));
     switch(atthakiLevel)
         {
-            case "HR1":totMit*=.80;break;
-            case "HR2":totMit*=.60;break;
+            case "HR1":totMit*=.75;break;
+            case "HR2":totMit*=.50;break;
             default:break;
         }
     switch(attackLevel)
         {           
             case "RG7":totMit*=.95;break;
             case "RG8":totMit*=.90;break;
-            case "RG9":totMit*=.825;break;
+            case "RG9":totMit*=.80;break;
             default:break;
                 
         }
@@ -331,8 +331,9 @@ function mitigate(power,hardness)
     var mitRate=0,mitAmt,maxblock,minblock;
     
     //hardness=adjStat(hardness);
-    minblock=.1+hardness/850*.3;
-    maxblock=.75+hardness/850*.15;
+    minblock=.1+hardness/500*.3;
+    maxblock=.9;
+    //maxblock=.75+hardness/850*.15;
     if(minblock>.4)
         {
             minblock=.4
