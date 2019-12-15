@@ -286,7 +286,7 @@ function calculateDefense()
             case "AP3":maxArmor=300;break;
             case "AP4":maxArmor=400;break;
             case "AP5":maxArmor=500;break;
-            default:maxArmor=15;
+            default:maxArmor=15;break;
         }
     if(armor>maxArmor)
         {
