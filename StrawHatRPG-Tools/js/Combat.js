@@ -281,16 +281,17 @@ function calculateDefense()
     
     switch(armorPerk)
         {
-            case "AP0":maxArmor=100;break;
-            case "AP1":maxArmor=175;break;
-            case "AP2":maxArmor=250;break;
-            case "AP3":maxArmor=325;break;
+            case "AP1":maxArmor=100;break;
+            case "AP2":maxArmor=200;break;
+            case "AP3":maxArmor=300;break;
             case "AP4":maxArmor=400;break;
+            case "AP5":maxArmor=500;break;
             default:maxArmor=0;
         }
     if(armor>maxArmor)
         {
-            armor=(armor-maxArmor)*overflow+maxArmor;
+            //armor=(armor-maxArmor)*overflow+maxArmor;
+            armor=(armor-maxArmor)*0+maxArmor;
         }
     armorSources=[statDef,HakiBoost,TekkaiBoost,armor].sort();
     armorSources.reverse();
