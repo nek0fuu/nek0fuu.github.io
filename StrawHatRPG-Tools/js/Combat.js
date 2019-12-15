@@ -219,7 +219,7 @@ function calculateDefense()
     var armorPerk=document.getElementById("defArmorPerkLevel").value;
     var atthakiLevel=document.getElementById("attHakiLevel").value;
     var attackLevel=document.getElementById("attattackLevel").value;
-    var totMit,defPower,maxArmor;
+    var totMit,defPower,maxArmor,armorSources;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
     var overflow=.25;
@@ -292,7 +292,10 @@ function calculateDefense()
         {
             armor=(armor-maxArmor)*overflow+maxArmor;
         }
-    defPower=statDef+HakiBoost+TekkaiBoost+armor;
+    armorSources=[statDef,HakiBoost,TekkaiBoost,armor].sort();
+    armorSources.reverse();
+    console.log(armorSources);
+    defPower=adjStat(armorSources[0]+armorSources[1]*.85+armorSources[2]*.70+armorSources[3]*.55);
     
     /*if((defPower<TekkaiMin)||(defPower<HakiMin))
         {
@@ -370,7 +373,6 @@ function adjStat(basestat)
     res+=basestat*multiplier;
     return res;
 }
-
 
 /*
             */
