@@ -158,7 +158,7 @@ function calculateAttack()
         {
             attackMult*=0.95;
         }
-    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult;
+    attackPower=adjStat2((strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult);
     for(i=0;i<stats.length;i++)
         {
             if(stats[i]<=lowest)
@@ -374,6 +374,21 @@ function adjStat(basestat)
     res+=basestat*multiplier;
     return res;
 }
-
+function adjStat2(basestat)
+{
+    var res=0,multiplier=1,increment=50,decreases=.005,decreasem=.99,decreaseincr=5;
+    while(basestat>=increment&&multiplier>0)
+        {
+            res+=increment*multiplier;
+            basestat-=increment;    
+            multiplier-=decreases;
+            if(increment>10)
+                {
+                    increment-=decreaseincr;
+                }
+        }
+    res+=basestat*multiplier;
+    return res;
+}
 /*
             */
