@@ -7,7 +7,44 @@ var iro=180;    60  15
 var bro=120     45  10
 var sto=75;     35  10
 var bon=40;     25  10
-var woo=15;   15*/
+var woo=15;   15
+
+W/Tungsten
+3rd
+500     90  10
+390     95  15
+295     80  15
+215     65  15
+150     50  10
+100     40  10
+60      30  10
+30      20  10
+10      10 
+
+2nd
+500 90  5
+410 85  10
+325 75  5
+250 70  15
+180 55  10
+125 45  5
+80  40  15
+40  25  10
+15  15  
+
+1st
+495 95  10
+400 85  10
+315 75  10
+240 65  10
+175 55  10
+120 45  10
+75  35  10
+40  25  10
+15  15  
+*/
+
+
 var thr5=500,thr5s=325,thr5o=125;
 var thr4=400,thr4s=260,thr4o=100;
 var thr3=300,thr3s=195,thr3o=75;
@@ -291,7 +328,7 @@ function calculateDefense()
     if(armor>maxArmor)
         {
             //armor=(armor-maxArmor)*overflow+maxArmor;
-            armor=(armor-maxArmor)*sloverflow+maxArmor;
+            armor=(armor-maxArmor)*overflow+maxArmor;
         }
     armorSources=[statDef,HakiBoost,TekkaiBoost,armor].sort();
     armorSources.reverse();
