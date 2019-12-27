@@ -91,6 +91,8 @@ function calculateAttack()
     var basewill=document.getElementById("attwillIPF").valueAsNumber;
     var attackLevel=document.getElementById("attattackLevel").value;
     var hakiLevel=document.getElementById("attHakiLevel").value;
+    var soruLevel=document.getElementById("soruLevel").value;
+    var boostedSpeed=document.getElementById("boostedSpeed");
     var SpecBoost=document.getElementById("attspecBoost").valueAsNumber;
     var HakiSpecBoost=document.getElementById("atthakispecBoost").valueAsNumber;
     var meitoGrade=document.getElementById("attbladeGrade").value;
@@ -99,6 +101,7 @@ function calculateAttack()
     var UACheck=document.getElementById("attUACheck").checked;
     var NACheck=document.getElementById("attNACheck").checked;
     var attackPower,attackMult,i,lowest=9999;
+    var sspec=5,SoruBoost,SoruMult,spdReq;
     var stats=[basestr,basespd,basedex,basewill];
     var strFactor=.35;
     var spdFactor=.15;
@@ -195,7 +198,18 @@ function calculateAttack()
         {
             attackMult*=0.95;
         }
-    attackPower=adjStat2((strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult);
+    switch(soruLevel)
+        {
+            case "SO1":SoruMult=0.30;spdReq=70;break;
+            case "SO2":SoruMult=0.35;spdReq=140;break;
+            case "SO3":SoruMult=0.40;spdReq=210;break;
+            case "SOS":SoruMult=0.40+sspec/100;spdReq=250;break;    
+            default:SoruMult=0;spdReq=0;break;
+        }
+    SoruBoost=(spdReq*2.5+(basespd-spdReq))*SoruMult;
+    //basespd+=SoruBoost;
+    boostedSpeed.value=Math.round(basespd+SoruBoost);
+    attackPower=diminish2((strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult);
     for(i=0;i<stats.length;i++)
         {
             if(stats[i]<=lowest)
@@ -333,7 +347,7 @@ function calculateDefense()
     armorSources=[statDef,HakiBoost,TekkaiBoost,armor].sort();
     armorSources.reverse();
     console.log(armorSources);
-    defPower=adjStat(armorSources[0]+armorSources[1]*.85+armorSources[2]*.70+armorSources[3]*.55);
+    defPower=diminish(armorSources[0]+armorSources[1]*.85+armorSources[2]*.70+armorSources[3]*.55);
     
     /*if((defPower<TekkaiMin)||(defPower<HakiMin))
         {
@@ -347,7 +361,7 @@ function calculateDefense()
             }
         }*/
     
-    totMit=mitigate(attPow,adjStat(defPower));
+    totMit=mitigate(attPow,diminish(defPower));
     switch(atthakiLevel)
         {
             case "HR1":totMit*=.75;break;
@@ -364,14 +378,14 @@ function calculateDefense()
         }
 
     document.getElementById("totMit").textContent=Math.round((totMit/attPow)*100)+"%";
-    document.getElementById("IntMit").textContent=Math.round(adjStat(defPower));
+    document.getElementById("IntMit").textContent=Math.round(diminish(defPower));
 }
 
 function mitigate(power,hardness)
 {
     var mitRate=0,mitAmt,maxblock,minblock;
     
-    //hardness=adjStat(hardness);
+    //hardness=diminish(hardness);
     minblock=.1+hardness/500*.3;
     maxblock=.9;
     //maxblock=.75+hardness/850*.15;
@@ -395,7 +409,7 @@ function mitigate(power,hardness)
         }
     return mitAmt;
 }
-function adjStat(basestat)
+function diminish(basestat)
 {
     var res=0,multiplier=1,increment=50,decreases=.005,decreasem=.99,decreaseincr=5;
     while(basestat>=increment&&multiplier>0)
@@ -411,7 +425,7 @@ function adjStat(basestat)
     res+=basestat*multiplier;
     return res;
 }
-function adjStat2(basestat)
+function diminish2(basestat)
 {
     var res=0,multiplier=1,increment=50,decreases=.005,decreasem=.99,decreaseincr=5;
     while(basestat>=increment&&multiplier>0)
@@ -426,6 +440,31 @@ function adjStat2(basestat)
         }
     res+=basestat*multiplier;
     return res;
+}
+function soruCode(level)
+{
+    var basespd=document.getElementById("attspdIPF").valueAsNumber;
+    var sspec=5;
+    var SoruBoost;
+    switch(level)
+        {
+            case "SO1":SoruMult=0.30;spdReq=70;break;
+            case "SO2":SoruMult=0.35;spdReq=140;break;
+            case "SO3":SoruMult=0.40;spdReq=210;break;
+            case "SOS":SoruMult=0.40+sspec/100;spdReq=250;break;    
+            default:SoruMult=0;spdReq=0;break;
+        }
+    SoruBoost=(spdReq*2.5+(basespd-spdReq))*SoruMult;
+    return SoruBoost;
+}
+function myFunc(stat1,stat2,stat3,req1,req2,req3,m1,m2,m3,f1,f2,f3)
+{
+    var s,s1,s2,s3;
+    s1=(req1*f1+(stat1-req1))*m1;
+    s2=(req2*f2+(stat2-req2))*m2;
+    s3=(req3*f3+(stat3-req3))*m3;
+    s=s1+s2+s3;
+    return s;
 }
 /*
             */
