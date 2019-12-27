@@ -206,7 +206,7 @@ function calculateAttack()
             case "SOS":SoruMult=0.40+sspec/100;spdReq=250;break;    
             default:SoruMult=0;spdReq=0;break;
         }
-    SoruBoost=(spdReq*2.5+(basespd-spdReq))*SoruMult;
+    SoruBoost=(spdReq*1.5+basespd)*SoruMult;
     //basespd+=SoruBoost;
     boostedSpeed.value=Math.round(basespd+SoruBoost);
     attackPower=diminish2((strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult);
@@ -326,8 +326,8 @@ function calculateDefense()
     //TekkaiMin=TekkaiMult*600;
     //HakiMin=HakiMult*600;
     
-    HakiBoost=(willReq*2.5+(basewill-willReq))*HakiMult;
-    TekkaiBoost=(stamReq*2.5+(basestam-stamReq))*TekkaiMult;
+    HakiBoost=(willReq*1.5+basewill)*HakiMult;
+    TekkaiBoost=(stamReq*1.5+basestam)*TekkaiMult;
     
     
     switch(armorPerk)
