@@ -209,11 +209,11 @@ function calculateAttack()
         {
             powerAtt=0.10;
         }
-    attSrc=[baseAtt,powerAtt,hakiAtt,MeitoAtt].sort();
+    attSrc=[baseAtt,powerAtt,hakiAtt].sort();
     attSrc.reverse();
     //console.log(attSrc);
-    //attackMult=attSrc[0]+attSrc[1]*.85+attSrc[2]*.70+MeitoAtt;
-    attackMult=attSrc[0]+attSrc[1]+attSrc[2]+attSrc[3];
+    attackMult=attSrc[0]+attSrc[1]*.85+attSrc[2]*.70+MeitoAtt;
+    //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+attSrc[3];
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
             attackMult*=0.9;
