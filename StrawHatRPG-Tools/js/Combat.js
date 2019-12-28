@@ -341,9 +341,9 @@ function calculateDefense()
     armorSources=[statDef,HakiBoost,TekkaiBoost,armor].sort();
     armorSources.reverse();
     //console.log(armorSources);
-    defPower=diminish(armorSources[0]+armorSources[1]*.85+armorSources[2]*.70+armorSources[3]*.55);
+    defPower=diminish(armorSources[0]+armorSources[1]*.5+armorSources[2]*.5+armorSources[3]*.5);
     
-    totMit=mitigate(attPow,diminish(defPower));
+    totMit=mitigate(attPow,defPower);
     switch(atthakiLevel)
         {
             case "HR1":totMit*=.80;break;
@@ -362,7 +362,7 @@ function calculateDefense()
         }
 
     document.getElementById("totMit").textContent=Math.round((totMit/attPow)*100)+"%";
-    document.getElementById("IntMit").textContent=Math.round(diminish(defPower));
+    document.getElementById("IntMit").textContent=Math.round(defPower);
 }
 
 function mitigate(power,hardness)
@@ -394,12 +394,13 @@ function mitigate(power,hardness)
 }
 function diminish(basestat)
 {
-    var res=0,multiplier=1,increment=50,decreases=.005,decreasem=.99,decreaseincr=5;
-    while(basestat>=increment&&multiplier>0)
+    var res=0,multiplier=1,increment=100,decreases=.005,decreasem=.99,decreaseincr=5;
+    while(basestat>=increment&&multiplier>0.25)
         {
             res+=increment*multiplier;
             basestat-=increment;    
             multiplier*=decreasem;
+            decreasem*=0.95;
             if(increment>10)
                 {
                     increment-=decreaseincr;
@@ -410,8 +411,8 @@ function diminish(basestat)
 }
 function diminish2(basestat)
 {
-    var res=0,multiplier=1,increment=50,decreases=.005,decreasem=.99,decreaseincr=5;
-    while(basestat>=increment&&multiplier>0)
+    var res=0,multiplier=1,increment=50,decreases=.005,decreasem=.95,decreaseincr=5;
+    while(basestat>=increment&&multiplier>0.25)
         {
             res+=increment*multiplier;
             basestat-=increment;    
