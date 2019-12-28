@@ -209,11 +209,11 @@ function calculateAttack()
         {
             powerAtt=0.10;
         }
-    attSrc=[baseAtt,powerAtt,hakiAtt].sort();
+    attSrc=[baseAtt,powerAtt,hakiAtt].sort(function(a,b){return a-b});
     attSrc.reverse();
     //console.log(attSrc);
-    attackMult=attSrc[0]+attSrc[1]*.85+attSrc[2]*.70+MeitoAtt;
-    //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+attSrc[3];
+    attackMult=attSrc[0]+attSrc[1]*.80+attSrc[2]*.60+MeitoAtt;
+    //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+MeitoAtt;
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
             attackMult*=0.9;
@@ -338,10 +338,10 @@ function calculateDefense()
         {
             armor=(armor-maxArmor)*overflow+maxArmor;
         }
-    armorSources=[statDef,HakiBoost,TekkaiBoost,armor].sort();
+    armorSources=[HakiBoost,TekkaiBoost,armor].sort(function(a,b){return a-b});
     armorSources.reverse();
-    //console.log(armorSources);
-    defPower=diminish(armorSources[0]+armorSources[1]*.5+armorSources[2]*.5+armorSources[3]*.5);
+    console.log(armorSources);
+    defPower=diminish(armorSources[0]+armorSources[1]*.5+armorSources[2]*.5+statDef);
     
     totMit=mitigate(attPow,defPower);
     switch(atthakiLevel)
