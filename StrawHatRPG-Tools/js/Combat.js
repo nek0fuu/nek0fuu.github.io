@@ -171,7 +171,7 @@ function calculateAttack()
         {
             case "HC1":hakiAtt=0.05;break;
             case "HC2":hakiAtt=0.10;break;
-            case "HC3":hakiAtt=0.20;break;
+            case "HC3":hakiAtt=0.15;break;
             case "HCS":hakiAtt=0.25;break;
             case "HR1":hakiAtt=0.025;break;
             case "HR2":hakiAtt=0.05;break;
@@ -315,7 +315,7 @@ function calculateDefense()
             case "HC1":HakiMult=0.275;willReq=250;break;
             case "HC2":HakiMult=0.350;willReq=300;break;
             case "HC3":HakiMult=0.425;willReq=350;break;
-            case "HCS":HakiMult=0.500;willReq=375;break;    
+            case "HCS":HakiMult=0.525;willReq=375;break;    
             default:HakiMult=0;willReq=0;break;
         }
     //TekkaiMin=TekkaiMult*600;
@@ -347,8 +347,8 @@ function calculateDefense()
     switch(atthakiLevel)
         {
             case "HR1":totMit*=.80;break;
-            case "HR2":totMit*=.65;break;
-            case "HRS":totMit*=.50;break;
+            case "HR2":totMit*=.60;break;
+            case "HRS":totMit*=.40;break;
             default:break;
         }
     switch(attackLevel)
