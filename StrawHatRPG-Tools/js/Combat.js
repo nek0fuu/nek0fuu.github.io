@@ -441,6 +441,23 @@ function mitigate(power,hardness)
         }
     return mitAmt;
 }
+function diminish0(basestat)
+{
+    var res=0,multiplier=1,increment=25,decreases=.005,decreasem=.9,decreaseincr=5;
+    while(basestat>=increment&&multiplier>0.25)
+        {
+            res+=increment*multiplier;
+            basestat-=increment;    
+            multiplier*=decreasem;
+            decreasem*=0.9;
+            if(increment>10)
+                {
+                    increment-=decreaseincr;
+                }
+        }
+    res+=basestat*multiplier;
+    return res;
+}
 function diminish(basestat)
 {
     var res=0,multiplier=1,increment=100,decreases=.005,decreasem=.99,decreaseincr=5;
