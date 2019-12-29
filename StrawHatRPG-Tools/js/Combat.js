@@ -121,20 +121,11 @@ function calculateAttack()
     var willFactor=.15;
     var overflow=.25;
     var thr=9,restype;
-    var baseDrain, HaoMult,totalDrain,willDiff,focHao=.6;
+    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1;
     for(i=0;i<errors.length;i++)
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
     }
-    /*if(attackLevel.charAt(2)!="S"&&attackLevel!="RK5")
-        {
-            document.getElementById("attspecBoost").valueAsNumber=0;
-            document.getElementById("attspecBoost").disabled=true;
-        }
-    else
-        {   
-            document.getElementById("attspecBoost").disabled=false;
-        }*/
     switch(attackLevel)
         {
             case "NS9":baseAtt=1.00;restype="AttMeito";break;
@@ -228,18 +219,17 @@ function calculateAttack()
     SoruBoost=(spdReq*1.5+basespd)*SoruMult;
     document.getElementById("SoruSpd").textContent=Math.round(basespd+SoruBoost);
     
-    if(focCheck)
-       focHao=1;
+    if(!focCheck)
+       focHao=.7;
     willDiff=basewill-oppwill;
     if(willDiff<0)
         willDiff=0;
     totalDrain=willDiff*HaoMult*focHao;
     if(totalDrain<baseDrain*focHao)
         totalDrain=baseDrain*focHao;
-    totalDrain=diminish0(totalDrain);
-    if(totalDrain>baseDrain*3)
+    if(totalDrain>baseDrain*3*focHao)
         {
-            totalDrain=baseDrain*3;
+            totalDrain=baseDrain*3*focHao;
         }
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
     
@@ -450,15 +440,15 @@ function mitigate(power,hardness)
         }
     return mitAmt;
 }
-function diminish0(basestat)
+/*function diminish0(basestat)
 {
-    var res=0,multiplier=1,increment=25,decreases=.005,decreasem=.9,decreaseincr=5;
+    var res=0,multiplier=1,increment=10,decreases=.005,decreasem=.99,decreaseincr=5;
     while(basestat>=increment&&multiplier>0.25)
         {
             res+=increment*multiplier;
             basestat-=increment;    
             multiplier*=decreasem;
-            decreasem*=0.9;
+            decreasem*=0.95;
             if(increment>10)
                 {
                     increment-=decreaseincr;
@@ -466,7 +456,7 @@ function diminish0(basestat)
         }
     res+=basestat*multiplier;
     return res;
-}
+}*/
 function diminish(basestat)
 {
     var res=0,multiplier=1,increment=100,decreases=.005,decreasem=.99,decreaseincr=5;
