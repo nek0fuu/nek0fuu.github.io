@@ -281,7 +281,7 @@ function calculateAttack()
             attackMult*=0.95;
         }
     
-    attackPower=diminish((strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult);
+    attackPower=diminish2((strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult);
     for(i=0;i<stats.length;i++)
         {
             if(stats[i]<=lowest)
