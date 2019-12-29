@@ -70,6 +70,11 @@
                         <option value="RG2">Rokuogan Level 2</option>
                         <option value="RG3">Rokuogan Level 3</option>
                         <option value="RGS">Rokuogan Specialzation</option>
+                        <option value="HAL">Haoshoku (Light)</option>
+                        <option value="HAM">Haoshoku (Medium)</option>
+                        <option value="HAH">Haoshoku (Heavy)</option>
+                        <option value="HAI">Haoshoku (Immense)</option>
+                        <option value="HAS">Haoshoku Specialzation (Power)</option>
                     </select>
                 </li>
                 <li>
@@ -85,9 +90,13 @@
                         <option value="HRS">Haki Specialization (Ryou)</option>
                     </select>
                 </li><br><br>
-                <li>
+                <li id="hideThisPowCheck">
                     <label class="SlashIPL">Power Attack</label>
                     <input type="checkbox" class="SlashIPF IP" id="attPowCheck" name="PowCheck" value="Pow">
+                </li>
+                <li id="hideThisHaoCheck">
+                    <label class="SlashIPL">Focused Blast</label>
+                    <input type="checkbox" class="SlashIPF IP" id="attHaoFoc" name="PowCheck" value="Pow">
                 </li>
                 <br><br>
                 <li id="hideThisBladeGrade">
@@ -119,7 +128,7 @@
             </ul>
             
             <ul id="results-list">
-                <li>
+                <li id="hideThisAttackRes">
                     <p>
                         <strong>Attack Power</strong>
                         <span class="power" id="attPow"><strong>0</strong></span>
@@ -129,6 +138,12 @@
                     <p>
                         <strong>Boosted Speed</strong>
                         <span class="power" id="SoruSpd"><strong>0</strong></span>
+                    </p>
+                </li>
+                <li id="hideThisHao">
+                    <p>
+                        <strong>Stamina Drain</strong>
+                        <span class="power" id="HaoRes"><strong>0</strong></span>
                     </p>
                 </li>
                 
