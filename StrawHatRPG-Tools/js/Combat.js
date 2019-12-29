@@ -229,7 +229,7 @@ function calculateAttack()
     document.getElementById("SoruSpd").textContent=Math.round(basespd+SoruBoost);
     
     if(!focCheck)
-       focHao=.7;
+       focHao=.75;
     willDiff=basewill-oppwill;
     if(willDiff<0)
         willDiff=0;
@@ -237,9 +237,9 @@ function calculateAttack()
     if(totalDrain<baseDrain*focHao)
         totalDrain=baseDrain*focHao;
     totalDrain=diminish0(totalDrain);
-    if(totalDrain>baseDrain*3*focHao)
+    if(totalDrain>baseDrain*2.75*focHao)
         {
-            totalDrain=baseDrain*3*focHao;
+            totalDrain=baseDrain*2.75*focHao;
         }
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
     
