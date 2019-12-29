@@ -169,7 +169,7 @@ function calculateAttack()
             case "HAM":baseDrain=10;HaoMult=.6;restype="Hao";break;
             case "HAH":baseDrain=15;HaoMult=.8;restype="Hao";break;
             case "HAI":baseDrain=20;HaoMult=1;restype="Hao";break;
-            case "HAS":baseDrain=25;HaoMult=1.2;restype="Hao";break;
+            case "HAS":baseDrain=25;HaoMult=1.25;restype="Hao";break;
                 
             default:baseAtt=0;break;
         }
