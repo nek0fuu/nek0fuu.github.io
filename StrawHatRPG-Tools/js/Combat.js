@@ -126,6 +126,15 @@ function calculateAttack()
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
     }
+    /*if(attackLevel.charAt(2)!="S"&&attackLevel!="RK5")
+        {
+            document.getElementById("attspecBoost").valueAsNumber=0;
+            document.getElementById("attspecBoost").disabled=true;
+        }
+    else
+        {   
+            document.getElementById("attspecBoost").disabled=false;
+        }*/
     switch(attackLevel)
         {
             case "NS9":baseAtt=1.00;restype="AttMeito";break;
@@ -227,6 +236,7 @@ function calculateAttack()
     totalDrain=willDiff*HaoMult*focHao;
     if(totalDrain<baseDrain*focHao)
         totalDrain=baseDrain*focHao;
+    totalDrain=diminish0(totalDrain);
     if(totalDrain>baseDrain*3*focHao)
         {
             totalDrain=baseDrain*3*focHao;
@@ -440,7 +450,7 @@ function mitigate(power,hardness)
         }
     return mitAmt;
 }
-/*function diminish0(basestat)
+function diminish0(basestat)
 {
     var res=0,multiplier=1,increment=10,decreases=.005,decreasem=.99,decreaseincr=5;
     while(basestat>=increment&&multiplier>0.25)
@@ -456,7 +466,7 @@ function mitigate(power,hardness)
         }
     res+=basestat*multiplier;
     return res;
-}*/
+}
 function diminish(basestat)
 {
     var res=0,multiplier=1,increment=100,decreases=.005,decreasem=.99,decreaseincr=5;
