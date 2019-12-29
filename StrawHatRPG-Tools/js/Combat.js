@@ -121,7 +121,7 @@ function calculateAttack()
     var willFactor=.15;
     var overflow=.25;
     var thr=9,restype;
-    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1;
+    var baseDrain, HaoMult,totalDrain,willDiff,focHao=.6;
     for(i=0;i<errors.length;i++)
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
@@ -186,11 +186,15 @@ function calculateAttack()
         {
             document.getElementById("hideThisAttackRes").style.display="";
             document.getElementById("hideThisPowCheck").style.display="";
+            document.getElementById("hideThisDefResult").style.display="";
+            document.getElementById("hideThisDefResult2").style.display="";
         }
     else
         {
             document.getElementById("hideThisAttackRes").style.display="none"; 
             document.getElementById("hideThisPowCheck").style.display="none";
+            document.getElementById("hideThisDefResult").style.display="none";
+            document.getElementById("hideThisDefResult2").style.display="none";
         }
     if(restype.includes("Hao"))
         {
@@ -225,14 +229,18 @@ function calculateAttack()
     document.getElementById("SoruSpd").textContent=Math.round(basespd+SoruBoost);
     
     if(focCheck)
-       focHao=1.25;
+       focHao=1;
     willDiff=basewill-oppwill;
     if(willDiff<0)
         willDiff=0;
     totalDrain=willDiff*HaoMult*focHao;
-    if(totalDrain<baseDrain)
-        totalDrain=baseDrain;
+    if(totalDrain<baseDrain*focHao)
+        totalDrain=baseDrain*focHao;
     totalDrain=diminish0(totalDrain);
+    if(totalDrain>baseDrain*3)
+        {
+            totalDrain=baseDrain*3;
+        }
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
     
     switch(hakiLevel)
@@ -444,7 +452,7 @@ function mitigate(power,hardness)
 }
 function diminish0(basestat)
 {
-    var res=0,multiplier=1,increment=20,decreases=.005,decreasem=.9,decreaseincr=5;
+    var res=0,multiplier=1,increment=25,decreases=.005,decreasem=.9,decreaseincr=5;
     while(basestat>=increment&&multiplier>0.25)
         {
             res+=increment*multiplier;
