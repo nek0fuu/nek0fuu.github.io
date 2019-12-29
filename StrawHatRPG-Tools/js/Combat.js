@@ -231,7 +231,8 @@ function calculateAttack()
         willDiff=0;
     totalDrain=willDiff*HaoMult*focHao;
     if(totalDrain<baseDrain)
-        totalDrain=baseDrain
+        totalDrain=baseDrain;
+    totalDrain=diminish0(totalDrain);
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
     
     switch(hakiLevel)
@@ -443,7 +444,7 @@ function mitigate(power,hardness)
 }
 function diminish0(basestat)
 {
-    var res=0,multiplier=1,increment=25,decreases=.005,decreasem=.9,decreaseincr=5;
+    var res=0,multiplier=1,increment=20,decreases=.005,decreasem=.9,decreaseincr=5;
     while(basestat>=increment&&multiplier>0.25)
         {
             res+=increment*multiplier;
