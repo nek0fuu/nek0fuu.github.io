@@ -195,14 +195,18 @@
                         <option value="AP4">Armour Perk 4</option>
                         <option value="AP5">Armour Perk 5</option>
                     </select>
-                </li>                    
+                </li><br><br>
+                <li>
+                    <label class="SlashIPL">Full Suit</label>
+                    <input type="checkbox" class="SlashIPF IP" id="defFullCheck" name="PowCheck" value="Pow">
+                </li>
             </ul>
             
 
             <!-- Results -->
             <ul id="results-list">
                 
-                <li id="hideThisDefResult">
+                <li id="hideThisDefResult" style="display:none">
                     <p>
                         <strong>Reduction</strong>
                         <span class="power" id="totMit"><strong>0</strong></span>
@@ -212,6 +216,12 @@
                     <p>
                         <strong>Hardness</strong>
                         <span class="power" id="IntMit"><strong>0</strong></span>
+                    </p>
+                </li>
+                <li id="hideThisDefResultSpd">
+                    <p>
+                        <strong>Speed Penalty</strong>
+                        <span class="power" id="SpdPen"><strong>0</strong></span>
                     </p>
                 </li>
                 
