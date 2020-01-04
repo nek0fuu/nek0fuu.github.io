@@ -116,9 +116,9 @@ function calculateAttack()
     var baseAtt=0,hakiAtt=0,powerAtt=0,MeitoAtt=0,attSrc;
     var stats=[basestr,basespd,basedex,basewill];
     var strFactor=.35;
-    var spdFactor=.15;
+    var spdFactor=.125;
     var dexFactor=.35;
-    var willFactor=.15;
+    var willFactor=.175;
     var overflow=.25;
     var thr=9,restype;
     var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain;
@@ -259,8 +259,8 @@ function calculateAttack()
             case "HC3":HakiMult=0.0175;willReq=350;break;
             case "HCS":HakiMult=0.0225;willReq=375;break;
             case "HR1":HakiMult=0.0050;ryouMult=.035;willReq=300;break;
-            case "HR2":HakiMult=0.0075;ryouMult=.05;willReq=350;break;
-            case "HRS":HakiMult=0.0100;ryouMult=.065;willReq=375;break;
+            case "HR2":HakiMult=0.0075;ryouMult=.055;willReq=350;break;
+            case "HRS":HakiMult=0.0100;ryouMult=.075;willReq=375;break;
             default:HakiMult=0;willReq=0;ryouMult=0;break;
         }
     hakiAtt=(willReq+basewill)*HakiMult/100;
@@ -276,12 +276,12 @@ function calculateAttack()
         }
     if(PowCheck)
         {
-            powerAtt=0.10;
+            powerAtt=0.20;
         }
     attSrc=[baseAtt,powerAtt,hakiAtt].sort(function(a,b){return a-b});
     attSrc.reverse();
     //console.log(attSrc);
-    attackMult=attSrc[0]+attSrc[1]*.80+attSrc[2]*.60+MeitoAtt;
+    attackMult=attSrc[0]+attSrc[1]+attSrc[2]*.5+MeitoAtt;
     //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+MeitoAtt;
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
@@ -374,8 +374,8 @@ function calculateDefense()
         }
     switch(tekkai)
         {
-            case "TK1":TekkaiMult=0.225;stamReq=70;break;
-            case "TK2":TekkaiMult=0.325;stamReq=140;break;
+            case "TK1":TekkaiMult=0.275;stamReq=70;break;
+            case "TK2":TekkaiMult=0.350;stamReq=140;break;
             case "TK3":TekkaiMult=0.425;stamReq=210;break;
             case "TKS":TekkaiMult=0.500;stamReq=250;break;
             default:TekkaiMult=0;stamReq=0;break;
