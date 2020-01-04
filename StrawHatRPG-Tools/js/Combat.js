@@ -186,15 +186,13 @@ function calculateAttack()
         {
             document.getElementById("hideThisAttackRes").style.display="";
             document.getElementById("hideThisPowCheck").style.display="";
-            //document.getElementById("hideThisDefResult").style.display="";
-            document.getElementById("hideThisDefResult2").style.display="";
+            document.getElementById("hideThisHaki").style.display="";
         }
     else
         {
             document.getElementById("hideThisAttackRes").style.display="none"; 
             document.getElementById("hideThisPowCheck").style.display="none";
-            document.getElementById("hideThisDefResult").style.display="none";
-            document.getElementById("hideThisDefResult2").style.display="none";
+            document.getElementById("hideThisHaki").style.display="none";
         }
     if(restype.includes("Hao"))
         {
