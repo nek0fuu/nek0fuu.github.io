@@ -401,11 +401,11 @@ function calculateDefense()
             case "AP3":maxArmor=300;armPerk=.15;arm2Perk=.85;break;
             case "AP4":maxArmor=400;armPerk=.125;arm2Perk=.875;break;
             case "AP5":maxArmor=500;armPerk=.1;arm2Perk=.9;break;
-            default:maxArmor=15;armPerk=.4;arm2Perk=.6;break;
+            default:maxArmor=15;armPerk=.3;arm2Perk=.7;break;
         }
     if(armor>maxArmor)
         {
-            spdRed=(maxArmor*armPerk+(armor-maxArmor)*.4)*fullPart;        
+            spdRed=(maxArmor*armPerk+(armor-maxArmor)*.3)*fullPart;        
         }
     else
         {
@@ -413,7 +413,7 @@ function calculateDefense()
         }
     if(armor>maxArmor)
         {
-            armor=maxArmor*arm2Perk+(armor-maxArmor)*.6;
+            armor=maxArmor*arm2Perk+(armor-maxArmor)*.7;
         }
     else
         {
