@@ -254,10 +254,10 @@ function calculateAttack()
     
     switch(hakiLevel)
         {
-            case "HC1":HakiMult=0.0075;willReq=250;break;
-            case "HC2":HakiMult=0.0125;willReq=300;break;
-            case "HC3":HakiMult=0.0175;willReq=350;break;
-            case "HCS":HakiMult=0.0225;willReq=375;break;
+            case "HC1":HakiMult=0.0075;ryouMult=0;willReq=250;break;
+            case "HC2":HakiMult=0.0125;ryouMult=0;willReq=300;break;
+            case "HC3":HakiMult=0.0175;ryouMult=0;willReq=350;break;
+            case "HCS":HakiMult=0.0225;ryouMult=0;willReq=375;break;
             case "HR1":HakiMult=0.0050;ryouMult=.035;willReq=300;break;
             case "HR2":HakiMult=0.0075;ryouMult=.055;willReq=350;break;
             case "HRS":HakiMult=0.0100;ryouMult=.075;willReq=375;break;
@@ -278,10 +278,10 @@ function calculateAttack()
         {
             powerAtt=0.20;
         }
-    attSrc=[baseAtt,powerAtt,hakiAtt].sort(function(a,b){return a-b});
+    attSrc=[powerAtt,hakiAtt].sort(function(a,b){return a-b});
     attSrc.reverse();
     //console.log(attSrc);
-    attackMult=attSrc[0]+attSrc[1]+attSrc[2]*.5+MeitoAtt;
+    attackMult=attSrc[0]+attSrc[1]*.5+MeitoAtt+baseAtt;
     //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+MeitoAtt;
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
@@ -354,7 +354,7 @@ function calculateDefense()
     var atthakiLevel=document.getElementById("attHakiLevel").value;
     var attackLevel=document.getElementById("attattackLevel").value;
     var FullCheck=document.getElementById("defFullCheck").checked;
-    var totMit,defPower,maxArmor,armorSources,spdRed,armPerk,fullPart=1;
+    var totMit,defPower,maxArmor,armorSources,spdRed,armPerk,arm2Perk,fullPart=1;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
     var overflow=.25,sloverflow=.10;
@@ -398,27 +398,35 @@ function calculateDefense()
        fullPart=.75;
     switch(armorPerk)
         {
-            case "AP1":maxArmor=100;armPerk=.8;break;
-            case "AP2":maxArmor=200;armPerk=.825;break;
-            case "AP3":maxArmor=300;armPerk=.85;break;
-            case "AP4":maxArmor=400;armPerk=.875;break;
-            case "AP5":maxArmor=500;armPerk=.9;break;
-            default:maxArmor=15;armPerk=.4;break;
+            case "AP1":maxArmor=100;armPerk=.2;arm2Perk=.8;break;
+            case "AP2":maxArmor=200;armPerk=.175;arm2Perk=.825;break;
+            case "AP3":maxArmor=300;armPerk=.15;arm2Perk=.85;break;
+            case "AP4":maxArmor=400;armPerk=.125;arm2Perk=.875;break;
+            case "AP5":maxArmor=500;armPerk=.1;arm2Perk=.9;break;
+            default:maxArmor=15;armPerk=.4;arm2Perk=.6;break;
         }
     if(armor>maxArmor)
         {
-            spdRed=(maxArmor*(1-armPerk)+(armor-maxArmor)*(1-.4))*fullPart;
-            
+            spdRed=(maxArmor*armPerk+(armor-maxArmor)*.4)*fullPart;        
         }
     else
         {
-            spdRed=armor*(1-armPerk)*fullPart;
+            spdRed=armor*armPerk*fullPart;
         }
+    if(armor>maxArmor)
+        {
+            armor=maxArmor*arm2Perk+(armor-maxArmor)*.6;
+        }
+    else
+        {
+            armor=armor*arm2Perk;
+        }
+    armor=diminish2(armor);
     //console.log(spdRed);
     armorSources=[HakiBoost,TekkaiBoost,armor].sort(function(a,b){return a-b});
     armorSources.reverse();
     //console.log(armorSources);
-    defPower=diminish(armorSources[0]+armorSources[1]*.5+armorSources[2]*.5+statDef);
+    defPower=diminish2(armorSources[0]+armorSources[1]*.5+armorSources[2]*.5+statDef);
     switch(attackLevel)
         {           
             case "RG1":defPower*=.95;break;
