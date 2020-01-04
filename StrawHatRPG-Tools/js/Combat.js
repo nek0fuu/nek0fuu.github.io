@@ -121,7 +121,7 @@ function calculateAttack()
     var willFactor=.15;
     var overflow=.25;
     var thr=9,restype;
-    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult;
+    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain;
     for(i=0;i<errors.length;i++)
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
@@ -165,11 +165,11 @@ function calculateAttack()
             case "RG2":baseAtt=1.3;restype="Att";break;
             case "RG3":baseAtt=1.4;restype="Att";break;
             case "RGS":baseAtt=1.5;restype="Att";break;
-            case "HAL":baseDrain=5;HaoMult=.4;willReq=200;restype="Hao";break;
-            case "HAM":baseDrain=10;HaoMult=.6;willReq=250;restype="Hao";break;
-            case "HAH":baseDrain=15;HaoMult=.8;willReq=300;restype="Hao";break;
-            case "HAI":baseDrain=20;HaoMult=1;willReq=350;restype="Hao";break;
-            case "HAS":baseDrain=25;HaoMult=1.25;willReq=375;restype="Hao";break;
+            case "HAL":baseDrain=5;base2Drain=0;HaoMult=.4;willReq=200;restype="Hao";break;
+            case "HAM":baseDrain=10;base2Drain=10;HaoMult=.6;willReq=250;restype="Hao";break;
+            case "HAH":baseDrain=15;base2Drain=20;HaoMult=.8;willReq=300;restype="Hao";break;
+            case "HAI":baseDrain=20;base2Drain=30;HaoMult=1;willReq=350;restype="Hao";break;
+            case "HAS":baseDrain=25;base2Drain=40;HaoMult=1.2;willReq=375;restype="Hao";break;
                 
             default:baseAtt=0;break;
         }
@@ -225,27 +225,31 @@ function calculateAttack()
        {
             document.getElementById("hideThisCheck").style.display="none";
        }
-    SoruBoost=(spdReq*1.5+basespd)*SoruMult;
+    SoruBoost=(spdReq+basespd)*SoruMult;
     document.getElementById("SoruSpd").textContent=Math.round(basespd+SoruBoost);
     
     maxDrain=baseDrain*3;
     if(!focCheck)
-       focHao=.7;
-    willDiff=basewill-oppwill;
-    maxPerc=(willReq*1.5+basewill)/1000;
+       focHao=.6;
+    willDiff=basewill-oppwill+base2Drain;
+    maxPerc=(willReq+basewill)/800;
     if(maxPerc>1)
         maxPerc=1;
     
 
-    totalDrain=willDiff*HaoMult*focHao;
-    if(totalDrain<baseDrain*focHao)
-        totalDrain=baseDrain*focHao;
+    totalDrain=baseDrain+willDiff*HaoMult;
+    /*if(totalDrain<baseDrain*focHao)
+        totalDrain=baseDrain*focHao;*/
     totalDrain=diminish0(totalDrain);
-    
-    if(totalDrain>maxDrain*maxPerc*focHao)
+    if(totalDrain<0)
         {
-            totalDrain=maxDrain*maxPerc*focHao;
+            totalDrain=0;
         }
+    if(totalDrain>maxDrain*maxPerc)
+        {
+            totalDrain=maxDrain*maxPerc;
+        }
+    totalDrain*=focHao;
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
     
     switch(hakiLevel)
@@ -259,8 +263,8 @@ function calculateAttack()
             case "HRS":HakiMult=0.0100;ryouMult=.065;willReq=375;break;
             default:HakiMult=0;willReq=0;ryouMult=0;break;
         }
-    hakiAtt=(willReq*1.5+basewill)*HakiMult/100;
-    breakAmt=(willReq*1.5+basewill)*ryouMult/100;
+    hakiAtt=(willReq+basewill)*HakiMult/100;
+    breakAmt=(willReq+basewill)*ryouMult/100;
 
     switch(meitoGrade)
         {
@@ -381,14 +385,14 @@ function calculateDefense()
             case "HC1":HakiMult=0.275;willReq=250;break;
             case "HC2":HakiMult=0.350;willReq=300;break;
             case "HC3":HakiMult=0.425;willReq=350;break;
-            case "HCS":HakiMult=0.525;willReq=375;break;    
+            case "HCS":HakiMult=0.500;willReq=375;break;    
             default:HakiMult=0;willReq=0;break;
         }
     //TekkaiMin=TekkaiMult*600;
     //HakiMin=HakiMult*600;
     
-    HakiBoost=(willReq*1.5+basewill)*HakiMult;
-    TekkaiBoost=(stamReq*1.5+basestam)*TekkaiMult;
+    HakiBoost=(willReq+basewill)*HakiMult;
+    TekkaiBoost=(stamReq+basestam)*TekkaiMult;
     
     if(!FullCheck)
        fullPart=.75;
