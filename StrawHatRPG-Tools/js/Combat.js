@@ -229,16 +229,16 @@ function calculateAttack()
     maxDrain=baseDrain*3;
     if(!focCheck)
        focHao=.6;
-    willDiff=basewill-oppwill+base2Drain;
+    willDiff=basewill-oppwill;
     maxPerc=(willReq+basewill)/800;
     if(maxPerc>1)
         maxPerc=1;
     
 
-    totalDrain=baseDrain+willDiff*HaoMult;
-    /*if(totalDrain<baseDrain*focHao)
-        totalDrain=baseDrain*focHao;*/
+    totalDrain=willDiff*HaoMult;
     totalDrain=diminish0(totalDrain);
+    if(totalDrain<baseDrain)
+        totalDrain=baseDrain;
     if(totalDrain<0)
         {
             totalDrain=0;
