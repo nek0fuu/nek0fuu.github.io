@@ -356,6 +356,7 @@ function calculateDefense()
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
     var overflow=.25,sloverflow=.10;
+    var stamRed=basestam*.001, totSpdRed;
     
     statDef=basestam*stamFactor+basewill*willFactor;
     
@@ -393,8 +394,8 @@ function calculateDefense()
     TekkaiBoost=(stamReq+basestam)*TekkaiMult;
     
     if(!FullCheck)
-       fullPart=.75;
-    switch(armorPerk)
+       fullPart=.7;
+    /*switch(armorPerk)
         {
             case "AP1":maxArmor=100;armPerk=.2;arm2Perk=.8;break;
             case "AP2":maxArmor=200;armPerk=.175;arm2Perk=.825;break;
@@ -419,7 +420,44 @@ function calculateDefense()
         {
             armor=armor*arm2Perk;
         }
+    armor=diminish2(armor);*/
+    switch(armorPerk)
+        {
+            case "AP1":maxArmor=100;armPerk=.4;arm2Perk=.8;break;
+            case "AP2":maxArmor=200;armPerk=.425;arm2Perk=.825;break;
+            case "AP3":maxArmor=300;armPerk=.45;arm2Perk=.85;break;
+            case "AP4":maxArmor=400;armPerk=.475;arm2Perk=.875;break;
+            case "AP5":maxArmor=500;armPerk=.5;arm2Perk=.9;break;
+            default:maxArmor=15;armPerk=.3;arm2Perk=.7;break;
+        }
+    totSpdRed=armPerk+stamRed;
+    if(totSpdRed>1)
+        {
+            totSpdRed=1;
+        }
+    if(armor>maxArmor)
+        {
+            spdRed=(maxArmor*(1-(totSpdRed))+(armor-maxArmor)*(1-(.3+stamRed)))*.15;        
+        }
+    else
+        {
+            spdRed=armor*(1-(totSpdRed))*.15;
+        }
+    if(spdRed<armor*.01)
+        {
+            spdRed=armor*.01;
+        }
+    if(armor>maxArmor)
+        {
+            armor=maxArmor*arm2Perk+(armor-maxArmor)*.7;
+        }
+    else
+        {
+            armor=armor*arm2Perk;
+        }
+    spdRed*=fullPart;
     armor=diminish2(armor);
+    
     //console.log(spdRed);
     armorSources=[HakiBoost,TekkaiBoost,armor].sort(function(a,b){return a-b});
     armorSources.reverse();
@@ -446,7 +484,7 @@ function calculateDefense()
 
     document.getElementById("totMit").textContent=Math.round((totMit/attPow)*100)+"%";
     document.getElementById("IntMit").textContent=Math.round(defPower);
-    document.getElementById("SpdPen").textContent=Math.round(spdRed);
+    document.getElementById("SpdPen").textContent=Math.round(spdRed)+"%";
     
 }
 
