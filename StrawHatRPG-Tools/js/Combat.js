@@ -447,6 +447,10 @@ function calculateDefense()
         {
             spdRed=armor*.01;
         }
+    if(spdRed>90)
+        {
+            spdRed=90;
+        }
     if(armor>maxArmor)
         {
             armor=maxArmor*arm2Perk+(armor-maxArmor)*.7;
