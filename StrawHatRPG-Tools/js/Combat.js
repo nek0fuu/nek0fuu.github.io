@@ -121,7 +121,7 @@ function calculateAttack()
     var dexFactor=.35;
     var willFactor=.175;
     var overflow=.25;
-    var thr=9,restype;
+    var thr=9999,restype;
     var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain;
     for(i=0;i<errors.length;i++)
     {
@@ -139,16 +139,16 @@ function calculateAttack()
     switch(attackLevel)
         {
             case "NS9":baseAtt=1.00;restype="AttMeito";break;
-            case "IW1":baseAtt=.45;thr=1;restype="Att";break;
-            case "IW2":baseAtt=.56;thr=2;restype="Att";break;
-            case "IW3":baseAtt=.67;thr=3;restype="Att";break;
-            case "IW4":baseAtt=.78;thr=4;restype="Att";break;
-            case "IW5":baseAtt=.90;thr=5;restype="Att";break;
-            case "FS1":baseAtt=.55;thr=1;restype="AttMeitoFS";break;
-            case "FS2":baseAtt=.65;thr=2;restype="AttMeitoFS";break;
-            case "FS3":baseAtt=.75;thr=3;restype="AttMeitoFS";break;
-            case "FS4":baseAtt=.85;thr=4;restype="AttMeitoFS";break;
-            case "FS5":baseAtt=.95;thr=5;restype="AttMeitoFS";break;
+            case "IW1":baseAtt=.45;thr=100;restype="Att";break;
+            case "IW2":baseAtt=.56;thr=200;restype="Att";break;
+            case "IW3":baseAtt=.67;thr=300;restype="Att";break;
+            case "IW4":baseAtt=.78;thr=400;restype="Att";break;
+            case "IW5":baseAtt=.90;thr=500;restype="Att";break;
+            case "FS1":baseAtt=.55;thr=100;restype="AttMeitoFS";break;
+            case "FS2":baseAtt=.65;thr=200;restype="AttMeitoFS";break;
+            case "FS3":baseAtt=.75;thr=300;restype="AttMeitoFS";break;
+            case "FS4":baseAtt=.85;thr=400;restype="AttMeitoFS";break;
+            case "FS5":baseAtt=.95;thr=500;restype="AttMeitoFS";break;
             case "FSS":baseAtt=1.05;restype="AttMeitoFS";break;
             case "SO1":baseAtt=1.00;SoruMult=0.30;spdReq=70;restype="Soru";break;
             case "SO2":baseAtt=1.00;SoruMult=0.35;spdReq=135;restype="Soru";break;
@@ -158,9 +158,9 @@ function calculateAttack()
             case "SH2":baseAtt=1.10;restype="Att";break;
             case "SH3":baseAtt=1.15;restype="Att";break;
             case "SHS":baseAtt=1.20;restype="Att";break;
-            case "RK1":baseAtt=.50;thr=2;restype="Att";break;
-            case "RK2":baseAtt=.625;thr=3;restype="Att";break;
-            case "RK3":baseAtt=.75;thr=5;restype="Att";break;
+            case "RK1":baseAtt=.50;thr=165;restype="Att";break;
+            case "RK2":baseAtt=.625;thr=335;restype="Att";break;
+            case "RK3":baseAtt=.75;thr=500;restype="Att";break;
             case "RKS":baseAtt=.875;restype="Att";break;
             case "RG1":baseAtt=1.2;restype="Att";break;
             case "RG2":baseAtt=1.3;restype="Att";break;
@@ -172,7 +172,7 @@ function calculateAttack()
             case "HAI":baseDrain=15;base2Drain=30;HaoMult=.35;willReq=350;restype="Hao";break;
             case "HAS":baseDrain=20;base2Drain=40;HaoMult=.40;willReq=400;restype="Hao";break;
                 
-            default:baseAtt=0;break;
+            default:baseAtt=0;thr=9999;break;
         }
     
     if(restype.includes("Soru"))
@@ -250,10 +250,10 @@ function calculateAttack()
             case "HC1":HakiMult=0.0075;ryouMult=0;willReq=250;break;
             case "HC2":HakiMult=0.0125;ryouMult=0;willReq=300;break;
             case "HC3":HakiMult=0.0175;ryouMult=0;willReq=350;break;
-            case "HCS":HakiMult=0.0225;ryouMult=0;willReq=375;break;
+            case "HCS":HakiMult=0.0225;ryouMult=0;willReq=400;break;
             case "HR1":HakiMult=0.0050;ryouMult=.035;willReq=300;break;
             case "HR2":HakiMult=0.0075;ryouMult=.055;willReq=350;break;
-            case "HRS":HakiMult=0.0100;ryouMult=.075;willReq=375;break;
+            case "HRS":HakiMult=0.0100;ryouMult=.075;willReq=400;break;
             default:HakiMult=0;willReq=0;ryouMult=0;break;
         }
     hakiAtt=(willReq+basewill)*HakiMult/100;
@@ -273,8 +273,9 @@ function calculateAttack()
         }
     attSrc=[powerAtt,hakiAtt].sort(function(a,b){return a-b});
     attSrc.reverse();
-    //console.log(attSrc);
+    console.log(attSrc);
     attackMult=attSrc[0]+attSrc[1]*.5+MeitoAtt+baseAtt;
+    console.log(attackMult);
     //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+MeitoAtt;
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
@@ -285,7 +286,7 @@ function calculateAttack()
             attackMult*=0.95;
         }
     
-    attackPower=diminish2((strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult);
+    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult;
     for(i=0;i<stats.length;i++)
         {
             if(stats[i]<=lowest)
@@ -293,6 +294,13 @@ function calculateAttack()
                     lowest=stats[i];
                 }
         }
+    thr=[lowest*5,basestr*2,thr].sort(function(a,b){return a-b})[0];
+    if(attackPower>thr)
+        {
+            attackPower=(attackPower-thr)*overflow+thr;
+        }
+    attackPower=diminish2(attackPower);
+    /*
     if((attackPower>thr1)&&(thr==1))
        {
             attackPower=(attackPower-thr1)*overflow+thr1;
@@ -327,7 +335,7 @@ function calculateAttack()
                     attackPower=((attackPower-lowest*5)*overflow)+(lowest*5);
                 }
             
-        }
+        }*/
     document.getElementById("attPow").textContent=Math.round(attackPower);
     attPow=attackPower;
     
@@ -461,7 +469,7 @@ function calculateDefense()
     armorSources=[HakiBoost,TekkaiBoost,armor].sort(function(a,b){return a-b});
     armorSources.reverse();
     //console.log(armorSources);
-    defPower=diminish2(armorSources[0]+armorSources[1]*.5+armorSources[2]*.5+statDef);
+    defPower=armorSources[0]+armorSources[1]*.5+armorSources[2]*.5+statDef;
     switch(attackLevel)
         {           
             case "RG1":defPower*=.95;break;
@@ -471,7 +479,7 @@ function calculateDefense()
             default:break;
                 
         }
-    defPower=defPower*(1-breakAmt);
+    defPower=diminish2(defPower*(1-breakAmt));
     totMit=mitigate(attPow,defPower);
     /*switch(atthakiLevel)
         {
