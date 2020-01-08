@@ -10,7 +10,7 @@ function fetchUserStats() {
     // https://spreadsheets.google.com/feeds/cells/SHEET_ID/od6/public/full?alt=json
     let sheetID = "11DBV69f-U9T1EXbdI_AvjHpp7XzSs38fH9eKqdx2sUw";
 
-    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
+    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/2/public/full?alt=json`;
 
     let request = new XMLHttpRequest();
     
@@ -30,18 +30,23 @@ function fetchUserStats() {
         if (request.readyState == XMLHttpRequest.DONE) {
             if (request.status === 200) {
                 // Good response
-                let data = JSON.parse(request.response);
-                let entry = data.feed.entry.find((e) => {
-                    return (e.gsx$username.$t.localeCompare(document.getElementById("username").value, 'en', {sensitivity: 'base'}) === 0)
+                let data = JSON.parse(request.response).feed.entry;
+                let entry = data.findIndex((e) => {
+                    return (e.gsx$racialboost.$t.localeCompare(document.getElementById("username").value, 'en', {sensitivity: 'base'}) === 0)
                 });
                 if (entry) {
                     //currentStats.value = entry.gsx$totalbasestats.$t;
-                    document.getElementById("stamIPF").value=entry.gsx$stamina.$t;
-                    document.getElementById("strIPF").value=entry.gsx$strength.$t;
-                    document.getElementById("spdIPF").value=entry.gsx$speed.$t;
-                    document.getElementById("dexIPF").value=entry.gsx$dexterity.$t;
-                    document.getElementById("willIPF").value=entry.gsx$willpower.$t;
-                    document.getElementById("charName").textContent=entry.gsx$names.$t;
+                    document.getElementById("stamIPF").value=data[entry+1].gsx$currentstats.$t;
+                    document.getElementById("stamRIPF").value=data[entry+1].gsx$racialboost.$t;
+                    document.getElementById("strIPF").value=data[entry+2].gsx$currentstats.$t;
+                    document.getElementById("strRIPF").value=data[entry+2].gsx$racialboost.$t;
+                    document.getElementById("spdIPF").value=data[entry+3].gsx$currentstats.$t;
+                    document.getElementById("spdRIPF").value=data[entry+3].gsx$racialboost.$t;
+                    document.getElementById("dexIPF").value=data[entry+4].gsx$currentstats.$t;
+                    document.getElementById("dexRIPF").value=data[entry+4].gsx$racialboost.$t;
+                    document.getElementById("willIPF").value=data[entry+5].gsx$currentstats.$t;
+                    document.getElementById("willRIPF").value=data[entry+5].gsx$racialboost.$t;
+                    document.getElementById("charName").textContent=data[entry].gsx$a.$t;
                     mainCalcFunction();
                 } else {
                     logError(statsErrorMsg, "Error Fetching User's Stats. Check spelling or enter stats manually");

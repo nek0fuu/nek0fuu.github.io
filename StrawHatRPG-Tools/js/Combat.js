@@ -121,7 +121,7 @@ function calculateAttack()
     var willFactor=.175;
     var overflow=.25;
     var thr=9,restype;
-    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain;
+    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain;
     for(i=0;i<errors.length;i++)
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
@@ -150,9 +150,9 @@ function calculateAttack()
             case "FS5":baseAtt=.95;thr=5;restype="AttMeitoFS";break;
             case "FSS":baseAtt=1.05;restype="AttMeitoFS";break;
             case "SO1":baseAtt=1.00;SoruMult=0.30;spdReq=70;restype="Soru";break;
-            case "SO2":baseAtt=1.00;SoruMult=0.35;spdReq=140;restype="Soru";break;
-            case "SO3":baseAtt=1.00;SoruMult=0.40;spdReq=210;restype="Soru";break;
-            case "SOS":baseAtt=1.00;SoruMult=0.45;spdReq=250;restype="Soru";break;
+            case "SO2":baseAtt=1.00;SoruMult=0.35;spdReq=135;restype="Soru";break;
+            case "SO3":baseAtt=1.00;SoruMult=0.40;spdReq=200;restype="Soru";break;
+            case "SOS":baseAtt=1.00;SoruMult=0.45;spdReq=265;restype="Soru";break;
             case "SH1":baseAtt=1.05;thr=2;restype="Att";break;
             case "SH2":baseAtt=1.10;thr=3;restype="Att";break;
             case "SH3":baseAtt=1.15;thr=5;restype="Att";break;
@@ -165,11 +165,11 @@ function calculateAttack()
             case "RG2":baseAtt=1.3;restype="Att";break;
             case "RG3":baseAtt=1.4;restype="Att";break;
             case "RGS":baseAtt=1.5;restype="Att";break;
-            case "HAL":baseDrain=5;base2Drain=0;HaoMult=.4;willReq=200;restype="Hao";break;
-            case "HAM":baseDrain=10;base2Drain=10;HaoMult=.6;willReq=250;restype="Hao";break;
-            case "HAH":baseDrain=15;base2Drain=20;HaoMult=.8;willReq=300;restype="Hao";break;
-            case "HAI":baseDrain=20;base2Drain=30;HaoMult=1;willReq=350;restype="Hao";break;
-            case "HAS":baseDrain=25;base2Drain=40;HaoMult=1.2;willReq=375;restype="Hao";break;
+            case "HAL":baseDrain=0;base2Drain=0;HaoMult=.2;willReq=200;restype="Hao";break;
+            case "HAM":baseDrain=5;base2Drain=10;HaoMult=.25;willReq=250;restype="Hao";break;
+            case "HAH":baseDrain=10;base2Drain=20;HaoMult=.3;willReq=300;restype="Hao";break;
+            case "HAI":baseDrain=15;base2Drain=30;HaoMult=.35;willReq=350;restype="Hao";break;
+            case "HAS":baseDrain=20;base2Drain=40;HaoMult=.40;willReq=400;restype="Hao";break;
                 
             default:baseAtt=0;break;
         }
@@ -226,26 +226,20 @@ function calculateAttack()
     SoruBoost=(spdReq+basespd)*SoruMult;
     document.getElementById("SoruSpd").textContent=Math.round(basespd+SoruBoost);
     
-    maxDrain=baseDrain*3;
     if(!focCheck)
        focHao=.6;
-    willDiff=basewill-oppwill;
-    maxPerc=(willReq+basewill)/800;
-    if(maxPerc>1)
-        maxPerc=1;
+    baseDrain=(basewill+willReq)*HaoMult/10;
+    maxDrain=(basewill+willReq)*HaoMult/10*2;
+    scaleDrain=(basewill-oppwill)*.4;
+    totalDrain=baseDrain+scaleDrain;
     
 
-    totalDrain=willDiff*HaoMult;
-    totalDrain=diminish0(totalDrain);
-    if(totalDrain<baseDrain)
-        totalDrain=baseDrain;
+    totalDrain=diminish0(scaleDrain+baseDrain);
+    if(totalDrain>maxDrain)
+        totalDrain=maxDrain;
     if(totalDrain<0)
         {
             totalDrain=0;
-        }
-    if(totalDrain>maxDrain*maxPerc)
-        {
-            totalDrain=maxDrain*maxPerc;
         }
     totalDrain*=focHao;
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
@@ -374,9 +368,9 @@ function calculateDefense()
     switch(tekkai)
         {
             case "TK1":TekkaiMult=0.275;stamReq=70;break;
-            case "TK2":TekkaiMult=0.350;stamReq=140;break;
-            case "TK3":TekkaiMult=0.425;stamReq=210;break;
-            case "TKS":TekkaiMult=0.500;stamReq=250;break;
+            case "TK2":TekkaiMult=0.350;stamReq=135;break;
+            case "TK3":TekkaiMult=0.425;stamReq=200;break;
+            case "TKS":TekkaiMult=0.500;stamReq=265;break;
             default:TekkaiMult=0;stamReq=0;break;
         }
     switch(haki)
