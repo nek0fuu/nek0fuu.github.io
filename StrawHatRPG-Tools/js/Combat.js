@@ -376,18 +376,18 @@ function calculateDefense()
         }
     switch(tekkai)
         {
-            case "TK1":TekkaiMult=0.275;stamReq=70;break;
-            case "TK2":TekkaiMult=0.350;stamReq=135;break;
-            case "TK3":TekkaiMult=0.425;stamReq=200;break;
-            case "TKS":TekkaiMult=0.500;stamReq=265;break;
+            case "TK1":TekkaiMult=0.25;stamReq=70;break;
+            case "TK2":TekkaiMult=0.35;stamReq=135;break;
+            case "TK3":TekkaiMult=0.45;stamReq=200;break;
+            case "TKS":TekkaiMult=0.55;stamReq=265;break;
             default:TekkaiMult=0;stamReq=0;break;
         }
     switch(haki)
         {
-            case "HC1":HakiMult=0.275;willReq=250;break;
+            case "HC1":HakiMult=0.25;willReq=250;break;
             case "HC2":HakiMult=0.350;willReq=300;break;
-            case "HC3":HakiMult=0.425;willReq=350;break;
-            case "HCS":HakiMult=0.500;willReq=400;break;    
+            case "HC3":HakiMult=0.45;willReq=350;break;
+            case "HCS":HakiMult=0.55;willReq=400;break;    
             default:HakiMult=0;willReq=0;break;
         }
     //TekkaiMin=TekkaiMult*600;
