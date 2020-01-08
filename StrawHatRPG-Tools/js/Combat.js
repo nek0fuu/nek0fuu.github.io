@@ -387,7 +387,7 @@ function calculateDefense()
             case "HC1":HakiMult=0.275;willReq=250;break;
             case "HC2":HakiMult=0.350;willReq=300;break;
             case "HC3":HakiMult=0.425;willReq=350;break;
-            case "HCS":HakiMult=0.500;willReq=375;break;    
+            case "HCS":HakiMult=0.500;willReq=400;break;    
             default:HakiMult=0;willReq=0;break;
         }
     //TekkaiMin=TekkaiMult*600;
