@@ -1,6 +1,7 @@
 var ipfields=document.getElementsByClassName("IP");
 var errors=document.getElementsByClassName("error-msg");
 /*
+Fuck This Shit
 var dia=500;  135 30
 var tit=365;    105 25
 var ste=260;    80  20
@@ -98,6 +99,7 @@ function calculateAttack()
 {
     //var chp=document.getElementById("attchpIPF").valueAsNumber;
     //var thp=document.getElementById("attthpIPF").valueAsNumber;
+    var basestam=document.getElementById("attstmIPF").valueAsNumber;
     var basestr=document.getElementById("attstrIPF").valueAsNumber;
     var basespd=document.getElementById("attspdIPF").valueAsNumber;
     var basedex=document.getElementById("attdexIPF").valueAsNumber;
@@ -116,13 +118,14 @@ function calculateAttack()
     var SoruBoost,SoruMult,spdReq;
     var baseAtt=0,hakiAtt=0,powerAtt=0,MeitoAtt=0,attSrc;
     var stats=[basestr,basespd,basedex,basewill];
+    var statReq=[],statMult=[],statsNeeded=[];
     var strFactor=.35;
     var spdFactor=.125;
     var dexFactor=.35;
     var willFactor=.175;
     var overflow=.25;
     var thr=9,restype;
-    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain;
+    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain,maxAtt;
     for(i=0;i<errors.length;i++)
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
@@ -137,6 +140,47 @@ function calculateAttack()
             document.getElementById("attspecBoost").disabled=false;
         }*/
     switch(attackLevel)
+        {
+            case "NS9":baseAtt=1.00;restype="AttMeito";break;
+            case "IW1":baseAtt=.375;thr=1;statReq=[75,25];statMult=[.000225,.000075];statsNeeded=[basestr,basespd];maxAtt=.55;restype="Att";break; //0(3)3000
+            case "IW2":baseAtt=.450;thr=2;statReq=[115,35];statMult=[.000234375,.000078125];statsNeeded=[basestr,basespd];maxAtt=.65;restype="Att";break; //0(3)3125
+            case "IW3":baseAtt=.525;thr=3;statReq=[150,50];statMult=[.00024375,.00008125];statsNeeded=[basestr,basespd];maxAtt=.75;restype="Att";break; //0(3)3250
+            case "IW4":baseAtt=.600;thr=4;statReq=[190,60];statMult=[.000253125,.000084375];statsNeeded=[basestr,basespd];maxAtt=.85;restype="Att";break; //0(3) 3375
+            case "IW5":baseAtt=.675;thr=5;statReq=[225,75];statMult=[.0002625,.0000875];statsNeeded=[basestr,basespd];maxAtt=.95;restype="Att";break; //0(3) 3500
+            case "FS1":baseAtt=.450;thr=1;statReq=[50,50];statMult=[.00018125,.00018125];statsNeeded=[basedex,basewill];maxAtt=.6;restype="AttMeitoFS";break; //0(3)3625
+            case "FS2":baseAtt=.525;thr=2;statReq=[75,75];statMult=[.0001875,.00011875];statsNeeded=[basedex,basewill];maxAtt=.7;restype="AttMeitoFS";break; //0(3)3750
+            case "FS3":baseAtt=.600;thr=3;statReq=[100,100];statMult=[.00019375,.00019375];statsNeeded=[basedex,basewill];maxAtt=.8;restype="AttMeitoFS";break; //0(3)3875
+            case "FS4":baseAtt=.675;thr=4;statReq=[125,125];statMult=[.0002,.0002];statsNeeded=[basedex,basewill];maxAtt=.9;restype="AttMeitoFS";break; //0(3)4000
+            case "FS5":baseAtt=.900;thr=5;statReq=[150,150];statMult=[.00020625,.00020625];statsNeeded=[basedex,basewill];maxAtt=1;restype="AttMeitoFS";break; //0(3)4125
+            case "FSS":baseAtt=0.950;statReq=[175,175];statMult=[.0002125,.0002125];statsNeeded=[basedex,basewill];maxAtt=1.3;restype="AttMeitoFS";break; //0(3)425
+            case "SO1":baseAtt=0;SoruMult=0.30;spdReq=70;restype="Soru";break;
+            case "SO2":baseAtt=0;SoruMult=0.35;spdReq=135;restype="Soru";break;
+            case "SO3":baseAtt=0;SoruMult=0.40;spdReq=200;restype="Soru";break;
+            case "SOS":baseAtt=0;SoruMult=0.45;spdReq=265;restype="Soru";break;
+            case "SH1":baseAtt=1;thr=2;statReq=[70,35];statMult=[];statsNeeded=[basestr,basespd];maxAtt=1.669;restype="Att";break;
+            case "SH2":baseAtt=1.05;thr=3;statReq=[135,65];statMult=[];statsNeeded=[basestr,basespd];maxAtt=1.669;restype="Att";break;
+            case "SH3":baseAtt=1.10;thr=5;statReq=[200,100];statMult=[];statsNeeded=[basestr,basespd];maxAtt=1.669;restype="Att";break;
+            case "SHS":baseAtt=1.15;statReq=[265,135];statMult=[];statsNeeded=[basestr,basespd];maxAtt=1.669;restype="Att";break;
+            case "RK1":baseAtt=.1;thr=2;statReq=[70,35];statMult=[];statsNeeded=[basestr,basestam];maxAtt=1.669;restype="Att";break;
+            case "RK2":baseAtt=.2;thr=3;statReq=[135,65];statMult=[];statsNeeded=[basestr,basestam];maxAtt=1.669;restype="Att";break;
+            case "RK3":baseAtt=.4;thr=5;statReq=[200,100];statMult=[];statsNeeded=[basestr,basestam];maxAtt=1.669;restype="Att";break;
+            case "RKS":baseAtt=.5;statReq=[265,135];statMult=[];statsNeeded=[basestr,basestam];maxAtt=1.669;restype="Att";break;
+            case "RG1":baseAtt=1.1;statReq=[200,200,200];statMult=[.000175,.000175,.000175];statsNeeded=[basestr,basespd,basestam];maxAtt=1.35;restype="Att";break;//0(3)525
+            case "RG2":baseAtt=1.2;statReq=[230,230,230];statMult=[,.00018333,.00018333,.00018333];statsNeeded=[basestr,basespd,basestam];maxAtt=1.45;restype="Att";break;//0(3)55
+            case "RG3":baseAtt=1.3;statReq=[260,260,260];statMult=[.000191666,.000191666,.000191666];statsNeeded=[basestr,basespd,basestam];maxAtt=1.55;restype="Att";break;//0(3)575
+            case "RGS":baseAtt=1.4;statReq=[290,290,290];statMult=[.0000333,.0000333,.0000333];statsNeeded=[basestr,basespd,basestam];maxAtt=1.65;restype="Att";break;//0(3)1000
+            case "HAL":baseDrain=0;base2Drain=0;HaoMult=.2;willReq=200;restype="Hao";break;
+            case "HAM":baseDrain=5;base2Drain=10;HaoMult=.25;willReq=250;restype="Hao";break;
+            case "HAH":baseDrain=10;base2Drain=20;HaoMult=.3;willReq=300;restype="Hao";break;
+            case "HAI":baseDrain=15;base2Drain=30;HaoMult=.35;willReq=350;restype="Hao";break;
+            case "HAS":baseDrain=20;base2Drain=40;HaoMult=.40;willReq=400;restype="Hao";break;
+                
+            default:baseAtt=0;break;
+        }
+
+    baseAtt=pimpedUpBase(baseAtt,statReq,statsNeeded,statMult,maxAtt);
+    console.log(baseAtt);
+    /*switch(attackLevel)
         {
             case "NS9":baseAtt=1.00;restype="AttMeito";break;
             case "IW1":baseAtt=.45;thr=1;restype="Att";break;
@@ -154,14 +198,14 @@ function calculateAttack()
             case "SO2":baseAtt=1.00;SoruMult=0.35;spdReq=135;restype="Soru";break;
             case "SO3":baseAtt=1.00;SoruMult=0.40;spdReq=200;restype="Soru";break;
             case "SOS":baseAtt=1.00;SoruMult=0.45;spdReq=265;restype="Soru";break;
-            case "SH1":baseAtt=1.05;restype="Att";break;
-            case "SH2":baseAtt=1.10;restype="Att";break;
-            case "SH3":baseAtt=1.15;restype="Att";break;
+            case "SH1":baseAtt=1.05;thr=2;restype="Att";break;
+            case "SH2":baseAtt=1.10;thr=3;restype="Att";break;
+            case "SH3":baseAtt=1.15;thr=5;restype="Att";break;
             case "SHS":baseAtt=1.20;restype="Att";break;
             case "RK1":baseAtt=.50;thr=2;restype="Att";break;
-            case "RK2":baseAtt=.625;thr=3;restype="Att";break;
-            case "RK3":baseAtt=.75;thr=5;restype="Att";break;
-            case "RKS":baseAtt=.875;restype="Att";break;
+            case "RK2":baseAtt=.60;thr=3;restype="Att";break;
+            case "RK3":baseAtt=.70;thr=5;restype="Att";break;
+            case "RKS":baseAtt=.80;restype="Att";break;
             case "RG1":baseAtt=1.2;restype="Att";break;
             case "RG2":baseAtt=1.3;restype="Att";break;
             case "RG3":baseAtt=1.4;restype="Att";break;
@@ -173,7 +217,7 @@ function calculateAttack()
             case "HAS":baseDrain=20;base2Drain=40;HaoMult=.40;willReq=400;restype="Hao";break;
                 
             default:baseAtt=0;break;
-        }
+        }*/
     
     if(restype.includes("Soru"))
         {
@@ -212,9 +256,10 @@ function calculateAttack()
         }
     else
         {
+            
+            document.getElementById("attbladeGrade").value="NON";
             document.getElementById("hideThisBladeGrade").style.display="none";
             document.getElementById("attbladeGrade").disabled=true;
-            document.getElementById("attbladeGrade").value="NON"
         }
     if(restype.includes("FS"))
        {
@@ -273,8 +318,9 @@ function calculateAttack()
         }
     attSrc=[powerAtt,hakiAtt].sort(function(a,b){return a-b});
     attSrc.reverse();
-    //console.log(attSrc);
+    console.log(attSrc);
     attackMult=attSrc[0]+attSrc[1]*.5+MeitoAtt+baseAtt;
+    console.log(attackMult);
     //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+MeitoAtt;
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
@@ -563,6 +609,22 @@ function diminish2(basestat)
         }
     res+=basestat*multiplier;
     return res;
+}
+function pimpedUpBase(base,statR,statN,statM,max)
+{
+    var res=0,i
+    {
+        for(i in statR)
+            {
+                res+=(statR[i]+statN[i])*statM[i];
+            }
+        res+=base;
+        if(res>max)
+            {
+                res=max;
+            }
+        return res;
+    }
 }
 /*
             */
