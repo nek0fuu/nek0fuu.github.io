@@ -121,8 +121,8 @@ function calculateAttack()
     var dexFactor=.35;
     var willFactor=.175;
     var overflow=.25;
-    var thr=9999,restype;
-    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain;
+    var thr=800,restype;
+    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain,willCost;
     for(i=0;i<errors.length;i++)
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
@@ -166,13 +166,13 @@ function calculateAttack()
             case "RG2":baseAtt=1.3;restype="Att";break;
             case "RG3":baseAtt=1.4;restype="Att";break;
             case "RGS":baseAtt=1.5;restype="Att";break;
-            case "HAL":baseDrain=0;base2Drain=0;HaoMult=.2;willReq=200;restype="Hao";break;
-            case "HAM":baseDrain=5;base2Drain=10;HaoMult=.25;willReq=250;restype="Hao";break;
-            case "HAH":baseDrain=10;base2Drain=20;HaoMult=.3;willReq=300;restype="Hao";break;
-            case "HAI":baseDrain=15;base2Drain=30;HaoMult=.35;willReq=350;restype="Hao";break;
-            case "HAS":baseDrain=20;base2Drain=40;HaoMult=.40;willReq=400;restype="Hao";break;
+            case "HAL":willCost=10;HaoMult=.02;willReq=200;restype="Hao";break;
+            case "HAM":willCost=15;HaoMult=.025;willReq=250;restype="Hao";break;
+            case "HAH":willCost=20;HaoMult=.03;willReq=300;restype="Hao";break;
+            case "HAI":willCost=25;HaoMult=.035;willReq=350;restype="Hao";break;
+            case "HAS":willCost=30;HaoMult=.040;willReq=400;restype="Hao";break;
                 
-            default:baseAtt=0;thr=9999;break;
+            default:baseAtt=0;break;
         }
     
     if(restype.includes("Soru"))
@@ -229,13 +229,14 @@ function calculateAttack()
     
     if(!focCheck)
        focHao=.6;
-    baseDrain=(basewill+willReq)*HaoMult/10;
-    maxDrain=(basewill+willReq)*HaoMult/10*2;
-    scaleDrain=(basewill-oppwill)*.4;
+    baseDrain=(basewill+willReq)*HaoMult;
+    maxDrain=(basewill+willReq)*HaoMult*2;
+    scaleDrain=(basewill-oppwill)*.2;
     totalDrain=baseDrain+scaleDrain;
-    
+    willCost=willCost+basewill*HaoMult*.1;
 
-    totalDrain=diminish0(scaleDrain+baseDrain);
+    //totalDrain=diminish0(scaleDrain+baseDrain);
+    totalDrain=scaleDrain+baseDrain;
     if(totalDrain>maxDrain)
         totalDrain=maxDrain;
     if(totalDrain<0)
@@ -244,6 +245,7 @@ function calculateAttack()
         }
     totalDrain*=focHao;
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
+    //document.getElementById("HaoRes2").textContent=Math.round(willCost);
     
     switch(hakiLevel)
         {
@@ -299,7 +301,7 @@ function calculateAttack()
         {
             attackPower=(attackPower-thr)*overflow+thr;
         }
-    attackPower=diminish2(attackPower);
+    //attackPower=diminish2(attackPower);
     /*
     if((attackPower>thr1)&&(thr==1))
        {
@@ -358,7 +360,7 @@ function calculateDefense()
     var totMit,defPower,maxArmor,armorSources,spdRed,armPerk,arm2Perk,fullPart=1;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
-    var overflow=.25,sloverflow=.10;
+    var overflow=.25,sloverflow=.10,thr=800;
     var stamRed=basestam*.001, totSpdRed;
     
     statDef=basestam*stamFactor+basewill*willFactor;
@@ -461,9 +463,10 @@ function calculateDefense()
     else
         {
             armor=armor*arm2Perk;
+            
         }
     spdRed*=fullPart;
-    armor=diminish2(armor);
+    //armor=diminish2(armor);
     
     //console.log(spdRed);
     armorSources=[HakiBoost,TekkaiBoost,armor].sort(function(a,b){return a-b});
@@ -479,7 +482,12 @@ function calculateDefense()
             default:break;
                 
         }
-    defPower=diminish2(defPower*(1-breakAmt));
+    if(defPower>thr)
+        {
+            defPower=(defPower-thr)*overflow+thr;
+        }
+    //defPower=diminish2(defPower*(1-breakAmt));
+    defPower=(defPower*(1-breakAmt));
     totMit=mitigate(attPow,defPower);
     /*switch(atthakiLevel)
         {
