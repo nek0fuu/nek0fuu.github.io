@@ -442,21 +442,21 @@ function calculateDefense()
         }
     if(armor>maxArmor)
         {
-            spdRed=(maxArmor*(1-(totSpdRed))+(armor-maxArmor)*(1-(.1+stamRed)))*.15;        
+            spdRed=(maxArmor*(1-(totSpdRed))+(armor-maxArmor)*(1-(.1+stamRed)))*.2;        
         }
     else
         {
-            spdRed=armor*(1-(totSpdRed))*.15;
+            spdRed=armor*(1-(totSpdRed))*.2;
         }
-    if(spdRed<armor*.01)
+    if(spdRed<armor*.025)
         {
-            spdRed=armor*.01;
+            spdRed=armor*.025;
         }
-    if(spdRed>90)
+    if(spdRed>99)
         {
-            spdRed=90;
+            spdRed=99;
         }
-    if(armor>maxArmor)
+    /*if(armor>maxArmor)
         {
             armor=maxArmor*arm2Perk+(armor-maxArmor)*.5;
         }
@@ -464,7 +464,7 @@ function calculateDefense()
         {
             armor=armor*arm2Perk;
             
-        }
+        }*/
     spdRed*=fullPart;
     //armor=diminish2(armor);
     
