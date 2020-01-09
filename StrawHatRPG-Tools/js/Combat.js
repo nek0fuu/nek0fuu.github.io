@@ -428,12 +428,12 @@ function calculateDefense()
     armor=diminish2(armor);*/
     switch(armorPerk)
         {
-            case "AP1":maxArmor=100;armPerk=.4;arm2Perk=.8;break;
-            case "AP2":maxArmor=200;armPerk=.425;arm2Perk=.825;break;
-            case "AP3":maxArmor=300;armPerk=.45;arm2Perk=.85;break;
-            case "AP4":maxArmor=400;armPerk=.475;arm2Perk=.875;break;
+            case "AP1":maxArmor=100;armPerk=.3;arm2Perk=.7;break;
+            case "AP2":maxArmor=200;armPerk=.35;arm2Perk=.75;break;
+            case "AP3":maxArmor=300;armPerk=.4;arm2Perk=.8;break;
+            case "AP4":maxArmor=400;armPerk=.45;arm2Perk=.85;break;
             case "AP5":maxArmor=500;armPerk=.5;arm2Perk=.9;break;
-            default:maxArmor=15;armPerk=.3;arm2Perk=.7;break;
+            default:maxArmor=15;armPerk=.1;arm2Perk=.5;break;
         }
     totSpdRed=armPerk+stamRed;
     if(totSpdRed>1)
@@ -442,7 +442,7 @@ function calculateDefense()
         }
     if(armor>maxArmor)
         {
-            spdRed=(maxArmor*(1-(totSpdRed))+(armor-maxArmor)*(1-(.3+stamRed)))*.15;        
+            spdRed=(maxArmor*(1-(totSpdRed))+(armor-maxArmor)*(1-(.1+stamRed)))*.15;        
         }
     else
         {
@@ -458,7 +458,7 @@ function calculateDefense()
         }
     if(armor>maxArmor)
         {
-            armor=maxArmor*arm2Perk+(armor-maxArmor)*.7;
+            armor=maxArmor*arm2Perk+(armor-maxArmor)*.5;
         }
     else
         {
