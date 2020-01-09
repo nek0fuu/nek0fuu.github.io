@@ -23,8 +23,8 @@
                 </li><br>
                 <h2 class="col-headers">Base Stats for<label id="charName"></label></h2>
                 <li>
-                    <label class="statIPL">Total Temporary Boost (Max 75%)</label>
-                    <input type="number" class="IP Boost" id="maxBoost" style="opacity: 1;" value="0" max="75" disabled>
+                    <label class="statIPL">Total Temporary Boost (Max 60%)</label>
+                    <input type="number" class="IP Boost" id="maxBoost" style="opacity: 1;" value="0" max="50" disabled>
                 </li><br><br>
                 <li>
                     <label class="statIPL">Total Stats</label>
@@ -152,7 +152,7 @@
                 </li>
                 <br><br>
                 <li>
-                    <label class="StancesIPL"><h4 class="col-headers">Flat Loss</h4></label>
+                    <label class="StancesIPL"><h4 class="col-headers">Stance Flat Loss</h4></label>
                 </li><br>
                 <li>
                     <label class="StancesIPL">Stamina</label>
@@ -181,6 +181,32 @@
                     <label class="StancesIPL"><strong>Remaining Stat Loss</strong></label>
                     <input type="number" class="StancesIPF IP stanceLoss" id="totalStancesLossF" value="0" disabled>
                 </li>                
+            </ul>
+            <ul id="posts-inputs-list">
+                <h3 class="col-headers">Other Flat Boost/Loss</h3>
+                <li>
+                    <label class="TempBoostFLatIPL">Stamina</label>
+                    <input type="number" class="IP" id="stamTempFlatBoostIPF" value="0" max="40">
+                </li>
+
+                <li>
+                    <label class="TempBoostFlatIPL">Strength</label>
+                    <input type="number" class="IP" id="strTempFlatBoostIPF" value="0" max="40">
+                </li>
+
+                <li>
+                    <label class="TempBoostFlatIPL">Speed</label>
+                    <input type="number" class="IP" id="spdTempFlatBoostIPF" value="0" max="40">
+                </li> 
+                
+                <li>
+                    <label class="TempBoostFlatIPL">Dexterity</label>
+                    <input type="number" class="IP" id="dexTempFlatBoostIPF" value="0" max="40">
+                </li>
+                <li>
+                    <label class="TempBoostFlatIPL">Will</label>
+                    <input type="number" class="IP" id="willTempFlatBoostIPF" value="0" max="40">
+                </li>
             </ul>
             <hr>
             
@@ -243,7 +269,7 @@
 
             <!-- Results -->
             <p id="statCap-error-msg" class="error-msg">Maximum Boost for a Single Stat is 40%</p>
-            <p id="maxStatCap-error-msg" class="error-msg">Maximum Boost for Total Stats is 75%</p>
+            <p id="maxStatCap-error-msg" class="error-msg">Maximum Boost for Total Stats is 60%</p>
             <p id="stanceCap-error-msg" class="error-msg">Maximum Total Boost for a Stance is 20%</p>
             <p id="stanceLoss-error-msg" class="error-msg">You have not distributed the Stat Loss from your Stance correctly</p>
             <p id="race-error-msg" class="error-msg">Your Race Boosts are too high</p>

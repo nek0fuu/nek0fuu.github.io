@@ -94,26 +94,31 @@ function mainCalcFunction()
     var tempstamBoost=document.getElementById("stamTempBoostIPF").valueAsNumber;
     var stancestamBoost=document.getElementById("stamStancesIPF").valueAsNumber;
     var stancestamLoss=document.getElementById("stamStancesLossIPF").valueAsNumber;
+    var otherstamBoost=document.getElementById("stamTempFlatBoostIPF").valueAsNumber;
     var racestr=document.getElementById("strRIPF").valueAsNumber;
     var basestr=document.getElementById("strIPF").valueAsNumber;
     var tempstrBoost=document.getElementById("strTempBoostIPF").valueAsNumber;
     var stancestrBoost=document.getElementById("strStancesIPF").valueAsNumber;
     var stancestrLoss=document.getElementById("strStancesLossIPF").valueAsNumber;
+    var otherstrBoost=document.getElementById("strTempFlatBoostIPF").valueAsNumber;
     var racespd=document.getElementById("spdRIPF").valueAsNumber;
     var basespd=document.getElementById("spdIPF").valueAsNumber;
     var tempspdBoost=document.getElementById("spdTempBoostIPF").valueAsNumber;
     var stancespdBoost=document.getElementById("spdStancesIPF").valueAsNumber;
     var stancespdLoss=document.getElementById("spdStancesLossIPF").valueAsNumber;
+    var otherspdBoost=document.getElementById("spdTempFlatBoostIPF").valueAsNumber;
     var racedex=document.getElementById("dexRIPF").valueAsNumber;
     var basedex=document.getElementById("dexIPF").valueAsNumber;
     var tempdexBoost=document.getElementById("dexTempBoostIPF").valueAsNumber;
     var stancedexBoost=document.getElementById("dexStancesIPF").valueAsNumber;
-    var stancedexLoss=document.getElementById("dexStancesLossIPF").valueAsNumber;    
+    var stancedexLoss=document.getElementById("dexStancesLossIPF").valueAsNumber; 
+    var otherdexBoost=document.getElementById("dexTempFlatBoostIPF").valueAsNumber;
     var racewill=document.getElementById("willRIPF").valueAsNumber;
     var basewill=document.getElementById("willIPF").valueAsNumber;
     var tempwillBoost=document.getElementById("willTempBoostIPF").valueAsNumber;
     var stancewillBoost=document.getElementById("willStancesIPF").valueAsNumber;
     var stancewillLoss=document.getElementById("willStancesLossIPF").valueAsNumber;
+    var otherwillBoost=document.getElementById("willTempFlatBoostIPF").valueAsNumber;
     var stancePerkLevel=document.getElementById("StancePerk").value;
     var strongWill=document.getElementById("StrongWillIPF").checked; 
     var statLossReduction,totalRaceBoost,totalStanceBoost,totalFlatStanceBoost,properFlatStanceLoss,actualFlatStanceBoost,totalBoost;
@@ -137,11 +142,11 @@ function mainCalcFunction()
     document.getElementById("TotalIPF").value=basetotal;  //Set Total
     for(i=0;i<errors.length;i++)
         {
-            errors[i].style.visibility="hidden";  //Hide Errors by Default
+            errors[i].style.display="none";  //Hide Errors by Default
         }
     for(i=0;i<warns.length;i++)
         {
-            warns[i].style.visibility="hidden";  //Hide Warns by Default
+            warns[i].style.display="none";  //Hide Warns by Default
         }
     for(i=0;i<newStats.length;i++)
         {
@@ -186,12 +191,10 @@ function mainCalcFunction()
         }
     document.getElementById("LossRedIPF").value=statLossReduction; //set StatLossReduction based on Perk Level
     
-    
-    
 
             //Check Stances settings and accordingly adjust
             //Calculate Total Boosts by adding (TotalTempBoosts+TotalStancesBoost*StatLossReduction)
-            //Check if Individual and Total Boosts are within 40 and 75 resp, show errors if true and highlight necessary boxes
+            //Check if Individual and Total Boosts are within 40 and 60 resp, show errors if true and highlight necessary boxes
             totalRaceBoost=(racestam+racestr+racespd+racedex+racewill)/100; //Should be less than 0.15
             totalStamBoost=(tempstamBoost+stancestamBoost)/100;
             totalStrBoost=(tempstrBoost+stancestrBoost)/100;
@@ -199,13 +202,13 @@ function mainCalcFunction()
             totalDexBoost=(tempdexBoost+stancedexBoost)/100;
             totalWillBoost=(tempwillBoost+stancewillBoost)/100; //Each Should be Less than 0.40
             totalStanceBoost=(stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost)/100; //Should be less than 0.20
-            totalBoost=((tempstamBoost+tempstrBoost+tempspdBoost+tempdexBoost+tempwillBoost)+(stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost))/100 //Should be less than 0.75
+            totalBoost=((tempstamBoost+tempstrBoost+tempspdBoost+tempdexBoost+tempwillBoost)+(stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost))/100 //Should be less than 0.60
             //Change the second bracket to (stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost)*statLossReduction/100 if you want to account for the fact that stances are not "really" boosts cause of flat loss
             document.getElementById("maxBoost").value=Math.round(totalBoost*100);
     
             if(totalRaceBoost>0.15)
                 {
-                    document.getElementById("race-error-msg").style.visibility="visible";
+                    document.getElementById("race-error-msg").style.display="";
                     for(i=0;i<raceBoost.length;i++)
                         {
                             raceBoost[i].style.border="2px solid red";
@@ -213,7 +216,7 @@ function mainCalcFunction()
                 }
             if(totalStamBoost>0.40)
                 {
-                    document.getElementById("statCap-error-msg").style.visibility="visible";
+                    document.getElementById("statCap-error-msg").style.display="";
                     for(i=0;i<stamBoost.length;i++)
                         {
                             stamBoost[i].style.border="2px solid red";
@@ -221,7 +224,7 @@ function mainCalcFunction()
                 }
             if(totalStrBoost>0.40)
                 {
-                    document.getElementById("statCap-error-msg").style.visibility="visible";
+                    document.getElementById("statCap-error-msg").style.display="";
                     for(i=0;i<strBoost.length;i++)
                         {
                             strBoost[i].style.border="2px solid red";
@@ -229,7 +232,7 @@ function mainCalcFunction()
                 }
             if(totalSpdBoost>0.40)
                 {
-                    document.getElementById("statCap-error-msg").style.visibility="visible";
+                    document.getElementById("statCap-error-msg").style.display="";
                     for(i=0;i<spdBoost.length;i++)
                         {
                             spdBoost[i].style.border="2px solid red";
@@ -237,7 +240,7 @@ function mainCalcFunction()
                 }
             if(totalDexBoost>0.40)
                 {
-                    document.getElementById("statCap-error-msg").style.visibility="visible";
+                    document.getElementById("statCap-error-msg").style.display="";
                     for(i=0;i<dexBoost.length;i++)
                         {
                             dexBoost[i].style.border="2px solid red";
@@ -245,7 +248,7 @@ function mainCalcFunction()
                 }
             if(totalWillBoost>0.40)
                 {
-                    document.getElementById("statCap-error-msg").style.visibility="visible";
+                    document.getElementById("statCap-error-msg").style.display="";
                     for(i=0;i<willBoost.length;i++)
                         {
                             willBoost[i].style.border="2px solid red";
@@ -253,15 +256,15 @@ function mainCalcFunction()
                 }
             if(totalStanceBoost>0.20)
                 {
-                    document.getElementById("stanceCap-error-msg").style.visibility="visible";
+                    document.getElementById("stanceCap-error-msg").style.display="";
                     for(i=0;i<stanceBoost.length;i++)
                         {
                             stanceBoost[i].style.border="2px solid red";
                         }
                 }
-            if(totalBoost>0.75)
+            if(totalBoost>0.60)
                 {
-                    document.getElementById("maxStatCap-error-msg").style.visibility="visible";
+                    document.getElementById("maxStatCap-error-msg").style.display="";
                     for(i=0;i<boosts.length;i++)
                         {
                             boosts[i].style.border="2px solid red";
@@ -307,7 +310,7 @@ function mainCalcFunction()
             
             if(document.getElementById("totalStancesLossF").value!=0)
                 {
-                    document.getElementById("stanceLoss-error-msg").style.visibility="visible";
+                    document.getElementById("stanceLoss-error-msg").style.display="";
                     for(i=0;i<stanceLoss.length;i++)
                         {
                             stanceLoss[i].style.border="2px solid red";
@@ -341,39 +344,39 @@ function mainCalcFunction()
                 }
     
     
-            finalstam=Math.round(racebasestam+basestam*totalStamBoost-stancestamLoss);
-            finalstr=Math.round(racebasestr+basestr*totalStrBoost-stancestrLoss);
-            finalspd=Math.round(racebasespd+basespd*totalSpdBoost-stancespdLoss);
-            finaldex=Math.round(racebasedex+basedex*totalDexBoost-stancedexLoss);
-            finalwill=Math.round(racebasewill+basewill*totalWillBoost-stancewillLoss);
+            finalstam=Math.round(racebasestam+basestam*totalStamBoost-stancestamLoss+otherstamBoost);
+            finalstr=Math.round(racebasestr+basestr*totalStrBoost-stancestrLoss+otherstrBoost);
+            finalspd=Math.round(racebasespd+basespd*totalSpdBoost-stancespdLoss+otherspdBoost);
+            finaldex=Math.round(racebasedex+basedex*totalDexBoost-stancedexLoss+otherdexBoost);
+            finalwill=Math.round(racebasewill+basewill*totalWillBoost-stancewillLoss+otherwillBoost);
     
             if(finalstam>650)
                 {
-                    document.getElementById("statCap-warn-msg").style.visibility="visible";
+                    document.getElementById("statCap-warn-msg").style.display="";
                     finalstam=650;
                     document.getElementById("new-stam").style.color="yellow";
                 }
             if(finalstr>650)
                 {
-                    document.getElementById("statCap-warn-msg").style.visibility="visible";
+                    document.getElementById("statCap-warn-msg").style.display="";
                     finalstr=650;
                     document.getElementById("new-str").style.color="yellow";
                 }
             if(finalspd>650)
                 {
-                    document.getElementById("statCap-warn-msg").style.visibility="visible";
+                    document.getElementById("statCap-warn-msg").style.display="";
                     finalspd=650;
                     document.getElementById("new-spd").style.color="yellow";
                 }
             if(finaldex>650)
                 {
-                    document.getElementById("statCap-warn-msg").style.visibility="visible";
+                    document.getElementById("statCap-warn-msg").style.display="";
                     finaldex=650;
                     document.getElementById("new-dex").style.color="yellow";
                 }
             if(finalwill>650)
                 {
-                    document.getElementById("statCap-warn-msg").style.visibility="visible";
+                    document.getElementById("statCap-warn-msg").style.display="";
                     finalwill=650;
                     document.getElementById("new-will").style.color="yellow";
                 }        
