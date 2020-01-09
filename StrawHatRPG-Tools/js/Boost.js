@@ -184,7 +184,7 @@ function mainCalcFunction()
                 if((strongWill)&&(totalStanceBoost)){maxMentStatBoost=31;maxBoostMentStatAmt=630;}
                 else{maxMentStatBoost=25;maxBoostMentStatAmt=600;}break;
             case '3':statLossReduction=75;
-                if((strongWill)&&(totalStanceBoost)){maxMentStatBoost=35;maxBoostMentStatAmt=650;}
+                if((strongWill)&&(totalStanceBoost)){maxMentStatBoost=35;maxBoostMentStatAmt=645;}
                 else{maxMentStatBoost=25;maxBoostMentStatAmt=600;}break;
             default:statLossReduction=0;break;
         }
