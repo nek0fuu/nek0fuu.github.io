@@ -23,13 +23,24 @@
                 </li><br>
                 <h2 class="col-headers">Base Stats for<label id="charName"></label></h2>
                 <li>
-                    <label class="statIPL">Total Temporary Boost (Max 60%)</label>
-                    <input type="number" class="IP Boost" id="maxBoost" style="opacity: 1;" value="0" max="50" disabled>
+                    <label class="statIPL">Total Temporary Boost<br>Max Boost(Total:<span id="maxTotalBoost">0</span>% Physical:<span id="maxPhysBoost">0</span>% Mental<span id="maxMentBoost">0</span>%)</label>
+                    <input type="number" class="IP Boost" id="maxBoost" style="opacity: 1;" value="0" max="0" disabled>
                 </li><br><br>
                 <li>
                     <label class="statIPL">Total Stats</label>
                     <input type="number" class="statIPF" id="TotalIPF" style="opacity: 1;" disabled>
-                </li><br><br>
+                </li>
+                <li>
+                    <label class="statIPL">Transformation</label>
+                    <select class="IP" id="MaxModifier">
+                        <option value="0">None</option>
+                        <option value="1">Normal/Ancient Zoan</option>
+                        <option value="2">Basic Mino Transformation</option>
+                        <option value="3">Intermediate Mino Transformation</option>
+                        <option value="4">Mastered Mino Transformation</option>
+                    </select>
+                </li>
+                <br><br>
                 <li>
                     <label class="statIPL">Stamina</label>
                     <input type="number" class="statIPF IP" id="stamIPF" value="10" min="7" max="500">
@@ -186,90 +197,34 @@
                 <h3 class="col-headers">Other Flat Boost/Loss</h3>
                 <li>
                     <label class="TempBoostFLatIPL">Stamina</label>
-                    <input type="number" class="IP" id="stamTempFlatBoostIPF" value="0" max="40">
+                    <input type="number" class="IP" id="stamTempFlatBoostIPF" value="0">
                 </li>
 
                 <li>
                     <label class="TempBoostFlatIPL">Strength</label>
-                    <input type="number" class="IP" id="strTempFlatBoostIPF" value="0" max="40">
+                    <input type="number" class="IP" id="strTempFlatBoostIPF" value="0">
                 </li>
 
                 <li>
                     <label class="TempBoostFlatIPL">Speed</label>
-                    <input type="number" class="IP" id="spdTempFlatBoostIPF" value="0" max="40">
+                    <input type="number" class="IP" id="spdTempFlatBoostIPF" value="0">
                 </li> 
                 
                 <li>
                     <label class="TempBoostFlatIPL">Dexterity</label>
-                    <input type="number" class="IP" id="dexTempFlatBoostIPF" value="0" max="40">
+                    <input type="number" class="IP" id="dexTempFlatBoostIPF" value="0">
                 </li>
                 <li>
                     <label class="TempBoostFlatIPL">Will</label>
-                    <input type="number" class="IP" id="willTempFlatBoostIPF" value="0" max="40">
+                    <input type="number" class="IP" id="willTempFlatBoostIPF" value="0">
                 </li>
             </ul>
             <hr>
             
-            
-            <!--<p id="query-msg">Query Status: <span id="query-status">Idle</span></p>
-
-            <button id="fetch-btn">Fetch Comments</button>
-            
-            <p id="fetch-error-msg" class="error-msg"></p>
-
-            <button id="remove-btn">Filter Removed Comments</button> 
-
-            <p id="remove-error-msg" class="error-msg"></p>-->
-
-            <!-- Stat Calculations -->
-            <!--
-            <ul id="calcs-list">
-                <li>
-                    <p class="word-count"><span id="word-count">0</span> words counted</p>
-                </li>
-
-                <li>
-                    <p class="comment-count"><span id="comment-count">0</span> comments loaded</p>
-                </li>
-
-                <li>
-                    <p class="words-per-comment">Average of <span id="words-per-comment">0</span> words per comment</p>
-                </li>
-            </ul>
-            -->
-
-            <!-- Stat Calculation Inputs -->
-            <!--<ul id="calcs-inputs-list">
-                <li>
-                    <label class="current-stats-total">Current Stats</label>
-                    <input type="number" class="current-stats" id="current-stats" value="50" autocomplete="off">
-                </li>
-
-                <li>
-                    <label class="base-level">Base Level</label>
-                    <select id="base-level" autocomplete="off">
-                        <option value="base_0">0</option>
-                        <option value="base_1">1</option>
-                        <option value="base_2" selected="selected">2</option>
-                        <option value="base_3">3</option>
-                        <option value="base_4">4</option>
-                        <option value="base_5">5</option>
-                        <option value="base_6">6</option>
-                        <option value="base_7">7</option>
-                        <option value="base_8">8</option>
-                        <option value="base_9">9</option>
-                    </select>
-                </li>
-
-                <li>
-                    <label class="max-stats-total">Max Stats (<span id="max-stats-label-new">0</span>)</label>
-                    <input type="number" class="max-stats" id="max-stats" value="751" autocomplete="off">
-                </li>
-            </ul>-->
 
             <!-- Results -->
-            <p id="statCap-error-msg" class="error-msg">Maximum Boost for a Single Stat is 40%</p>
-            <p id="maxStatCap-error-msg" class="error-msg">Maximum Boost for Total Stats is 60%</p>
+            <p id="statCap-error-msg" class="error-msg">Exceeded Maximum Temp Boost for this Stat(s)</p>
+            <p id="maxStatCap-error-msg" class="error-msg">Exceeded Maximum Temp Boost for Total Stats</p>
             <p id="stanceCap-error-msg" class="error-msg">Maximum Total Boost for a Stance is 20%</p>
             <p id="stanceLoss-error-msg" class="error-msg">You have not distributed the Stat Loss from your Stance correctly</p>
             <p id="race-error-msg" class="error-msg">Your Race Boosts are too high</p>
