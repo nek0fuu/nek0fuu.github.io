@@ -139,18 +139,18 @@ function calculateAttack()
     switch(attackLevel)
         {
             case "NS9":baseAtt=1.00;restype="AttMeito";break;
-            case "IW1":baseAtt=.45;thr=130;restype="Att";break;
-            case "IW2":baseAtt=.56;thr=260;restype="Att";break;
-            case "IW3":baseAtt=.67;thr=390;restype="Att";break;
-            case "IW4":baseAtt=.78;thr=520;restype="Att";break;
-            case "IW5":baseAtt=.90;thr=650;restype="Att";break;
-            case "FS1":baseAtt=.55;thr=130;restype="AttMeitoFS";break;
-            case "FS2":baseAtt=.65;thr=260;restype="AttMeitoFS";break;
-            case "FS3":baseAtt=.75;thr=390;restype="AttMeitoFS";break;
-            case "FS4":baseAtt=.85;thr=520;restype="AttMeitoFS";break;
+            case "IW1":baseAtt=.250;thr=130;restype="Att";break;
+            case "IW2":baseAtt=.425;thr=260;restype="Att";break;
+            case "IW3":baseAtt=.600;thr=390;restype="Att";break;
+            case "IW4":baseAtt=.775;thr=520;restype="Att";break;
+            case "IW5":baseAtt=.950;thr=650;restype="Att";break;
+            case "FS1":baseAtt=.35;thr=130;restype="AttMeitoFS";break;
+            case "FS2":baseAtt=.50;thr=260;restype="AttMeitoFS";break;
+            case "FS3":baseAtt=.65;thr=390;restype="AttMeitoFS";break;
+            case "FS4":baseAtt=.80;thr=520;restype="AttMeitoFS";break;
             case "FS5":baseAtt=.95;thr=650;restype="AttMeitoFS";break;
             case "FSS":baseAtt=.95;restype="AttMeitoFS";break;
-            case "FSP":baseAtt=1.05;restype="AttMeitoFS";break;
+            case "FSP":baseAtt=1.10;restype="AttMeitoFS";break;
             case "SO1":baseAtt=1.00;SoruMult=0.30;spdReq=70;restype="Soru";break;
             case "SO2":baseAtt=1.00;SoruMult=0.35;spdReq=135;restype="Soru";break;
             case "SO3":baseAtt=1.00;SoruMult=0.40;spdReq=200;restype="Soru";break;
