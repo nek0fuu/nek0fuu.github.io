@@ -159,11 +159,11 @@ function calculateAttack()
             case "SH2":baseAtt=1.10;restype="Att";break;
             case "SH3":baseAtt=1.15;restype="Att";break;
             case "SHP":baseAtt=1.20;restype="Att";break;
-            case "RK1":baseAtt=.50;thr=215;restype="Att";break;
-            case "RK2":baseAtt=.625;thr=430;restype="Att";break;
-            case "RK3":baseAtt=.75;thr=645;restype="Att";break;
-            case "RKS":baseAtt=.75;restype="Att";break;    
-            case "RKP":baseAtt=.875;restype="Att";break;
+            case "RK1":baseAtt=.35;thr=215;restype="Att";break;
+            case "RK2":baseAtt=.55;thr=430;restype="Att";break;
+            case "RK3":baseAtt=.70;thr=645;restype="Att";break;
+            case "RKS":baseAtt=.70;restype="Att";break;    
+            case "RKP":baseAtt=.95;restype="Att";break;
             case "RG1":baseAtt=1.2;restype="Att";break;
             case "RG2":baseAtt=1.3;restype="Att";break;
             case "RG3":baseAtt=1.4;restype="Att";break;
