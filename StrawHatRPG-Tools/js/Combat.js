@@ -443,9 +443,9 @@ function calculateDefense()
         {
             spdRed=armor*(1-(totSpdRed))*.2;
         }
-    if(spdRed<armor*.025)
+    if(spdRed<armor*.01)
         {
-            spdRed=armor*.025;
+            spdRed=armor*.01;
         }
     if(spdRed>99)
         {
