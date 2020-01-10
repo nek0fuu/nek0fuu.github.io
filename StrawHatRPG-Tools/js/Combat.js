@@ -362,19 +362,13 @@ function calculateDefense()
     var stamFactor=.175,willFactor=0.075;
     var overflow=.25,sloverflow=.10,thr=800;
     var stamRed=basestam*.001, totSpdRed;
+    var thr=0;
     
     statDef=basestam*stamFactor+basewill*willFactor;
-    
-    if((statDef>basestam/2)||(statDef>basewill))
+    thr=[basestam/2,basewill].sort(function(a,b){return a-b})[0]
+    if(statDef>thr)
         {
-            if(basestam<basewill/2)
-                {
-                    statPower=(statDef-basestam/2)*overflow+basestam;
-                }
-            else
-                {
-                    statPower=(statDef-basewill)*overflow+basewill;
-                }
+            statDef=(statDef-thr)*overflow+thr;
         }
     switch(tekkai)
         {
