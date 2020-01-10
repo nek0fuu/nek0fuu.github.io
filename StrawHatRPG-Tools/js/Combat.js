@@ -121,7 +121,7 @@ function calculateAttack()
     var dexFactor=.35;
     var willFactor=.175;
     var overflow=.25;
-    var thr=800,restype;
+    var thr=900,restype;
     var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain,willCost;
     for(i=0;i<errors.length;i++)
     {
@@ -139,16 +139,16 @@ function calculateAttack()
     switch(attackLevel)
         {
             case "NS9":baseAtt=1.00;restype="AttMeito";break;
-            case "IW1":baseAtt=.45;thr=100;restype="Att";break;
-            case "IW2":baseAtt=.56;thr=200;restype="Att";break;
-            case "IW3":baseAtt=.67;thr=300;restype="Att";break;
-            case "IW4":baseAtt=.78;thr=400;restype="Att";break;
-            case "IW5":baseAtt=.90;thr=500;restype="Att";break;
-            case "FS1":baseAtt=.55;thr=100;restype="AttMeitoFS";break;
-            case "FS2":baseAtt=.65;thr=200;restype="AttMeitoFS";break;
-            case "FS3":baseAtt=.75;thr=300;restype="AttMeitoFS";break;
-            case "FS4":baseAtt=.85;thr=400;restype="AttMeitoFS";break;
-            case "FS5":baseAtt=.95;thr=500;restype="AttMeitoFS";break;
+            case "IW1":baseAtt=.45;thr=130;restype="Att";break;
+            case "IW2":baseAtt=.56;thr=260;restype="Att";break;
+            case "IW3":baseAtt=.67;thr=390;restype="Att";break;
+            case "IW4":baseAtt=.78;thr=520;restype="Att";break;
+            case "IW5":baseAtt=.90;thr=650;restype="Att";break;
+            case "FS1":baseAtt=.55;thr=130;restype="AttMeitoFS";break;
+            case "FS2":baseAtt=.65;thr=260;restype="AttMeitoFS";break;
+            case "FS3":baseAtt=.75;thr=390;restype="AttMeitoFS";break;
+            case "FS4":baseAtt=.85;thr=520;restype="AttMeitoFS";break;
+            case "FS5":baseAtt=.95;thr=650;restype="AttMeitoFS";break;
             case "FSS":baseAtt=1.05;restype="AttMeitoFS";break;
             case "SO1":baseAtt=1.00;SoruMult=0.30;spdReq=70;restype="Soru";break;
             case "SO2":baseAtt=1.00;SoruMult=0.35;spdReq=135;restype="Soru";break;
@@ -158,9 +158,9 @@ function calculateAttack()
             case "SH2":baseAtt=1.10;restype="Att";break;
             case "SH3":baseAtt=1.15;restype="Att";break;
             case "SHS":baseAtt=1.20;restype="Att";break;
-            case "RK1":baseAtt=.50;thr=165;restype="Att";break;
-            case "RK2":baseAtt=.625;thr=335;restype="Att";break;
-            case "RK3":baseAtt=.75;thr=500;restype="Att";break;
+            case "RK1":baseAtt=.50;thr=215;restype="Att";break;
+            case "RK2":baseAtt=.625;thr=430;restype="Att";break;
+            case "RK3":baseAtt=.75;thr=645;restype="Att";break;
             case "RKS":baseAtt=.875;restype="Att";break;
             case "RG1":baseAtt=1.2;restype="Att";break;
             case "RG2":baseAtt=1.3;restype="Att";break;
@@ -212,9 +212,10 @@ function calculateAttack()
         }
     else
         {
+            document.getElementById("attbladeGrade").value="NON";
             document.getElementById("hideThisBladeGrade").style.display="none";
             document.getElementById("attbladeGrade").disabled=true;
-            document.getElementById("attbladeGrade").value="NON"
+            meitoGrade=document.getElementById("attbladeGrade").value;
         }
     if(restype.includes("FS"))
        {
@@ -360,15 +361,15 @@ function calculateDefense()
     var totMit,defPower,maxArmor,armorSources,spdRed,armPerk,arm2Perk,fullPart=1;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
-    var overflow=.25,sloverflow=.10,thr=800;
+    var overflow=.25,sloverflow=.10,thr=900;
     var stamRed=basestam*.001, totSpdRed;
-    var thr=0;
+    var thrStat=0;
     
     statDef=basestam*stamFactor+basewill*willFactor;
-    thr=[basestam/2,basewill].sort(function(a,b){return a-b})[0]
-    if(statDef>thr)
+    thrStat=[basestam/2,basewill].sort(function(a,b){return a-b})[0]
+    if(statDef>thrStat)
         {
-            statDef=(statDef-thr)*overflow+thr;
+            statDef=(statDef-thrStat)*overflow+thrStat;
         }
     switch(tekkai)
         {
