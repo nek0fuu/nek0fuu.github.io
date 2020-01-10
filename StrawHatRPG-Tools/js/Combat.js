@@ -121,7 +121,7 @@ function calculateAttack()
     var dexFactor=.35;
     var willFactor=.175;
     var overflow=.25;
-    var thr=850,restype;
+    var thr=800,restype;
     var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain,willCost;
     for(i=0;i<errors.length;i++)
     {
@@ -360,7 +360,7 @@ function calculateDefense()
     var totMit,defPower,maxArmor,armorSources,spdRed,armPerk,arm2Perk,fullPart=1;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
-    var overflow=.25,sloverflow=.10,thr=850;
+    var overflow=.25,sloverflow=.10,thr=800;
     var stamRed=basestam*.001, totSpdRed;
     
     statDef=basestam*stamFactor+basewill*willFactor;
