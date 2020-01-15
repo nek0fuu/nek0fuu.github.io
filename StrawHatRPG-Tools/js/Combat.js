@@ -121,7 +121,7 @@ function calculateAttack()
     var dexFactor=.35;
     var willFactor=.175;
     var overflow=.25;
-    var thr=875,soruThr,restype;
+    var thr=875,soruThr,HakiThr,Haki2Thr,restype;
     var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain,willCost;
     for(i=0;i<errors.length;i++)
     {
@@ -245,7 +245,7 @@ function calculateAttack()
     //totalDrain=diminish0(scaleDrain+baseDrain);
     totalDrain=scaleDrain+baseDrain;
     if(totalDrain>maxDrain)
-        totalDrain=maxDrain;
+        totalDrain=(totalDrain-maxDrain)*overflow+maxDrain;
     if(totalDrain<0)
         {
             totalDrain=0;
@@ -256,17 +256,25 @@ function calculateAttack()
     
     switch(hakiLevel)
         {
-            case "HC1":HakiMult=0.0075;ryouMult=0;willReq=250;break;
-            case "HC2":HakiMult=0.0125;ryouMult=0;willReq=300;break;
-            case "HC3":HakiMult=0.0175;ryouMult=0;willReq=350;break;
-            case "HCS":HakiMult=0.0225;ryouMult=0;willReq=400;break;
-            case "HR1":HakiMult=0.0050;ryouMult=.035;willReq=300;break;
-            case "HR2":HakiMult=0.0075;ryouMult=.055;willReq=350;break;
-            case "HRS":HakiMult=0.0100;ryouMult=.075;willReq=400;break;
+            case "HC1":HakiMult=0.0075;ryouMult=0;willReq=250;HakiThr=0.05;Haki2Thr=0;break;
+            case "HC2":HakiMult=0.0125;ryouMult=0;willReq=300;HakiThr=0.10;Haki2Thr=0;break;
+            case "HC3":HakiMult=0.0175;ryouMult=0;willReq=350;HakiThr=0.15;Haki2Thr=0;break;
+            case "HCS":HakiMult=0.0225;ryouMult=0;willReq=400;HakiThr=0.2;Haki2Thr=0;break;
+            case "HR1":HakiMult=0.0050;ryouMult=.035;willReq=300;HakiThr=0.025;Haki2Thr=.25;break;
+            case "HR2":HakiMult=0.0075;ryouMult=.055;willReq=350;HakiThr=0.05;Haki2Thr=.50;break;
+            case "HRS":HakiMult=0.0100;ryouMult=.075;willReq=400;HakiThr=0.075;Haki2Thr=.75;break;
             default:HakiMult=0;willReq=0;ryouMult=0;break;
         }
     hakiAtt=(willReq+basewill)*HakiMult/100;
+    if(hakiAtt>HakiThr)
+        {
+            hakiAtt=(hakiAtt-HakiThr)*overflow+HakiThr
+        }
     breakAmt=(willReq+basewill)*ryouMult/100;
+    if(breakAmt>Haki2Thr)
+        {
+            breakAmt=(breakAmt-Haki2Thr)*overflow+Haki2Thr;
+        }
 
     switch(meitoGrade)
         {
