@@ -151,10 +151,10 @@ function calculateAttack()
             case "FS5":baseAtt=.95;thr=650;restype="AttMeitoFS";break;
             case "FSS":baseAtt=.95;restype="AttMeitoFS";break;
             case "FSP":baseAtt=1.10;restype="AttMeitoFS";break;
-            case "SO1":baseAtt=1.00;SoruMult=0.30;spdReq=70;restype="Soru";break;
-            case "SO2":baseAtt=1.00;SoruMult=0.35;spdReq=135;restype="Soru";break;
-            case "SO3":baseAtt=1.00;SoruMult=0.40;spdReq=200;restype="Soru";break;
-            case "SOS":baseAtt=1.00;SoruMult=0.45;spdReq=265;restype="Soru";break;
+            case "SO1":baseAtt=1.00;SoruMult=0.25;spdReq=70;restype="Soru";break;
+            case "SO2":baseAtt=1.00;SoruMult=0.30;spdReq=135;restype="Soru";break;
+            case "SO3":baseAtt=1.00;SoruMult=0.35;spdReq=200;restype="Soru";break;
+            case "SOS":baseAtt=1.00;SoruMult=0.40;spdReq=265;restype="Soru";break;
             case "SH1":baseAtt=1.05;restype="Att";break;
             case "SH2":baseAtt=1.10;restype="Att";break;
             case "SH3":baseAtt=1.15;restype="Att";break;
