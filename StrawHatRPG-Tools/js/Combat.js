@@ -121,7 +121,7 @@ function calculateAttack()
     var dexFactor=.35;
     var willFactor=.175;
     var overflow=.25;
-    var thr=900,restype;
+    var thr=875,soruThr,restype;
     var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain,willCost;
     for(i=0;i<errors.length;i++)
     {
@@ -139,30 +139,30 @@ function calculateAttack()
     switch(attackLevel)
         {
             case "NS9":baseAtt=1.00;restype="AttMeito";break;
-            case "IW1":baseAtt=.250;thr=130;restype="Att";break;
-            case "IW2":baseAtt=.425;thr=260;restype="Att";break;
-            case "IW3":baseAtt=.600;thr=390;restype="Att";break;
-            case "IW4":baseAtt=.775;thr=520;restype="Att";break;
-            case "IW5":baseAtt=.950;thr=650;restype="Att";break;
-            case "FS1":baseAtt=.35;thr=130;restype="AttMeitoFS";break;
-            case "FS2":baseAtt=.50;thr=260;restype="AttMeitoFS";break;
-            case "FS3":baseAtt=.65;thr=390;restype="AttMeitoFS";break;
-            case "FS4":baseAtt=.80;thr=520;restype="AttMeitoFS";break;
-            case "FS5":baseAtt=.95;thr=650;restype="AttMeitoFS";break;
+            case "IW1":baseAtt=.250;thr=125;restype="Att";break;
+            case "IW2":baseAtt=.425;thr=250;restype="Att";break;
+            case "IW3":baseAtt=.600;thr=375;restype="Att";break;
+            case "IW4":baseAtt=.775;thr=500;restype="Att";break;
+            case "IW5":baseAtt=.950;thr=625;restype="Att";break;
+            case "FS1":baseAtt=.35;thr=125;restype="AttMeitoFS";break;
+            case "FS2":baseAtt=.50;thr=250;restype="AttMeitoFS";break;
+            case "FS3":baseAtt=.65;thr=375;restype="AttMeitoFS";break;
+            case "FS4":baseAtt=.80;thr=500;restype="AttMeitoFS";break;
+            case "FS5":baseAtt=.95;thr=625;restype="AttMeitoFS";break;
             case "FSS":baseAtt=.95;restype="AttMeitoFS";break;
             case "FSP":baseAtt=1.10;restype="AttMeitoFS";break;
-            case "SO1":baseAtt=1.00;SoruMult=0.25;spdReq=70;restype="Soru";break;
-            case "SO2":baseAtt=1.00;SoruMult=0.30;spdReq=135;restype="Soru";break;
-            case "SO3":baseAtt=1.00;SoruMult=0.35;spdReq=200;restype="Soru";break;
-            case "SOS":baseAtt=1.00;SoruMult=0.40;spdReq=265;restype="Soru";break;
+            case "SO1":baseAtt=1.00;SoruMult=0.25;spdReq=70;soruThr=100;restype="Soru";break;
+            case "SO2":baseAtt=1.00;SoruMult=0.30;spdReq=135;soruThr=200;restype="Soru";break;
+            case "SO3":baseAtt=1.00;SoruMult=0.35;spdReq=200;soruThr=300;restype="Soru";break;
+            case "SOS":baseAtt=1.00;SoruMult=0.40;spdReq=265;soruThr=400;restype="Soru";break;
             case "SH1":baseAtt=1.05;restype="Att";break;
             case "SH2":baseAtt=1.10;restype="Att";break;
             case "SH3":baseAtt=1.15;restype="Att";break;
             case "SHP":baseAtt=1.20;restype="Att";break;
-            case "RK1":baseAtt=.35;thr=215;restype="Att";break;
-            case "RK2":baseAtt=.55;thr=430;restype="Att";break;
-            case "RK3":baseAtt=.70;thr=645;restype="Att";break;
-            case "RKS":baseAtt=.70;restype="Att";break;    
+            case "RK1":baseAtt=.35;thr=205;restype="Att";break;
+            case "RK2":baseAtt=.55;thr=410;restype="Att";break;
+            case "RK3":baseAtt=.75;thr=615;restype="Att";break;
+            case "RKS":baseAtt=.75;restype="Att";break;    
             case "RKP":baseAtt=.95;restype="Att";break;
             case "RG1":baseAtt=1.2;restype="Att";break;
             case "RG2":baseAtt=1.3;restype="Att";break;
@@ -228,6 +228,10 @@ function calculateAttack()
             document.getElementById("hideThisCheck").style.display="none";
        }
     SoruBoost=(spdReq+basespd)*SoruMult;
+    if(SoruBoost>soruThr)
+        {
+            SoruBoost=(SoruBoost-soruThr)*overflow+soruThr;
+        }
     document.getElementById("SoruSpd").textContent=Math.round(basespd+SoruBoost);
     
     if(!focCheck)
@@ -236,7 +240,7 @@ function calculateAttack()
     maxDrain=(basewill+willReq)*HaoMult*2;
     scaleDrain=(basewill-oppwill)*.2;
     totalDrain=baseDrain+scaleDrain;
-    willCost=willCost+basewill*HaoMult*.1;
+    //willCost=willCost+basewill*HaoMult*.1;
 
     //totalDrain=diminish0(scaleDrain+baseDrain);
     totalDrain=scaleDrain+baseDrain;
@@ -363,7 +367,7 @@ function calculateDefense()
     var totMit,defPower,maxArmor,armorSources,spdRed,armPerk,arm2Perk,fullPart=1;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
-    var overflow=.25,sloverflow=.10,thr=900;
+    var overflow=.25,sloverflow=.10,thr=875,Tekkaithr,Hakithr;
     var stamRed=basestam*.001, totSpdRed;
     var thrStat=0;
     
@@ -375,25 +379,33 @@ function calculateDefense()
         }
     switch(tekkai)
         {
-            case "TK1":TekkaiMult=0.25;stamReq=70;break;
-            case "TK2":TekkaiMult=0.35;stamReq=135;break;
-            case "TK3":TekkaiMult=0.45;stamReq=200;break;
-            case "TKS":TekkaiMult=0.55;stamReq=265;break;
-            default:TekkaiMult=0;stamReq=0;break;
+            case "TK1":TekkaiMult=0.225;stamReq=70;Tekkaithr=125;break;
+            case "TK2":TekkaiMult=0.325;stamReq=135;Tekkaithr=250;break;
+            case "TK3":TekkaiMult=0.425;stamReq=200;Tekkaithr=375;break;
+            case "TKS":TekkaiMult=0.525;stamReq=265;Tekkaithr=500;break;
+            default:TekkaiMult=0;stamReq=0;Tekkaithr=0;break;
         }
     switch(haki)
         {
-            case "HC1":HakiMult=0.25;willReq=250;break;
-            case "HC2":HakiMult=0.350;willReq=300;break;
-            case "HC3":HakiMult=0.45;willReq=350;break;
-            case "HCS":HakiMult=0.55;willReq=400;break;    
+            case "HC1":HakiMult=0.25;willReq=250;Hakithr=150;break;
+            case "HC2":HakiMult=0.35;willReq=300;Hakithr=300;break;
+            case "HC3":HakiMult=0.45;willReq=350;Hakithr=450;break;
+            case "HCS":HakiMult=0.55;willReq=400;Hakithr-600;break;    
             default:HakiMult=0;willReq=0;break;
         }
     //TekkaiMin=TekkaiMult*600;
     //HakiMin=HakiMult*600;
     
     HakiBoost=(willReq+basewill)*HakiMult;
+    if(HakiBoost>Hakithr)
+        {
+            HakiBoost=(HakiBoost-Hakithr)*overflow+Hakithr
+        }
     TekkaiBoost=(stamReq+basestam)*TekkaiMult;
+    if(TekkaiBoost>Tekkaithr)
+        {
+            TekkaiBoost=(TekkaiBoost-Tekkaithr)*overflow+Tekkaithr;
+        }
     
     if(!FullCheck)
        fullPart=.7;
