@@ -122,7 +122,7 @@ function calculateAttack()
     var willFactor=.175;
     var overflow=.25;
     var thr=875,soruThr,HakiThr,Haki2Thr,restype;
-    var baseDrain, HaoMult,totalDrain,willDiff,focHao=1,maxDrain,willReq,maxPerc,willReq,HakiMult,ryouMult,base2Drain,scaleDrain,willCost;
+    var HaoMult,totalDrain,focHao=1,maxDrain,minDrain,willReq,maxPerc,HakiMult,ryouMult,extraWill;
     for(i=0;i<errors.length;i++)
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
@@ -168,11 +168,11 @@ function calculateAttack()
             case "RG2":baseAtt=1.3;restype="Att";break;
             case "RG3":baseAtt=1.4;restype="Att";break;
             case "RGP":baseAtt=1.5;restype="Att";break;
-            case "HAL":willCost=10;HaoMult=.02;willReq=200;restype="Hao";break;
-            case "HAM":willCost=15;HaoMult=.025;willReq=250;restype="Hao";break;
-            case "HAH":willCost=20;HaoMult=.03;willReq=300;restype="Hao";break;
-            case "HAI":willCost=25;HaoMult=.035;willReq=350;restype="Hao";break;
-            case "HAS":willCost=30;HaoMult=.040;willReq=400;restype="Hao";break;
+            case "HAL":minDrain=0;HaoMult=.4;willReq=200;extraWill=5;restype="Hao";break;
+            case "HAM":minDrain=5;HaoMult=.6;willReq=250;extraWill=10;restype="Hao";break;
+            case "HAH":minDrain=10;HaoMult=.8;willReq=300;extraWill=15;restype="Hao";break;
+            case "HAI":minDrain=15;HaoMult=1;willReq=350;extraWill=20;restype="Hao";break;
+            case "HAS":minDrain=20;HaoMult=1.2;willReq=400;extraWill=25;restype="Hao";break;
                 
             default:baseAtt=0;break;
         }
@@ -236,21 +236,30 @@ function calculateAttack()
     
     if(!focCheck)
        focHao=.6;
+    /*
     baseDrain=(basewill+willReq)*HaoMult;
     maxDrain=(basewill+willReq)*HaoMult*2;
     scaleDrain=(basewill-oppwill)*.2;
-    totalDrain=baseDrain+scaleDrain;
+    totalDrain=baseDrain+scaleDrain;*/
+    maxDrain=minDrain*3;
+    maxPerc=(willReq+basewill)/800;
+    if(maxPerc>1)
+        {
+            maxPerc=1;
+        }
+    totalDrain=(basewill+extraWill-oppwill)*HaoMult;
     //willCost=willCost+basewill*HaoMult*.1;
 
     //totalDrain=diminish0(scaleDrain+baseDrain);
-    totalDrain=scaleDrain+baseDrain;
+    //totalDrain=scaleDrain+baseDrain;
     if(totalDrain>maxDrain)
-        totalDrain=(totalDrain-maxDrain)*overflow+maxDrain;
-    if(totalDrain<0)
+        //totalDrain=(totalDrain-maxDrain)*overflow+maxDrain;
+        totalDrain=maxDrain;
+    if(totalDrain<minDrain)
         {
-            totalDrain=0;
+            totalDrain=minDrain;
         }
-    totalDrain*=focHao;
+    totalDrain*=(focHao*maxPerc);
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
     //document.getElementById("HaoRes2").textContent=Math.round(willCost);
     
@@ -311,7 +320,7 @@ function calculateAttack()
                     lowest=stats[i];
                 }
         }
-    thr=[lowest*5,basestr*2,thr].sort(function(a,b){return a-b})[0];
+    thr=[lowest*5,basestr*2.5,thr].sort(function(a,b){return a-b})[0];
     if(attackPower>thr)
         {
             attackPower=(attackPower-thr)*overflow+thr;
