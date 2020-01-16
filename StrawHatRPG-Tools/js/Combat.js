@@ -299,9 +299,7 @@ function calculateAttack()
         }
     attSrc=[powerAtt,hakiAtt].sort(function(a,b){return a-b});
     attSrc.reverse();
-    console.log(attSrc);
     attackMult=attSrc[0]+attSrc[1]*.5+MeitoAtt+baseAtt;
-    console.log(attackMult);
     //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+MeitoAtt;
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
