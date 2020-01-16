@@ -168,11 +168,11 @@ function calculateAttack()
             case "RG2":baseAtt=1.3;restype="Att";break;
             case "RG3":baseAtt=1.4;restype="Att";break;
             case "RGP":baseAtt=1.5;restype="Att";break;
-            case "HAL":minDrain=5;HaoMult=.4;willReq=200;extraWill=0;restype="Hao";break;
-            case "HAM":minDrain=10;HaoMult=.6;willReq=250;extraWill=5;restype="Hao";break;
-            case "HAH":minDrain=15;HaoMult=.8;willReq=300;extraWill=10;restype="Hao";break;
-            case "HAI":minDrain=20;HaoMult=1;willReq=350;extraWill=15;restype="Hao";break;
-            case "HAS":minDrain=25  ;HaoMult=1.2;willReq=400;extraWill=20;restype="Hao";break;
+            case "HAL":minDrain=5;HaoMult=.4;willReq=200;restype="Hao";break;
+            case "HAM":minDrain=10;HaoMult=.6;willReq=250;restype="Hao";break;
+            case "HAH":minDrain=15;HaoMult=.8;willReq=300;restype="Hao";break;
+            case "HAI":minDrain=20;HaoMult=1;willReq=350;restype="Hao";break;
+            case "HAS":minDrain=25;HaoMult=1.2;willReq=400;restype="Hao";break;
                 
             default:baseAtt=0;break;
         }
@@ -242,12 +242,7 @@ function calculateAttack()
     scaleDrain=(basewill-oppwill)*.2;
     totalDrain=baseDrain+scaleDrain;*/
     maxDrain=minDrain*3;
-    maxPerc=(willReq+basewill)/800;
-    extraWill=(basewill+willReq)*.025
-    if(maxPerc>1)
-        {
-            maxPerc=1;
-        }
+    extraWill=(basewill+willReq)*HaoMult*.025;
     totalDrain=(basewill+extraWill-oppwill)*HaoMult;
     //willCost=willCost+basewill*HaoMult*.1;
 
@@ -260,7 +255,7 @@ function calculateAttack()
         {
             totalDrain=minDrain;
         }
-    totalDrain*=(focHao*maxPerc);
+    totalDrain*=focHao;
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
     //document.getElementById("HaoRes2").textContent=Math.round(willCost);
     
