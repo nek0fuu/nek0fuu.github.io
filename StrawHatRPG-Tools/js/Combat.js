@@ -260,9 +260,9 @@ function calculateAttack()
             case "HC2":HakiMult=0.0125;ryouMult=0;willReq=300;HakiThr=0.10;Haki2Thr=0;break;
             case "HC3":HakiMult=0.0175;ryouMult=0;willReq=350;HakiThr=0.15;Haki2Thr=0;break;
             case "HCS":HakiMult=0.0225;ryouMult=0;willReq=400;HakiThr=0.2;Haki2Thr=0;break;
-            case "HR1":HakiMult=0.0050;ryouMult=.035;willReq=300;HakiThr=0.025;Haki2Thr=.25;break;
-            case "HR2":HakiMult=0.0075;ryouMult=.055;willReq=350;HakiThr=0.05;Haki2Thr=.50;break;
-            case "HRS":HakiMult=0.0100;ryouMult=.075;willReq=400;HakiThr=0.075;Haki2Thr=.75;break;
+            case "HR1":HakiMult=0.0050;ryouMult=.035;willReq=300;HakiThr=0.03;Haki2Thr=.25;break;
+            case "HR2":HakiMult=0.0075;ryouMult=.055;willReq=350;HakiThr=0.06;Haki2Thr=.50;break;
+            case "HRS":HakiMult=0.0100;ryouMult=.075;willReq=400;HakiThr=0.09;Haki2Thr=.75;break;
             default:HakiMult=0;willReq=0;ryouMult=0;break;
         }
     hakiAtt=(willReq+basewill)*HakiMult/100;
