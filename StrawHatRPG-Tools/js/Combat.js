@@ -404,10 +404,10 @@ function calculateDefense()
         }
     switch(haki)
         {
-            case "HC1":HakiMult=0.25;willReq=250;Hakithr=150;break;
-            case "HC2":HakiMult=0.35;willReq=300;Hakithr=300;break;
-            case "HC3":HakiMult=0.45;willReq=350;Hakithr=450;break;
-            case "HCS":HakiMult=0.55;willReq=400;Hakithr-600;break;    
+            case "HC1":HakiMult=0.25;willReq=250;Hakithr=155;break;
+            case "HC2":HakiMult=0.35;willReq=300;Hakithr=310;break;
+            case "HC3":HakiMult=0.45;willReq=350;Hakithr=465;break;
+            case "HCS":HakiMult=0.55;willReq=400;Hakithr-620;break;    
             default:HakiMult=0;willReq=0;break;
         }
     //TekkaiMin=TekkaiMult*600;
