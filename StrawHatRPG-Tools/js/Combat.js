@@ -260,10 +260,11 @@ function calculateAttack()
     //totalDrain=scaleDrain+baseDrain;
     if(totalDrain>maxDrain)
         {
-            totalDrain=(totalDrain-maxDrain)*sloverflow+maxDrain;
+            //totalDrain=(totalDrain-maxDrain)*sloverflow+maxDrain;
+            totalDrain=maxDrain;
         }
         
-        //totalDrain=maxDrain;
+        
     if(totalDrain<minDrain)
         {
             totalDrain=minDrain;
