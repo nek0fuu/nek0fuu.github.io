@@ -112,6 +112,7 @@ function calculateAttack()
     var UACheck=document.getElementById("attUACheck").checked;
     var NACheck=document.getElementById("attNACheck").checked;
     var focCheck=document.getElementById("attHaoFoc").checked;
+    var FMind=document.getElementById("defFMindCheck").checked;
     var attackPower,attackMult,i,lowest=9999;
     var SoruBoost,SoruMult,spdReq;
     var baseAtt=0,hakiAtt=0,powerAtt=0,MeitoAtt=0,attSrc;
@@ -120,9 +121,9 @@ function calculateAttack()
     var spdFactor=.125;
     var dexFactor=.35;
     var willFactor=.175;
-    var overflow=.25;
+    var overflow=.25,sloverflow=.10;
     var thr=875,soruThr,HakiThr,Haki2Thr,restype;
-    var HaoMult,totalDrain,focHao=1,maxDrain,minDrain,willReq,maxPerc,HakiMult,ryouMult,extraWill;
+    var HaoMult,totalDrain,focHao=1,maxDrain,minDrain,willReq,maxPerc,HakiMult,ryouMult,extraWill,HaoRes=0;
     for(i=0;i<errors.length;i++)
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
@@ -168,11 +169,11 @@ function calculateAttack()
             case "RG2":baseAtt=1.3;restype="Att";break;
             case "RG3":baseAtt=1.4;restype="Att";break;
             case "RGP":baseAtt=1.5;restype="Att";break;
-            case "HAL":minDrain=5;HaoMult=.4;willReq=200;restype="Hao";break;
-            case "HAM":minDrain=10;HaoMult=.6;willReq=250;restype="Hao";break;
-            case "HAH":minDrain=15;HaoMult=.8;willReq=300;restype="Hao";break;
-            case "HAI":minDrain=20;HaoMult=1;willReq=350;restype="Hao";break;
-            case "HAS":minDrain=25;HaoMult=1.2;willReq=400;restype="Hao";break;
+            case "HAL":minDrain=0;maxDrain=20;HaoMult=.4;willReq=200;restype="Hao";break;
+            case "HAM":minDrain=5;maxDrain=30;HaoMult=.6;willReq=250;restype="Hao";break;
+            case "HAH":minDrain=10;maxDrain=40;HaoMult=.8;willReq=300;restype="Hao";break;
+            case "HAI":minDrain=15;maxDrain=50;HaoMult=1;willReq=350;restype="Hao";break;
+            case "HAS":minDrain=20;maxDrain=60;HaoMult=1.2;willReq=400;restype="Hao";break;
                 
             default:baseAtt=0;break;
         }
@@ -200,11 +201,13 @@ function calculateAttack()
     if(restype.includes("Hao"))
         {
             document.getElementById("hideThisHao").style.display="";
+            document.getElementById("hideThisHao2").style.display="";
             document.getElementById("hideThisHaoCheck").style.display="";
         }
     else
         {
             document.getElementById("hideThisHao").style.display="none";  
+            document.getElementById("hideThisHao2").style.display="none";
             document.getElementById("hideThisHaoCheck").style.display="none";
         }
     if(restype.includes("Meito"))
@@ -241,21 +244,31 @@ function calculateAttack()
     maxDrain=(basewill+willReq)*HaoMult*2;
     scaleDrain=(basewill-oppwill)*.2;
     totalDrain=baseDrain+scaleDrain;*/
-    maxDrain=minDrain*3;
     extraWill=(basewill+willReq)*HaoMult*.025;
     totalDrain=(basewill+extraWill-oppwill)*HaoMult;
     //willCost=willCost+basewill*HaoMult*.1;
-
+    
+    if(FMind)
+        {
+            HaoRes=(300+oppwill)*.05/100;  //300=willReq
+        }
+    if(HaoRes>.40)
+        {
+            HaoRes=(HaoRes-.40)*overflow+.40 //.30=thr
+        }
     //totalDrain=diminish0(scaleDrain+baseDrain);
     //totalDrain=scaleDrain+baseDrain;
     if(totalDrain>maxDrain)
-        //totalDrain=(totalDrain-maxDrain)*overflow+maxDrain;
-        totalDrain=maxDrain;
+        {
+            totalDrain=(totalDrain-maxDrain)*sloverflow+maxDrain;
+        }
+        
+        //totalDrain=maxDrain;
     if(totalDrain<minDrain)
         {
             totalDrain=minDrain;
         }
-    totalDrain*=focHao;
+    totalDrain=totalDrain*focHao*(1-HaoRes);
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
     //document.getElementById("HaoRes2").textContent=Math.round(willCost);
     
