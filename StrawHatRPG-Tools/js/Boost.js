@@ -401,7 +401,7 @@ function mainCalcFunction()
             //Change the second bracket to (stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost)*statLossReduction/100 if you want to account for the fact that stances are not "really" boosts cause of flat loss
             document.getElementById("maxBoost").value=Math.round(totalBoost*100);
     
-            if(totalRaceBoost>maxRacialBoost)
+            if(totalRaceBoost>maxRacialBoost/100)
                 {
                     document.getElementById("race-error-msg").style.display="";
                     for(i=0;i<raceBoost.length;i++)
