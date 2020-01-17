@@ -127,7 +127,7 @@ function mainCalcFunction()
     var stancePerkLevel=document.getElementById("StancePerk").value;
     var maxBoosterPerk=document.getElementById("MaxModifier").value;
     var strongWill=document.getElementById("StrongWillIPF").checked;
-    var maxRacialBoost=15,maxStanceBoost;
+    var maxRacialBoost=10,maxStanceBoost;
     var maxTotalBoost,maxBaseStatAmt=500;
     var maxPhysStatBoost, maxBoostPhysStatAmt, maxMentStatBoost, maxBoostMentStatAmt;
     var statLossReduction,totalRaceBoost,totalStanceBoost,totalFlatStanceBoost,properFlatStanceLoss,actualFlatStanceLoss,totalBoost;
@@ -168,26 +168,35 @@ function mainCalcFunction()
 
     switch(maxBoosterPerk)
         {
-            case '0':maxPhysStatBoost=25;maxBoostPhysStatAmt=700;maxTotalBoost=50;break;
-            case '1':maxPhysStatBoost=25;maxBoostPhysStatAmt=700;maxTotalBoost=55;break;    
-            case '2':maxPhysStatBoost=28;maxBoostPhysStatAmt=715;maxTotalBoost=60;break;
-            case '3':maxPhysStatBoost=31;maxBoostPhysStatAmt=730;maxTotalBoost=65;break;
-            case '4':maxPhysStatBoost=35;maxBoostPhysStatAmt=750;maxTotalBoost=70;break;
+            case 'NON':maxPhysStatBoost=25;maxBoostPhysStatAmt=675;maxTotalBoost=50;break;
+            case 'M1':maxPhysStatBoost=26;maxBoostPhysStatAmt=680;maxTotalBoost=50;break;
+            case 'M2':maxPhysStatBoost=27;maxBoostPhysStatAmt=685;maxTotalBoost=50;break;
+            case 'M3':maxPhysStatBoost=28;maxBoostPhysStatAmt=690;maxTotalBoost=50;break;
+            case 'M4':maxPhysStatBoost=29;maxBoostPhysStatAmt=695;maxTotalBoost=50;break;
+            case 'M5':maxPhysStatBoost=30;maxBoostPhysStatAmt=700;maxTotalBoost=50;break;
+            case 'O1':maxPhysStatBoost=28;maxBoostPhysStatAmt=690;maxTotalBoost=50;break;
+            case 'O2':maxPhysStatBoost=31;maxBoostPhysStatAmt=705;maxTotalBoost=50;break;
+            case 'O3':maxPhysStatBoost=34;maxBoostPhysStatAmt=720;maxTotalBoost=50;break;
+            case 'O4':maxPhysStatBoost=37;maxBoostPhysStatAmt=735;maxTotalBoost=50;break;
+            case 'O5':maxPhysStatBoost=40;maxBoostPhysStatAmt=750;maxTotalBoost=50;break;
+            case 'A1':maxPhysStatBoost=40;maxBoostPhysStatAmt=750;maxTotalBoost=53;break;
+            case 'A2':maxPhysStatBoost=40;maxBoostPhysStatAmt=750;maxTotalBoost=56;break;
+            case 'A3':maxPhysStatBoost=40;maxBoostPhysStatAmt=750;maxTotalBoost=60;break;
             default:break;
         }
     totalStanceBoost=(stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost)/100
     switch(stancePerkLevel)
         {
-            case '0':statLossReduction=0;maxStanceBoost=10;maxMentStatBoost=25;maxBoostMentStatAmt=700;break;
+            case '0':statLossReduction=0;maxStanceBoost=10;maxMentStatBoost=25;maxBoostMentStatAmt=675;break;
             case '1':statLossReduction=25;maxStanceBoost=13;
-                if((strongWill)&&(totalStanceBoost)){maxMentStatBoost=28;maxBoostMentStatAmt=715;}
-                else{maxMentStatBoost=25;maxBoostMentStatAmt=700;}break;
+                if(strongWill){maxMentStatBoost=30;maxBoostMentStatAmt=700;}
+                else{maxMentStatBoost=25;maxBoostMentStatAmt=675;}break;
             case '2':statLossReduction=50;maxStanceBoost=16;
-                if((strongWill)&&(totalStanceBoost)){maxMentStatBoost=31;maxBoostMentStatAmt=730;}
-                else{maxMentStatBoost=25;maxBoostMentStatAmt=700;}break;
+                if(strongWill){maxMentStatBoost=35;maxBoostMentStatAmt=725;}
+                else{maxMentStatBoost=25;maxBoostMentStatAmt=675;}break;
             case '3':statLossReduction=75;maxStanceBoost=20;
-                if((strongWill)&&(totalStanceBoost)){maxMentStatBoost=35;maxBoostMentStatAmt=750;}
-                else{maxMentStatBoost=25;maxBoostMentStatAmt=700;}break;
+                if(strongWill){maxMentStatBoost=40;maxBoostMentStatAmt=750;}
+                else{maxMentStatBoost=25;maxBoostMentStatAmt=675;}break;
             default:statLossReduction=0;maxStanceBoost=10;break;
         }
     for(i=0;i<MaxTotalBoostLabel.length;i++)
@@ -285,34 +294,34 @@ function mainCalcFunction()
                     errorFlag=false;
                 }
     
-            racestam=check(racestam,maxRacialBoost*100);
+            racestam=check(racestam,maxRacialBoost);
             if(errorFlag)
                 {
-                    document.getElementById("stamRIPF").value=maxRacialBoost*100;
+                    document.getElementById("stamRIPF").value=maxRacialBoost;
                     errorFlag=false;
                 }
-            racestr=check(racestr,.20*100);
+            racestr=check(racestr,15);
             if(errorFlag)
                 {
-                    document.getElementById("strRIPF").value=.20*100;
+                    document.getElementById("strRIPF").value=15;
                     errorFlag=false;
                 }
-            racespd=check(racespd,maxRacialBoost*100);
+            racespd=check(racespd,maxRacialBoost);
             if(errorFlag)
                 {
-                    document.getElementById("spdRIPF").value=maxRacialBoost*100;
+                    document.getElementById("spdRIPF").value=maxRacialBoost;
                     errorFlag=false;
                 }
-            racedex=check(racedex,maxRacialBoost*100);
+            racedex=check(racedex,maxRacialBoost);
             if(errorFlag)
                 {
-                    document.getElementById("dexRIPF").value=maxRacialBoost*100;
+                    document.getElementById("dexRIPF").value=maxRacialBoost;
                     errorFlag=false;
                 }
-            racewill=check(racewill,maxRacialBoost*100);
+            racewill=check(racewill,maxRacialBoost);
             if(errorFlag)
                 {
-                    document.getElementById("willRIPF").value=maxRacialBoost*100;
+                    document.getElementById("willRIPF").value=maxRacialBoost;
                     errorFlag=false;
                 }
             tempstamBoost=check(tempstamBoost,maxPhysStatBoost);
@@ -358,7 +367,7 @@ function mainCalcFunction()
                     document.getElementById("strStancesIPF").value=maxStanceBoost;
                     errorFlag=false;
                 }
-            stancespdBoost=check(stancespdBoost,maxStanceBoost*100)
+            stancespdBoost=check(stancespdBoost,maxStanceBoost)
             if(errorFlag)
                 {
                     document.getElementById("spdStancesIPF").value=maxStanceBoost;
@@ -392,7 +401,7 @@ function mainCalcFunction()
             //Change the second bracket to (stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost)*statLossReduction/100 if you want to account for the fact that stances are not "really" boosts cause of flat loss
             document.getElementById("maxBoost").value=Math.round(totalBoost*100);
     
-            if(totalRaceBoost>0.15)
+            if(totalRaceBoost>maxRacialBoost)
                 {
                     document.getElementById("race-error-msg").style.display="";
                     for(i=0;i<raceBoost.length;i++)
