@@ -169,6 +169,7 @@ function mainCalcFunction()
     switch(maxBoosterPerk)
         {
             case 'NON':maxPhysStatBoost=25;maxBoostPhysStatAmt=675;maxTotalBoost=50;break;
+            /*
             case 'M1':maxPhysStatBoost=26;maxBoostPhysStatAmt=680;maxTotalBoost=50;break;
             case 'M2':maxPhysStatBoost=27;maxBoostPhysStatAmt=685;maxTotalBoost=50;break;
             case 'M3':maxPhysStatBoost=28;maxBoostPhysStatAmt=690;maxTotalBoost=50;break;
@@ -182,11 +183,16 @@ function mainCalcFunction()
             case 'A1':maxPhysStatBoost=40;maxBoostPhysStatAmt=750;maxTotalBoost=53;break;
             case 'A2':maxPhysStatBoost=40;maxBoostPhysStatAmt=750;maxTotalBoost=56;break;
             case 'A3':maxPhysStatBoost=40;maxBoostPhysStatAmt=750;maxTotalBoost=60;break;
+            */
+            case 'A1':maxPhysStatBoost=28;maxBoostPhysStatAmt=690;maxTotalBoost=53;break;
+            case 'A2':maxPhysStatBoost=31;maxBoostPhysStatAmt=705;maxTotalBoost=56;break;
+            case 'A3':maxPhysStatBoost=35;maxBoostPhysStatAmt=725;maxTotalBoost=60;break;
             default:break;
         }
     totalStanceBoost=(stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost)/100
     switch(stancePerkLevel)
         {
+            /*
             case '0':statLossReduction=0;maxStanceBoost=10;maxMentStatBoost=25;maxBoostMentStatAmt=675;break;
             case '1':statLossReduction=25;maxStanceBoost=13;
                 if(strongWill){maxMentStatBoost=30;maxBoostMentStatAmt=700;}
@@ -197,6 +203,17 @@ function mainCalcFunction()
             case '3':statLossReduction=75;maxStanceBoost=20;
                 if(strongWill){maxMentStatBoost=40;maxBoostMentStatAmt=750;}
                 else{maxMentStatBoost=25;maxBoostMentStatAmt=675;}break;
+            */
+            case '1':statLossReduction=25;maxStanceBoost=13;
+                if(strongWill&&totalStanceBoost){maxMentStatBoost=28;maxBoostMentStatAmt=690;}
+                else{maxMentStatBoost=25;maxBoostMentStatAmt=675;}break;
+            case '2':statLossReduction=50;maxStanceBoost=16;
+                if(strongWill&&totalStanceBoost){maxMentStatBoost=31;maxBoostMentStatAmt=705;}
+                else{maxMentStatBoost=25;maxBoostMentStatAmt=675;}break;
+            case '3':statLossReduction=75;maxStanceBoost=20;
+                if(strongWill&&totalStanceBoost){maxMentStatBoost=35;maxBoostMentStatAmt=725;}
+                else{maxMentStatBoost=25;maxBoostMentStatAmt=675;}break;    
+                
             default:statLossReduction=0;maxStanceBoost=10;break;
         }
     for(i=0;i<MaxTotalBoostLabel.length;i++)
