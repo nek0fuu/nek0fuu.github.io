@@ -165,10 +165,10 @@ function calculateAttack()
             case "RK3":baseAtt=.75;thr=615;restype="Att";break;
             case "RKS":baseAtt=.75;restype="Att";break;    
             case "RKP":baseAtt=.95;restype="Att";break;
-            case "RG1":baseAtt=1.2;restype="Att";break;
+            case "RG1":baseAtt=1.15;restype="Att";break;
             case "RG2":baseAtt=1.3;restype="Att";break;
-            case "RG3":baseAtt=1.4;restype="Att";break;
-            case "RGP":baseAtt=1.5;restype="Att";break;
+            case "RG3":baseAtt=1.45;restype="Att";break;
+            case "RGP":baseAtt=1.6;restype="Att";break;
             case "HAL":minDrain=0;maxDrain=20;HaoMult=.4;willReq=200;restype="Hao";break;
             case "HAM":minDrain=5;maxDrain=30;HaoMult=.6;willReq=250;restype="Hao";break;
             case "HAH":minDrain=10;maxDrain=40;HaoMult=.8;willReq=300;restype="Hao";break;
@@ -311,6 +311,7 @@ function calculateAttack()
     attSrc.reverse();
     attackMult=attSrc[0]+attSrc[1]*.5+MeitoAtt+baseAtt;
     //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+MeitoAtt;
+    console.log(attackMult);
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
             attackMult*=0.9;
