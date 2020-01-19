@@ -216,8 +216,8 @@ function mainCalcFunction()
                 
             default:statLossReduction=0;maxStanceBoost=10;break;
         }
-    maxBoostPhysStatAmt=675;
-    maxBoostMentStatAmt=675;
+    maxBoostPhysStatAmt=700;
+    maxBoostMentStatAmt=700;
     for(i=0;i<MaxTotalBoostLabel.length;i++)
         {
             MaxTotalBoostLabel[i].textContent=maxTotalBoost;
