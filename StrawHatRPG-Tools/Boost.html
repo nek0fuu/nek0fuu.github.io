@@ -30,11 +30,11 @@
                     <label class="statIPL">Total Stats</label>
                     <input type="number" class="statIPF" id="TotalIPF" style="opacity: 1;" disabled>
                 </li>
-                <li>
+                <!--<li>
                     <label class="statIPL">Mino Transformations</label>
                     <select class="IP" id="MaxModifier">
                         <option value="NON">None</option>
-                        <!--<option value="M1">Mythical Zoan Level 1</option>
+                        <option value="M1">Mythical Zoan Level 1</option>
                         <option value="M2">Mythical Zoan Level 2</option>
                         <option value="M3">Mythical Zoan Level 3</option>
                         <option value="M4">Mythical Zoan Level 4</option>
@@ -43,12 +43,12 @@
                         <option value="O2">Normal/Ancient Zoan Level 2</option>
                         <option value="O3">Normal/Ancient Zoan Level 3</option>
                         <option value="O4">Normal/Ancient Zoan Level 4</option>
-                        <option value="O5">Normal/Ancient Zoan Level 5</option>-->
+                        <option value="O5">Normal/Ancient Zoan Level 5</option>
                         <option value="A1">Basic Mino Transformation</option>
                         <option value="A2">Intermediate Mino Transformation</option>
                         <option value="A3">Mastered Mino Transformation</option>
                     </select>
-                </li>
+                </li>-->
                 <br><br>
                 <li>
                     <label class="statIPL">Stamina</label>
@@ -76,26 +76,26 @@
                 <h4 class="col-headers">Racial Boosts</h4>
                 <li>
                     <label class="statIPL">Stamina</label>
-                    <input type="number" class="statIPF raceBoost IP" id="stamRIPF" value="0" max="10"  step=.1>
+                    <input type="number" class="statIPF raceBoost IP" id="stamRIPF" value="0" max="15"  step=.1>
                 </li>
 
                 <li>
                     <label class="statIPL">Strength</label>
-                    <input type="number" class="statIPF raceBoost IP" id="strRIPF" value="0" max="15"  step=.1> <!--maxes are diff cause of giants-->
+                    <input type="number" class="statIPF raceBoost IP" id="strRIPF" value="0" max="20"  step=.1> <!--maxes are diff cause of giants-->
                 </li>
 
                 <li>
                     <label class="statIPL">Speed</label>
-                    <input type="number" class="statIPF raceBoost IP" id="spdRIPF" value="0" max="10" step=.1>
+                    <input type="number" class="statIPF raceBoost IP" id="spdRIPF" value="0" max="15" step=.1>
                 </li>
                 
                 <li>
                     <label class="statIPL">Dexterity</label>
-                    <input type="number" class="statIPF raceBoost IP" id="dexRIPF" value="0" max="10" step=.1>
+                    <input type="number" class="statIPF raceBoost IP" id="dexRIPF" value="0" max="15" step=.1>
                 </li>
                 <li>
                     <label class="statIPL">Will</label>
-                    <input type="number" class="statIPF raceBoost IP" id="willRIPF" value="0" max="10" step=.1>
+                    <input type="number" class="statIPF raceBoost IP" id="willRIPF" value="0" max="15" step=.1>
                 </li>
                 </ul>
                 <hr>
@@ -203,28 +203,28 @@
                 </li>                
             </ul>
             <ul id="posts-inputs-list">
-                <h3 class="col-headers">Other Flat Reductions</h3>
+                <h3 class="col-headers">Other Flat Boosts/Losses</h3>
                 <li>
-                    <label class="TempBoostFLatIPL">Stamina</label>
+                    <label class="TempBoostFLatIPL">Stamina(Max <span class="maxFlarBoost">0</span>)</label>
                     <input type="number" class="IP" id="stamTempFlatBoostIPF" value="0">
                 </li>
 
                 <li>
-                    <label class="TempBoostFlatIPL">Strength</label>
+                    <label class="TempBoostFlatIPL">Strength(Max <span class="maxFlarBoost">0</span>)</label>
                     <input type="number" class="IP" id="strTempFlatBoostIPF" value="0">
                 </li>
 
                 <li>
-                    <label class="TempBoostFlatIPL">Speed</label>
+                    <label class="TempBoostFlatIPL">Speed(Max <span class="maxFlarBoost">0</span>)</label>
                     <input type="number" class="IP" id="spdTempFlatBoostIPF" value="0">
                 </li> 
                 
                 <li>
-                    <label class="TempBoostFlatIPL">Dexterity</label>
+                    <label class="TempBoostFlatIPL">Dexterity(Max <span class="maxFlarBoost">0</span>)</label>
                     <input type="number" class="IP" id="dexTempFlatBoostIPF" value="0">
                 </li>
                 <li>
-                    <label class="TempBoostFlatIPL">Will</label>
+                    <label class="TempBoostFlatIPL">Will(Max <span class="maxFlarBoost">0</span>)</label>
                     <input type="number" class="IP" id="willTempFlatBoostIPF" value="0">
                 </li>
             </ul>
