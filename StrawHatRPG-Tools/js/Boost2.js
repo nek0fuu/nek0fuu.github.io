@@ -1,3 +1,4 @@
+//30/60 Max Semi-Zoan Update Version
 window.onload=function(){
     mainCalcFunction();
 }
