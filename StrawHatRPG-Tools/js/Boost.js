@@ -137,7 +137,7 @@ function mainCalcFunction()
     var strongWill=document.getElementById("StrongWillIPF").checked;
     var maxRacialBoost=3,maxStanceBoost;
     var maxTotalBoost=10,maxBaseStatAmt=500, maxStatFlatBoost=50, maxTotalFlatBoost=100;
-    var maxPhysStatBoost=5, maxBoostPhysStatAmt=750, maxMentStatBoost=5, maxBoostMentStatAmt=750;
+    var maxPhysStatBoost=5, maxBoostPhysStatAmt=700, maxMentStatBoost=5, maxBoostMentStatAmt=700, minStatAmt=5;
     var statLossReduction,totalRaceBoost,totalStanceBoost,totalFlatStanceBoost,properFlatStanceLoss,actualFlatStanceLoss,totalBoost, totalFlatBoost=0;
     var totalStamBoost=1;
     var totalStrBoost=1;
@@ -155,8 +155,6 @@ function mainCalcFunction()
     var willBoost=document.getElementsByClassName("willBoost");
     var stanceBoost=document.getElementsByClassName("stanceBoost"); //Creating Variables/Array Pointers to use in case boosts exceed caps
     var stanceLoss=document.getElementsByClassName("stanceLoss")
-    var basetotal=basestam+basestr+basespd+basedex+basewill;
-    document.getElementById("TotalIPF").value=basetotal;  //Set Total
     for(i=0;i<errors.length;i++)
         {
             errors[i].style.display="none";  //Hide Errors by Default
@@ -496,7 +494,8 @@ function mainCalcFunction()
                     errorFlag=false;
                 }
     
-    
+            var basetotal=basestam+basestr+basespd+basedex+basewill;
+            document.getElementById("TotalIPF").value=basetotal;  //Set Total
             //Check Stances settings and accordingly adjust
             //Calculate Total Boosts by adding (TotalTempBoosts+TotalStancesBoost*StatLossReduction)
             //Check if Individual and Total Boosts are within maxPhysStatBoost/100 or maxMenStatBoost/100 and maxTotalBoost/100 resp, show errors if true and highlight necessary boxes
@@ -794,6 +793,28 @@ function mainCalcFunction()
                     document.getElementById("new-will").style.color="yellow";
                     errorFlag=false;
                 }
+    
+            if(finalstam<minStatAmt)
+                {
+                    finalstam=minStatAmt;
+                }
+            if(finalstr<minStatAmt)
+                {
+                    finalstr=minStatAmt;
+                }
+            if(finalspd<minStatAmt)
+                {
+                    finalspd=minStatAmt;
+                }
+            if(finaldex<minStatAmt)
+                {
+                    finaldex=minStatAmt;
+                }
+            if(finalwill<minStatAmt)
+                {
+                    finalwill=minStatAmt;
+                }
+    
     
             /*finalstam=Math.round(racebasestam+basestam*totalStamBoost-stancestamLoss+otherstamBoost);
             finalstr=Math.round(racebasestr+basestr*totalStrBoost-stancestrLoss+otherstrBoost);
