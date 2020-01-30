@@ -434,34 +434,34 @@ function mainCalcFunction()
                 }
             totalStanceBoost=(stancestamBoost+stancestrBoost+stancespdBoost+stancedexBoost+stancewillBoost)/100;
     
-            stancestamLoss=check(stancestamLoss,totalStanceBoost*100)
+            stancestamLoss=check(stancestamLoss,maxStanceBoost*100)
             if(errorFlag)
                 {
-                    document.getElementById("stamStancesLossIPF").value=totalStanceBoost*100;
+                    document.getElementById("stamStancesLossIPF").value=maxStanceBoost*100;
                     errorFlag=false;
                 }
-            stancestrLoss=check(stancestrLoss,totalStanceBoost*100)
+            stancestrLoss=check(stancestrLoss,maxStanceBoost*100)
             if(errorFlag)
                 {
-                    document.getElementById("strStancesLossIPF").value=totalStanceBoost*100;
+                    document.getElementById("strStancesLossIPF").value=maxStanceBoost*100;
                     errorFlag=false;
                 }
-            stancespdLoss=check(stancespdLoss,totalStanceBoost*100)
+            stancespdLoss=check(stancespdLoss,maxStanceBoost*100)
             if(errorFlag)
                 {
-                    document.getElementById("spdStancesLossIPF").value=totalStanceBoost*100;
+                    document.getElementById("spdStancesLossIPF").value=maxStanceBoost*100;
                     errorFlag=false;
                 }
-            stancedexLoss=check(stancedexLoss,totalStanceBoost*100)
+            stancedexLoss=check(stancedexLoss,maxStanceBoost*100)
             if(errorFlag)
                 {
-                    document.getElementById("dexStancesLossIPF").value=totalStanceBoost*100;
+                    document.getElementById("dexStancesLossIPF").value=maxStanceBoost*100;
                     errorFlag=false;
                 }
-            stancewillLoss=check(stancewillLoss,totalStanceBoost*100)
+            stancewillLoss=check(stancewillLoss,maxStanceBoost*100)
             if(errorFlag)
                 {
-                    document.getElementById("willStancesLossIPF").value=totalStanceBoost*100;
+                    document.getElementById("willStancesLossIPF").value=maxStanceBoost*100;
                     errorFlag=false;
                 }
     

@@ -534,7 +534,7 @@ function calculateDefense()
 
     document.getElementById("totMit").textContent=Math.round((totMit/attPow)*100)+"%";
     document.getElementById("IntMit").textContent=Math.round(defPower);
-    document.getElementById("SpdPen").textContent=Math.round(spdRed)+"%";
+    document.getElementById("SpdPen").textContent=Math.round(spdRed*10)/100+"%";
     
 }
 
