@@ -24,7 +24,7 @@
                 <h2 class="col-headers">Base Stats for<label id="charName"></label></h2>
                 <li>
                     <label class="statIPL">Total Temp Boost (Max <span class="maxBoost">0</span>%)</label>
-                    <input type="number" class="IP Boost" id="maxBoost" value="0" max="70" disabled>
+                    <input type="percent" class="IP Boost" id="maxBoost" value="0" max="70" disabled>
                 </li><br><br>
                 <li>
                     <label class="statIPL">Total Stats</label>
@@ -176,34 +176,34 @@
                 </li><br>
                 <li>
                     <label class="StancesIPL">Stamina</label>
-                    <input type="number" class="StacnesIPF IP stanceLoss" id="stamStancesLossIPF" value="0">
+                    <input type="number" class="StacnesIPF IP stanceLoss stamBoost Boost" id="stamStancesLossIPF" value="0">
                 </li>
 
                 <li>
                     <label class="StancesIPL">Strength</label>
-                    <input type="number" class="StancesIPF IP stanceLoss" id="strStancesLossIPF" value="0">
+                    <input type="number" class="StancesIPF IP stanceLoss strBoost Boost" id="strStancesLossIPF" value="0">
                 </li>
 
                 <li>
                     <label class="StancesIPL">Speed</label>
-                    <input type="number" class="StancesIPF IP stanceLoss" id="spdStancesLossIPF" value="0">
+                    <input type="number" class="StancesIPF IP stanceLoss spdBoost Boost" id="spdStancesLossIPF" value="0">
                 </li>
                 
                 <li>
                     <label class="StancesIPL">Dexterity</label>
-                    <input type="number" class="StancesIPF IP stanceLoss" id="dexStancesLossIPF" value="0" disabled>
+                    <input type="number" class="StancesIPF IP stanceLoss dexBoost Boost" id="dexStancesLossIPF" value="0" disabled>
                 </li>
                 <li>
                     <label class="StancesIPL">Will</label>
-                    <input type="number" class="StancesIPF IP stanceLoss" id="willStancesLossIPF" value="0" disabled>
+                    <input type="number" class="StancesIPF IP stanceLoss willBoost Boost" id="willStancesLossIPF" value="0" disabled>
                 </li>
                 <li>
                     <label class="StancesIPL"><strong>Remaining Stat Loss</strong></label>
-                    <input type="number" class="StancesIPF IP stanceLoss" id="totalStancesLossF" value="0" disabled>
+                    <input type="percent" class="StancesIPF IP stanceLoss" id="totalStancesLossF" value="0" disabled>
                 </li>                
             </ul>
             <ul id="posts-inputs-list">
-                <h3 class="col-headers">Other Flat Boosts/Losses</h3>
+                <h3 class="col-headers">Other Flat Boosts</h3>
                 <li>
                     <label class="TempBoostFLatIPL">Stamina(Max <span class="maxFlatBoost">0</span>)</label>
                     <input type="number" class="FlatBoosts IP" id="stamTempFlatBoostIPF" value="0">
@@ -226,6 +226,32 @@
                 <li>
                     <label class="TempBoostFlatIPL">Will(Max <span class="maxFlatBoost">0</span>)</label>
                     <input type="number" class="FlatBoosts IP" id="willTempFlatBoostIPF" value="0">
+                </li>
+            </ul>
+            <ul id="posts-inputs-list">
+                <h3 class="col-headers">Other Flat Losses</h3>
+                <li>
+                    <label class="TempBoostFLatIPL">Stamina</label>
+                    <input type="number" class="FlatLoss IP" id="stamTempFlatLossIPF" value="0">
+                </li>
+
+                <li>
+                    <label class="TempBoostFlatIPL">Strength</label>
+                    <input type="number" class="FlatLoss IP" id="strTempFlatLossIPF" value="0">
+                </li>
+
+                <li>
+                    <label class="TempBoostFlatIPL">Speed</label>
+                    <input type="number" class="FlatLoss IP" id="spdTempFlatLossIPF" value="0">
+                </li> 
+                
+                <li>
+                    <label class="TempBoostFlatIPL">Dexterity</label>
+                    <input type="number" class="FlatLoss IP" id="dexTempFlatLossIPF" value="0">
+                </li>
+                <li>
+                    <label class="TempBoostFlatIPL">Will</label>
+                    <input type="number" class="FlatLoss IP" id="willTempFlatLossIPF" value="0">
                 </li>
             </ul>
             <hr>
