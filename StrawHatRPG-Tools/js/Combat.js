@@ -311,7 +311,6 @@ function calculateAttack()
     attSrc.reverse();
     attackMult=attSrc[0]+attSrc[1]*.5+MeitoAtt+baseAtt;
     //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+MeitoAtt;
-    console.log(attackMult);
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
             attackMult*=0.9;
@@ -389,12 +388,12 @@ function calculateDefense()
     var armorPerk=document.getElementById("defArmorPerkLevel").value;
     var atthakiLevel=document.getElementById("attHakiLevel").value;
     var attackLevel=document.getElementById("attattackLevel").value;
-    var FullCheck=document.getElementById("defFullCheck").checked;
+    var FullCheck=document.getElementById("defFullCheck").value;
     var totMit,defPower,maxArmor,armorSources,spdRed,armPerk,arm2Perk,fullPart=1;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
     var overflow=.25,sloverflow=.10,thr=875,Tekkaithr,Hakithr;
-    var stamRed=basestam*.001, totSpdRed;
+    var statRed=basestam*.00025+basewill*.00015, totSpdRed;
     var thrStat=0;
     
     statDef=basestam*stamFactor+basewill*willFactor;
@@ -433,8 +432,14 @@ function calculateDefense()
             TekkaiBoost=(TekkaiBoost-Tekkaithr)*overflow+Tekkaithr;
         }
     
-    if(!FullCheck)
-       fullPart=.7;
+    switch(FullCheck)
+        {
+            case 'H1':fullPart=.15;break;
+            case 'H2':fullPart=.30;break;
+            case 'H3':fullPart=.50;break;
+            case 'H4':fullPart=.70;break;
+            case 'H5':fullPart=1;break;
+        }
     /*switch(armorPerk)
         {
             case "AP1":maxArmor=100;armPerk=.2;arm2Perk=.8;break;
@@ -461,6 +466,7 @@ function calculateDefense()
             armor=armor*arm2Perk;
         }
     armor=diminish2(armor);*/
+    armorcopy=armor;
     switch(armorPerk)
         {
             case "AP1":maxArmor=100;armPerk=.3;arm2Perk=.7;break;
@@ -470,27 +476,30 @@ function calculateDefense()
             case "AP5":maxArmor=500;armPerk=.5;arm2Perk=.9;break;
             default:maxArmor=15;armPerk=.1;arm2Perk=.5;break;
         }
-    totSpdRed=armPerk+stamRed;
+    totSpdRed=armPerk+statRed;
     if(totSpdRed>1)
         {
             totSpdRed=1;
         }
     if(armor>maxArmor)
         {
-            spdRed=(maxArmor*(1-(totSpdRed))+(armor-maxArmor)*(1-(.1+stamRed)))*.2;        
+            spdRed=((maxArmor*(1-totSpdRed))+(armor-maxArmor)*(1-(.1+statRed))) ;        
         }
     else
         {
-            spdRed=armor*(1-(totSpdRed))*.2;
+            spdRed=(armor*(1-totSpdRed));
         }
-    if(spdRed<armor*.01)
+    if(spdRed<armor*.25)
         {
-            spdRed=armor*.01;
+            spdRed=armor*.25;
         }
+    spdRed=Try2(spdRed)
+    /*
     if(spdRed>99)
         {
             spdRed=99;
         }
+    */
     /*if(armor>maxArmor)
         {
             armor=maxArmor*arm2Perk+(armor-maxArmor)*.5;
@@ -534,7 +543,7 @@ function calculateDefense()
 
     document.getElementById("totMit").textContent=Math.round((totMit/attPow)*100)+"%";
     document.getElementById("IntMit").textContent=Math.round(defPower);
-    document.getElementById("SpdPen").textContent=Math.round(spdRed*10)/100+"%";
+    document.getElementById("SpdPen").textContent=Math.round(spdRed);
     
 }
 
@@ -614,6 +623,20 @@ function diminish2(basestat)
         }
     res+=basestat*multiplier;
     return res;
+}
+function Try(base)
+{       
+    var res=0
+    while(base>0)
+        {
+            base--;
+            res=res+(1*(.1+base/500*1.8));
+        }
+    return res;
+}
+function Try2(base)
+{
+        return base*base/500;
 }
 /*
             */

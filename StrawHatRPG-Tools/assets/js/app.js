@@ -642,23 +642,28 @@ function countWords(str) {
     base_0: [
     { //1
         threshold: 0,
-        percent: 1.00
+        percent: 0.500,
+        percent2: 1.00
     },
     { //2
         threshold: 101,
-        percent: 0.85
+        percent: 0.500,
+        percent2: 0.90
     },
     { //3
         threshold: 151,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.80
     },
     { //4
         threshold: 201,
-        percent: 0.55
+        percent: 0.500,
+        percent2: 0.70
     },
     { //5
         threshold: 251,
-        percent: 0.40
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_1: [
@@ -668,23 +673,28 @@ function countWords(str) {
     },
     { //2
         threshold: 301,
-        percent: 1.00
+        percent: 0.500,
+        percent2: 1.00
     },
     { //3
         threshold: 351,
-        percent: 0.85
+        percent: 0.500,
+        percent2: 0.90
     },
     { //4
         threshold: 401,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.80
     },
     { //5
         threshold: 451,
-        percent: 0.55
+        percent: 0.500,
+        percent2: 0.70
     },
     { //6
         threshold: 501,
-        percent: 0.40
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_2: [
@@ -698,23 +708,28 @@ function countWords(str) {
     },
     { //3
         threshold: 551,
-        percent: 0.90
+        percent: 0.500,
+        percent2: 1.00
     },
     { //4
         threshold: 601,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.90
     },
     { //5
         threshold: 651,
-        percent: 0.50
+        percent: 0.500,
+        percent2: 0.80
     },
     { //6
         threshold: 701,
-        percent: 0.40
+        percent: 0.500,
+        percent2: 0.70
     },
     { //7
         threshold: 751,
-        percent: 0.30
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_3: [
@@ -732,23 +747,28 @@ function countWords(str) {
     },
     { //4
         threshold: 801,
-        percent: 0.90
+        percent: 0.500,
+        percent2: 1.00
     },
     { //5
         threshold: 851,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.90
     },
     { //6
         threshold: 901,
-        percent: 0.50
+        percent: 0.500,
+        percent2: 0.80
     },
     { //7
         threshold: 951,
-        percent: 0.40
+        percent: 0.500,
+        percent2: 0.70
     },
     { //8
         threshold: 1001,
-        percent: 0.30
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
         
     base_4: [
@@ -770,22 +790,28 @@ function countWords(str) {
     },
     { //5
         threshold: 1051,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //6
         threshold: 1101,
-        percent: 0.85    },
+        percent: 0.500,
+        percent2: 0.90
+    },
     { //7
         threshold: 1151,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.80
     },
     { //8
         threshold: 1201,
-        percent: 0.55
+        percent: 0.500,
+        percent2: 0.70
     },
     { //9
         threshold: 1251,
-        percent: 0.40
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_5: [
@@ -811,23 +837,28 @@ function countWords(str) {
     },
     { //6
         threshold: 1301,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //7
         threshold: 1351,
-        percent: 0.85
+        percent: 0.500,
+        percent2: 0.90
     },
     { //8
         threshold: 1401,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.80
     },
     { //9
         threshold: 1451,
-        percent: 0.55
+        percent: 0.500,
+        percent2: 0.70
     },
     { //10
         threshold: 1501,
-        percent: 0.40
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_6: [
@@ -857,23 +888,28 @@ function countWords(str) {
     },
     { //7
         threshold: 1551,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //8
         threshold: 1601,
-        percent: 0.85
+        percent: 0.500,
+        percent2: 0.90
     },
     { //9
         threshold: 1651,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.80
     },
     { //10
         threshold: 1701,
-        percent: 0.55
+        percent: 0.500,
+        percent2: 0.70
     },
     { //11
         threshold: 1751,
-        percent: 0.40
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_7: [
@@ -907,23 +943,28 @@ function countWords(str) {
     },
     { //8
         threshold: 1801,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.0
     },
     { //9
         threshold: 1851,
-        percent: 0.85
+        percent: 0.500,
+        percent2: 0.90
     },
     { //10
         threshold: 1901,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.80
     },
     { //11
         threshold: 1951,
-        percent: 0.55
+        percent: 0.500,
+        percent2: 0.70
     },
     { //12
         threshold: 2001,
-        percent: 0.40
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_8: [
@@ -961,23 +1002,28 @@ function countWords(str) {
     },
     { //9
         threshold: 2051,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //10
         threshold: 2101,
-        percent: 0.85
+        percent: 0.500,
+        percent2: 0.90
     },
     { //11
         threshold: 2151,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.80
     },
     { //12
         threshold: 2201,
-        percent: 0.55
+        percent: 0.500,
+        percent2: 0.70
     },
     { //13
         threshold: 2251,
-        percent: 0.40
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_9: [
@@ -1019,19 +1065,23 @@ function countWords(str) {
     },
     { //10
         threshold: 2301,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //11
         threshold: 2351,
-        percent: 0.85
+        percent: 0.500,
+        percent2: 0.90
     },
     { //12
         threshold: 2401,
-        percent: 0.70
+        percent: 0.500,
+        percent2: 0.80
     },
     { //13
         threshold: 2451,
-        percent: 0.55
+        percent: 0.500,
+        percent2: 0.70
     }]  //DONE
 };
 
@@ -1114,6 +1164,7 @@ function calculate(stats, score, getMax = false, base = baseLevel.selectedIndex,
         percent = baseArray[rangeLevel].percent;
         // Catch up system
         // If percent is less than 1.0 and score is multiple of 50
+        /*
         if (percent < 1.0 && score % 50 === 0 && isMax === false) {
             if (percent === 0.90) {
                 percent = 1.0;
@@ -1123,6 +1174,11 @@ function calculate(stats, score, getMax = false, base = baseLevel.selectedIndex,
                 percent = (percent + baseArray[rangeLevel - 1].percent) / 2;
             }
         }
+        */
+        if (percent < 1.0 && isMax === false) {
+                percent = baseArray[rangeLevel].percent2;
+            }
+        
 
         if (rangeLevel === (baseArray.length - 1)) {
             isBottomRange = true;
@@ -1354,4 +1410,85 @@ function countThread() {
     }
     
     console.log("Thread processed!");
+}
+
+function newSys(currStats,maxStats,earnedScore=20,maxScore=50)
+{
+    var currentStatsCopy=currStats;
+    var earnedScoreCopy=earnedScore;
+    var maxStatsCopy=maxStats;
+    var maxScoreCopy=maxScore;
+    var baseRate=0.60, boostRate=0.15, acceleRate, diffBoostRate;
+    var earnedStas;
+    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
+    if(currStats < startingStats)
+        {
+            currStats = startingStats;
+        }
+    //maxStats+=maxScore*baseRate
+    if(currStats < maxStats)
+        {
+            diffBoostRate=(maxStats-currStats)/200
+            if(earnedScoreCopy == maxScore)
+                {
+                    acceleRate=boostRate;
+                }
+            else
+                {
+                    acceleRate=0;
+                }
+        }
+    else
+        {
+            diffBoostRate=0;
+            acceleRate=0;
+        }
+    while(earnedScore>0)
+        {
+            if(currStats < maxStats)
+                {
+                    diffBoostRate=(maxStats-currStats)/200
+                    if(earnedScoreCopy == maxScore)
+                        {
+                            acceleRate=boostRate;
+                        }
+                    else
+                        {
+                            acceleRate=0;
+                        }
+                }
+            else
+                {
+                    diffBoostRate=0;
+                    acceleRate=0;
+                }
+            //console.log(baseRate+" / "+diffBoostRate+" / "+acceleRate);
+            currStats+=1*(baseRate + diffBoostRate + acceleRate);
+            maxStats+=1*baseRate;
+            
+            earnedScore--;
+        }
+    maxStats=maxStatsCopy
+    maxScoreCopy=maxScore;
+    while(maxScore)
+        {
+            maxStats+=1*baseRate;
+            maxScore--;
+        }
+    if(currStats > maxStats)
+        {
+            currStats = maxStats;
+        }
+    currStats=Math.round(currStats);
+    maxStats=Math.round(maxStats);
+    earnedStas=currStats-currentStatsCopy;
+    return "Current Stats: "+currentStatsCopy +
+        "\nCurrent Starting Stats: "+(50+Math.floor((maxStatsCopy-50)/100)*25) + 
+        "\nCurrent Max Stats: "+maxStatsCopy + 
+        "\nMax Score: "+maxScoreCopy + 
+        "\nEarned Score: "+earnedScoreCopy + 
+        "\nEarned Stats: "+earnedStas+" (" +Math.round(earnedStas*.6)+"/"+Math.round(earnedStas*.4)+")" + 
+        "\nNew Stats: "+currStats + 
+        "\nNew Max Stats: "+maxStats + 
+        "\nNew Starting Stats: "+(50+Math.floor((maxStats-50)/100)*25);
 }
