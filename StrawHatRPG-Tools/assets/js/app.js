@@ -73,6 +73,7 @@ function winLoad() {
     timerInit();
     changeStartingStats();
     fetchMaxStats();
+    newSys(document.getElementById('current-stats').valueAsNumber,document.getElementById('max-stats').valueAsNumber,document.getElementById('manual-score').valueAsNumber,50);
 }
 
 // Initiate the countdown timer and automatically set the start date and end date
@@ -129,6 +130,7 @@ function changeStartingStats() {
     //Calculate Max Stats since base is changed
     calculateMaxStats();
     currentStats.value = 50 * (parseInt(baseLevel.options[baseLevel.selectedIndex].textContent) + 1);
+    newSys(document.getElementById('current-stats').valueAsNumber,document.getElementById('max-stats').valueAsNumber,document.getElementById('manual-score').valueAsNumber,50);
 }
 
 function calculateMaxStats() {
@@ -152,6 +154,7 @@ function calculateMaxStats() {
         maxNewStats = calc.newStats;
         maxStatsLabelNew.textContent = maxNewStats;
     }
+    newSys(document.getElementById('current-stats').valueAsNumber,document.getElementById('max-stats').valueAsNumber,document.getElementById('manual-score').valueAsNumber,50);
 }
 
 // Automatically fetch the max stats from the stats sheet
