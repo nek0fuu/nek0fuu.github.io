@@ -122,7 +122,7 @@ function calculateAttack()
     var dexFactor=.35;
     var willFactor=.175;
     var overflow=.25,sloverflow=.10;
-    var thr=875,soruThr,HakiThr,Haki2Thr,restype;
+    var thr=850,soruThr,HakiThr,Haki2Thr,restype;
     var HaoMult,totalDrain,focHao=1,maxDrain,minDrain,willReq,maxPerc,HakiMult,ryouMult,extraWill,HaoRes=0;
     for(i=0;i<errors.length;i++)
     {
@@ -140,40 +140,44 @@ function calculateAttack()
     switch(attackLevel)
         {
             case "NS9":baseAtt=1.00;restype="AttMeito";break;
-            case "IW1":baseAtt=.250;thr=125;restype="Att";break;
-            case "IW2":baseAtt=.425;thr=250;restype="Att";break;
-            case "IW3":baseAtt=.600;thr=375;restype="Att";break;
-            case "IW4":baseAtt=.775;thr=500;restype="Att";break;
-            case "IW5":baseAtt=.950;thr=625;restype="Att";break;
-            case "FS1":baseAtt=.35;thr=125;restype="AttMeitoFS";break;
-            case "FS2":baseAtt=.50;thr=250;restype="AttMeitoFS";break;
-            case "FS3":baseAtt=.65;thr=375;restype="AttMeitoFS";break;
-            case "FS4":baseAtt=.80;thr=500;restype="AttMeitoFS";break;
-            case "FS5":baseAtt=.95;thr=625;restype="AttMeitoFS";break;
+            case "IW1":baseAtt=.250;thr=120;restype="Att";break;
+            case "IW2":baseAtt=.425;thr=240;restype="Att";break;
+            case "IW3":baseAtt=.600;thr=360;restype="Att";break;
+            case "IW4":baseAtt=.775;thr=480;restype="Att";break;
+            case "IW5":baseAtt=.950;thr=600;restype="Att";break;
+            case "FS1":baseAtt=.35;thr=120;restype="AttMeitoFS";break;
+            case "FS2":baseAtt=.50;thr=240;restype="AttMeitoFS";break;
+            case "FS3":baseAtt=.65;thr=360;restype="AttMeitoFS";break;
+            case "FS4":baseAtt=.80;thr=480;restype="AttMeitoFS";break;
+            case "FS5":baseAtt=.95;thr=600;restype="AttMeitoFS";break;
             case "FSS":baseAtt=.95;restype="AttMeitoFS";break;
             case "FSP":baseAtt=1.10;restype="AttMeitoFS";break;
             case "SO1":baseAtt=1.00;SoruMult=0.25;spdReq=70;soruThr=100;restype="Soru";break;
             case "SO2":baseAtt=1.00;SoruMult=0.30;spdReq=135;soruThr=200;restype="Soru";break;
             case "SO3":baseAtt=1.00;SoruMult=0.35;spdReq=200;soruThr=300;restype="Soru";break;
-            case "SOS":baseAtt=1.00;SoruMult=0.40;spdReq=265;soruThr=400;restype="Soru";break;
+            case "SOS":baseAtt=1.00;SoruMult=0.35;spdReq=200;soruThr=400;restype="Soru";break;
+            case "SOP":baseAtt=1.00;SoruMult=0.40;spdReq=265;soruThr=400;restype="Soru";break;
             case "SH1":baseAtt=1.05;restype="Att";break;
             case "SH2":baseAtt=1.10;restype="Att";break;
             case "SH3":baseAtt=1.15;restype="Att";break;
+            case "SHS":baseAtt=1.15;restype="Att";break;
             case "SHP":baseAtt=1.20;restype="Att";break;
-            case "RK1":baseAtt=.35;thr=205;restype="Att";break;
-            case "RK2":baseAtt=.55;thr=410;restype="Att";break;
-            case "RK3":baseAtt=.75;thr=615;restype="Att";break;
+            case "RK1":baseAtt=.35;thr=200;restype="Att";break;
+            case "RK2":baseAtt=.55;thr=400;restype="Att";break;
+            case "RK3":baseAtt=.75;thr=600;restype="Att";break;
             case "RKS":baseAtt=.75;restype="Att";break;    
             case "RKP":baseAtt=.95;restype="Att";break;
             case "RG1":baseAtt=1.15;restype="Att";break;
             case "RG2":baseAtt=1.3;restype="Att";break;
             case "RG3":baseAtt=1.45;restype="Att";break;
+            case "RGS":baseAtt=1.45;restype="Att";break;
             case "RGP":baseAtt=1.6;restype="Att";break;
             case "HAL":minDrain=0;maxDrain=20;HaoMult=.4;willReq=200;restype="Hao";break;
             case "HAM":minDrain=5;maxDrain=30;HaoMult=.6;willReq=250;restype="Hao";break;
             case "HAH":minDrain=10;maxDrain=40;HaoMult=.8;willReq=300;restype="Hao";break;
             case "HAI":minDrain=15;maxDrain=50;HaoMult=1;willReq=350;restype="Hao";break;
-            case "HAS":minDrain=20;maxDrain=60;HaoMult=1.2;willReq=400;restype="Hao";break;
+            case "HAS":minDrain=15;maxDrain=60;HaoMult=1;willReq=350;restype="Hao";break;
+            case "HAP":minDrain=20;maxDrain=60;HaoMult=1.2;willReq=400;restype="Hao";break;
                 
             default:baseAtt=0;break;
         }
@@ -279,9 +283,9 @@ function calculateAttack()
             case "HC2":HakiMult=0.0125;ryouMult=0;willReq=300;HakiThr=0.10;Haki2Thr=0;break;
             case "HC3":HakiMult=0.0175;ryouMult=0;willReq=350;HakiThr=0.15;Haki2Thr=0;break;
             case "HCS":HakiMult=0.0225;ryouMult=0;willReq=400;HakiThr=0.2;Haki2Thr=0;break;
-            case "HR1":HakiMult=0.0050;ryouMult=.035;willReq=300;HakiThr=0.03;Haki2Thr=.25;break;
-            case "HR2":HakiMult=0.0075;ryouMult=.055;willReq=350;HakiThr=0.06;Haki2Thr=.50;break;
-            case "HRS":HakiMult=0.0100;ryouMult=.075;willReq=400;HakiThr=0.09;Haki2Thr=.75;break;
+            case "HR1":HakiMult=0.0050;ryouMult=.020;willReq=300;HakiThr=0.03;Haki2Thr=.2;break;
+            case "HR2":HakiMult=0.0075;ryouMult=.040;willReq=350;HakiThr=0.06;Haki2Thr=.4;break;
+            case "HRS":HakiMult=0.0100;ryouMult=.060;willReq=400;HakiThr=0.09;Haki2Thr=.6;break;
             default:HakiMult=0;willReq=0;ryouMult=0;break;
         }
     hakiAtt=(willReq+basewill)*HakiMult/100;
@@ -392,9 +396,9 @@ function calculateDefense()
     var totMit,defPower,maxArmor,armorSources,spdRed,armPerk,arm2Perk,fullPart=1;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq;
     var stamFactor=.175,willFactor=0.075;
-    var overflow=.25,sloverflow=.10,thr=875,Tekkaithr,Hakithr;
+    var overflow=.25,sloverflow=.10,thr=850,Tekkaithr,Hakithr;
     var statRed=basestam*.00025+basewill*.00015, totSpdRed;
-    var thrStat=0;
+    var thrStat=0,dmgLvl="";
     
     statDef=basestam*stamFactor+basewill*willFactor;
     thrStat=[basestam/2,basewill].sort(function(a,b){return a-b})[0]
@@ -522,16 +526,17 @@ function calculateDefense()
             case "RG1":defPower*=.95;break;
             case "RG2":defPower*=.90;break;
             case "RG3":defPower*=.85;break;
-            case "RGS":defPower*=.80;break;
+            case "RGS":defPower*=.85;break;
+            case "RGP":defPower*=.80;break;
             default:break;
                 
         }
+    defPower=(defPower*(1-breakAmt));
     if(defPower>thr)
         {
             defPower=(defPower-thr)*overflow+thr;
         }
     //defPower=diminish2(defPower*(1-breakAmt));
-    defPower=(defPower*(1-breakAmt));
     totMit=mitigate(attPow,defPower);
     /*switch(atthakiLevel)
         {
@@ -540,10 +545,32 @@ function calculateDefense()
             case "HRS":totMit*=.40;break;
             default:break;
         }*/
-
+       
     document.getElementById("totMit").textContent=Math.round((totMit/attPow)*100)+"%";
     document.getElementById("IntMit").textContent=Math.round(defPower);
     document.getElementById("SpdPen").textContent=Math.round(spdRed);
+    defPower*=(1+defPower*.0005);
+    if(attPow>defPower)
+        {
+            dmgLvl="Major Damage"
+        }
+    else if(attPow>defPower*.8)
+        {
+            dmgLvl="Moderate Damage";
+        }
+    else if(attPow>defPower*.6)
+        {
+            dmgLvl="Minor Damage";
+        }
+    else if(attPow>defPower*.4)
+        {
+            dmgLvl="Negligable Damage"
+        }
+    else
+        {
+            dmgLvl="Literally Nothing"
+        }
+    document.getElementById("DmgLvl").textContent=dmgLvl;
     
 }
 

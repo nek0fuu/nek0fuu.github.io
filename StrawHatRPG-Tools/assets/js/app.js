@@ -1424,7 +1424,7 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
     var maxScoreCopy=maxScore;
     var baseRate=0.60, boostRate=0.15, acceleRate, diffBoostRate;
     var earnedStas;
-    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
+    var startingStats=(100+Math.floor((maxStats-100)/100)*25)
     if(currStats < startingStats)
         {
             currStats = startingStats;
@@ -1487,14 +1487,14 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
     maxStats=Math.round(maxStats);
     earnedStas=currStats-currentStatsCopy;
     return "Current Stats: "+currentStatsCopy +
-        "\nCurrent Starting Stats: "+(50+Math.floor((maxStatsCopy-50)/100)*25) + 
+        "\nCurrent Starting Stats: "+(100+Math.floor((maxStatsCopy-100)/100)*25) + 
         "\nCurrent Max Stats: "+maxStatsCopy + 
         "\nMax Score: "+maxScoreCopy + 
         "\nEarned Score: "+earnedScoreCopy + 
         "\nEarned Stats: "+earnedStas+" (" +Math.round(earnedStas*.6)+"/"+Math.round(earnedStas*.4)+")" + 
         "\nNew Stats: "+currStats + 
         "\nNew Max Stats: "+maxStats + 
-        "\nNew Starting Stats: "+(50+Math.floor((maxStats-50)/100)*25);
+        "\nNew Starting Stats: "+(100+Math.floor((maxStats-100)/100)*25);
     
 }
 
@@ -1506,7 +1506,7 @@ function newSys(currStats,maxStats,earnedScore=20,maxScore=50)
     var maxScoreCopy=maxScore;
     var baseRate=0.60, boostRate=0.15, acceleRate, diffBoostRate;
     var earnedStas;
-    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
+    var startingStats=(100+Math.floor((maxStats-100)/100)*25)
     if(currStats < startingStats)
         {
             currStats = startingStats;
@@ -1570,7 +1570,7 @@ function newSys(currStats,maxStats,earnedScore=20,maxScore=50)
     earnedStas=currStats-currentStatsCopy;
     /*
     return "Current Stats: "+currentStatsCopy +
-        "\nCurrent Starting Stats: "+(50+Math.floor((maxStatsCopy-50)/100)*25) + 
+        "\nCurrent Starting Stats: "+(100+Math.floor((maxStatsCopy-100)/100)*25) + 
         "\nCurrent Max Stats: "+maxStatsCopy + 
         "\nMax Score: "+maxScoreCopy + 
         "\nEarned Score: "+earnedScoreCopy + 
@@ -1583,5 +1583,5 @@ function newSys(currStats,maxStats,earnedScore=20,maxScore=50)
     earnedSplit.textContent = "("+Math.round(earnedStas*.6)+"/"+Math.round(earnedStas*.4)+")";
     newStats.textContent = currStats;
     document.getElementById('max-stats-label-new').textContent=maxStats;
-    document.getElementById('new-start-stats').textContent=(50+Math.floor((maxStats-50)/100)*25);
+    document.getElementById('new-start-stats').textContent=(100+Math.floor((maxStats-100)/100)*25);
 }
