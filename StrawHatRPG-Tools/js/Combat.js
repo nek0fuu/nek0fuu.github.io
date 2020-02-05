@@ -317,11 +317,11 @@ function calculateAttack()
     //attackMult=attSrc[0]+attSrc[1]+attSrc[2]+MeitoAtt;
     if((DFCheck)&&(attackLevel.includes("FS")))
         {
-            attackMult*=0.9;
+            attackMult-=0.05;
         }
     if((UACheck)&&(attackLevel.includes("FS")))
         {
-            attackMult*=0.95;
+            attackMult-=0.025;
         }
     
     attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill)*attackMult;
