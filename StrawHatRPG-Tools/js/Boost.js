@@ -140,7 +140,7 @@ function mainCalcFunction()
     var strongWill=document.getElementById("StrongWillIPF").checked;
     var maxRacialBoost=3,maxStanceBoost,maxStanceFlatBoost;
     var maxTotalBoost=10,maxBaseStatAmt=500, maxStatFlatBoost=50, maxTotalFlatBoost=100;
-    var maxPhysStatBoost=5, maxBoostPhysStatAmt=700, maxMentStatBoost=5, maxBoostMentStatAmt=700, minStatAmt=5;
+    var maxPhysStatBoost=5, maxBoostPhysStatAmt=675, maxMentStatBoost=5, maxBoostMentStatAmt=675, minStatAmt=5;
     var maxStancePercBoost,statLossReduction,totalRaceBoost,actualStancePercBoost=0,actualStanceFlatBoost=0,properFlatStanceLoss,properPercStanceLoss,actualFlatStanceLoss=0,actualPercStanceLoss=0,totalBoost, totalFlatBoost=0;
     var totalStamBoost=0, totalStamFlatBoost=0;
     var totalStrBoost=0, totalStrFlatBoost=0;
@@ -201,9 +201,9 @@ function mainCalcFunction()
     switch(stancePerkLevel)
         {
             case '0':statLossReduction=0;maxStanceFlatBoost=0;break;
-            case '1':statLossReduction=25;maxStanceFlatBoost=7;break;
-            case '2':statLossReduction=50;maxStanceFlatBoost=14;break;
-            case '3':statLossReduction=75;maxStanceFlatBoost=21;break;  
+            case '1':statLossReduction=25;maxStanceFlatBoost=5;break;
+            case '2':statLossReduction=50;maxStanceFlatBoost=15;break;
+            case '3':statLossReduction=75;maxStanceFlatBoost=20;break;  
                 
             default:statLossReduction=0;break;
         }
@@ -249,7 +249,7 @@ function mainCalcFunction()
         }
     else
         {
-            maxStancePercBoost=4.5;
+            maxStancePercBoost=4;
             document.getElementById("dexStancesPIPF").disabled=false;
             document.getElementById("willStancesPIPF").disabled=false;
             if(!Number(stancePerkLevel))
