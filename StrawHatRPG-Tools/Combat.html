@@ -19,22 +19,26 @@
             <ul id="posts-inputs-list">
                 <h2 class="col-headers">Attacker</h2>
                 <li>
+                    <label class="statIPL">Stamina</label>
+                    <input type="number" class="statIPF waveReq IP" id="attstmIPF" value="10" min="7" max="675">
+                </li>
+                <li>
                     <label class="statIPL">Strength</label>
-                    <input type="number" class="statIPF waveReq IP" id="attstrIPF" value="10" min="7" max="725">
+                    <input type="number" class="statIPF waveReq IP" id="attstrIPF" value="10" min="7" max="675">
                 </li>
 
                 <li>
                     <label class="statIPL">Speed</label>
-                    <input type="number" class="statIPF waveReq IP" id="attspdIPF" value="10" min="7" max="725">
+                    <input type="number" class="statIPF waveReq IP" id="attspdIPF" value="10" min="7" max="675">
                 </li>
                 
                 <li>
                     <label class="statIPL">Dexterity</label>
-                    <input type="number" class="statIPF slashReq IP" id="attdexIPF" value="10" min="7" max="725">
+                    <input type="number" class="statIPF slashReq IP" id="attdexIPF" value="10" min="7" max="675">
                 </li>
                 <li>
                     <label class="statIPL">Will</label>
-                    <input type="number" class="statIPF slashReq IP" id="attwillIPF" value="10" min="7" max="725">
+                    <input type="number" class="statIPF slashReq IP" id="attwillIPF" value="10" min="7" max="675">
                 </li>
                 <br>
                 </ul>
@@ -42,7 +46,7 @@
                 <li>
                     <label class="AttackIPL">Attack Type/Level</label>
                     <select class="AttackIPF IP" id="attattackLevel">
-                        <option value="NS9">Normal Attack</option>
+                        <option value="NS">Normal Attack</option>
                         <option value="IW1">Impact Wave Level 1</option>
                         <option value="IW2">Impact Wave Level 2</option>
                         <option value="IW3">Impact Wave Level 3</option>
@@ -100,6 +104,10 @@
                     <label class="SlashIPL">Power Attack</label>
                     <input type="checkbox" class="SlashIPF IP" id="attPowCheck" name="PowCheck" value="Pow">
                 </li>
+                <li id="hideThisCurseCheck">
+                    <label class="SlashIPL">Cursed Blade</label>
+                    <input type="checkbox" class="SlashIPF IP" id="attCurseCheck" name="PowCheck" value="Pow">
+                </li>
                 <li id="hideThisHaoCheck">
                     <label class="SlashIPL">Focused Blast</label>
                     <input type="checkbox" class="SlashIPF IP" id="attHaoFoc" name="PowCheck" value="Pow">
@@ -138,7 +146,6 @@
                     <p>
                         <strong>Attack Power</strong>
                         <span class="power" id="attPow"><strong>0</strong></span>
-                        <span id="DmgLvl"><strong></strong></span>
                     </p>
                 </li>
                 <li id="hideThisSoru">
@@ -176,7 +183,8 @@
                         <option value="TK1">Tekkai Level 1</option>
                         <option value="TK2">Tekkai Level 2</option>
                         <option value="TK3">Tekkai Level 3</option>
-                        <option value="TKS">Tekkai Specialization (Hardness)</option>
+                        <option value="TKP">Tekkai Specialization (Hardness)</option>
+                        <option value="TKS">Tekkai Specialization (Other)</option>
                     </select>
                 </li>
                 <li>
@@ -186,12 +194,35 @@
                         <option value="HC1">Invisible Haki</option>
                         <option value="HC2">Dull Haki</option>
                         <option value="HC3">Shiny Haki</option>
-                        <option value="HCS">Haki Specialization (Hardness)</option>
+                        <option value="HCP">Haki Specialization (Hardness)</option>
+                        <option value="HCS">Haki Specialization (Other)</option>
                     </select>
                 </li><br><br>
                 <li>
                     <label class="statIPL">Armament Hardness</label>
                     <input type="number" class="statIPF waveReq IP" id="defarmIPF" value="0" max="650">
+                </li>
+                <li>
+                    <label class="AttackIPL">Haki (on the Armament)</label>
+                    <select class="HakiIPF IP" id="defArmHakiLevel">
+                        <option value="NA">None</option>
+                        <option value="HC1">Invisible Haki</option>
+                        <option value="HC2">Dull Haki</option>
+                        <option value="HC3">Shiny Haki</option>
+                        <option value="HCP">Haki Specialization (Hardness)</option>
+                        <option value="HCS">Haki Specialization (Other)</option>
+                    </select>
+                </li>
+                <br><br>
+                <li>
+                    <label class="SlashIPL">Armament Size</label>
+                    <select class="SlashIPF IP" id="defFullCheck" name="PowCheck" value="Pow">
+                        <option value="H1">Tiny</option>
+                        <option value="H2">Small</option>
+                        <option value="H3">Medium</option>
+                        <option value="H4">Large/Bulky</option>
+                        <option value="H5">Massive/Full Suit</option>
+                    </select>
                 </li>
                 <li>
                     <label class="AttackIPL">Armament Perk</label>
@@ -204,36 +235,31 @@
                         <option value="AP5">Armour Perk 5</option>
                     </select>
                 </li><br><br>
-                <li>
-                    <label class="SlashIPL">Armament Size</label>
-                    <select class="SlashIPF IP" id="defFullCheck" name="PowCheck" value="Pow">
-                        <option value="H1">Tiny</option>
-                        <option value="H2">Small</option>
-                        <option value="H3">Medium</option>
-                        <option value="H4">Large/Bulky</option>
-                        <option value="H5">Massive/Full Suit</option>
-                    </select>
-                </li><br><br>
                 <li id="hideThisHao2">
                     <label>Fortified Mind</label>
                     <input type="checkbox" class="SlashIPF IP" id="defFMindCheck" name="PowCheck" value="Pow">
+                </li>
+                <li>
+                    <label>Blacksmiths</label>
+                    <input type="checkbox" class="SlashIPF IP" id="defBMCheck" name="PowCheck" value="Pow">
                 </li>
             </ul>
             
 
             <!-- Results -->
             <ul id="results-list">
-                
-                <li id="hideThisDefResult" style="display:none">
+                <li id="hideThisDefResult2">
                     <p>
-                        <strong>Reduction</strong>
-                        <span class="power" id="totMit"><strong>0</strong></span>
+                        <strong>Innate Defense</strong>
+                        <span class="power" id="InnDef"><strong>0</strong></span>
+                        <span id="DmgLvl"><strong></strong></span>
                     </p>
                 </li>
                 <li id="hideThisDefResult2">
                     <p>
-                        <strong>Hardness</strong>
-                        <span class="power" id="IntMit"><strong>0</strong></span>
+                        <strong>Armor Defense</strong>
+                        <span class="power" id="ArmDef"><strong>0</strong></span>
+                        <span id="DmgLvl2"><strong></strong></span>
                     </p>
                 </li>
                 <li id="hideThisDefResultSpd">
