@@ -212,10 +212,10 @@ function calculateAttack()
 
     switch(meitoGrade)
         {
-            case "WAZ":MeitoAtt=0.05;MeitoFlat=11;break;
-            case "RYO":MeitoAtt=0.10;MeitoFlat=22;break;
-            case "OWA":MeitoAtt=0.15;MeitoFlat=33;break;
-            case "SOW":MeitoAtt=0.25;MeitoFlat=50;break;
+            case "WAZ":MeitoAtt=0.05;MeitoFlat=10;break;
+            case "RYO":MeitoAtt=0.10;MeitoFlat=20;break;
+            case "OWA":MeitoAtt=0.15;MeitoFlat=30;break;
+            case "SOW":MeitoAtt=0.25;MeitoFlat=45;break;
             default:break;
         }
     if(PowCheck)
