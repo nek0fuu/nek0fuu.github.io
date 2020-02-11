@@ -58,11 +58,11 @@ function calculateAttack()
     switch(attackLevel)
         {
             case "NS":baseAtt=1.00;restype="AttMeitoFS";break;
-            case "IW1":baseAtt=.250;thr=100;restype="AttMeitoFS";break;
-            case "IW2":baseAtt=.425;thr=180;restype="AttMeitoFS";break;
-            case "IW3":baseAtt=.600;thr=260;restype="AttMeitoFS";break;
-            case "IW4":baseAtt=.775;thr=340;restype="AttMeitoFS";break;
-            case "IW5":baseAtt=.950;thr=420;restype="AttMeitoFS";break;
+            case "IW1":baseAtt=.30;thr=100;restype="AttMeitoFS";break;
+            case "IW2":baseAtt=.45;thr=180;restype="AttMeitoFS";break;
+            case "IW3":baseAtt=.60;thr=260;restype="AttMeitoFS";break;
+            case "IW4":baseAtt=.75;thr=340;restype="AttMeitoFS";break;
+            case "IW5":baseAtt=.90;thr=420;restype="AttMeitoFS";break;
             case "FS1":baseAtt=.35;thr=100;restype="AttMeitoFS";break;
             case "FS2":baseAtt=.50;thr=200;restype="AttMeitoFS";break;
             case "FS3":baseAtt=.65;thr=300;restype="AttMeitoFS";break;
