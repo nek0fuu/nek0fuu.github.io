@@ -658,7 +658,7 @@ function mainCalcFunction()
             if(totalDexBoost>maxMentStatBoost)
                 {
                     totalDexBoost=(totalDexBoost-maxPhysStatBoost)*overflow+maxMentStatBoost;
-                    document.getElementById("mentstatCap-error-msg").style.display="";
+                    document.getElementById("physstatCap-error-msg").style.display="";
                     for(i=0;i<dexPercBoost.length;i++)
                         {
                             if(dexPercBoost[i].value!=0)
@@ -670,7 +670,7 @@ function mainCalcFunction()
             if(totalWillBoost>maxMentStatBoost)
                 {
                     totalWillBoost=(totalWillBoost-maxPhysStatBoost)*overflow+maxMentStatBoost;
-                    document.getElementById("mentstatCap-error-msg").style.display="";
+                    document.getElementById("physstatCap-error-msg").style.display="";
                     for(i=0;i<willPercBoost.length;i++)
                         {
                             if(willPercBoost[i].value!=0)
@@ -783,7 +783,7 @@ function mainCalcFunction()
                 }
             
     
-            properPercStanceLoss=Math.round(actualStancePercBoost*(100-statLossReduction)/100*100)/100;
+            properPercStanceLoss=Math.round(actualStancePercBoost*(100-statLossReduction)/100*1000)/1000;
             if(stancestamPerc<0) actualPercStanceLoss-=stancestamPerc;
             if(stancestrPerc<0) actualPercStanceLoss-=stancestrPerc;
             if(stancespdPerc<0) actualPercStanceLoss-=stancespdPerc;
@@ -819,8 +819,6 @@ function mainCalcFunction()
                 } //Check to see if the flat stat reduction from the stance is proper
             
             finalstam=Math.round(check(check(basestam+(totalStamBoost*basetotal)/100,maxBoostPhysStatAmt)+totalStamFlatBoost,maxBoostPhysStatAmt)-otherstamLoss,maxBoostPhysStatAmt);
-            //finalstam=Math.round(check(check(check(check(basestam+basetotal*(tempstamBoost+racestam)/100,maxBoostPhysStatAmt)+otherstamBoost,maxBoostPhysStatAmt)+stancestamFlat,maxBoostPhysStatAmt)+(stancestamPerc*basetotal)/100,maxBoostPhysStatAmt)-otherstamLoss,maxPhysStatBoost);
-    console.log(finalstam);
             if(errorFlag)
                 {
                     document.getElementById("statCap-warn-msg").style.display="";
@@ -828,7 +826,7 @@ function mainCalcFunction()
                     errorFlag=false;
                 }
     
-            finalstr=Math.round(check(check(check(check(basestr+basetotal*(tempstrBoost+racestr)/100,maxBoostPhysStatAmt)+otherstrBoost,maxBoostPhysStatAmt)+stancestrFlat,maxBoostPhysStatAmt)+(stancestrPerc*basetotal)/100,maxBoostPhysStatAmt)-otherstrLoss,maxPhysStatBoost);
+            finalstr=Math.round(check(check(basestr+(totalStrBoost*basetotal)/100,maxBoostPhysStatAmt)+totalStrFlatBoost,maxBoostPhysStatAmt)-otherstrLoss,maxBoostPhysStatAmt);
             if(errorFlag)
                 {
                     document.getElementById("statCap-warn-msg").style.display="";
@@ -836,7 +834,7 @@ function mainCalcFunction()
                     errorFlag=false;
                 }
 
-            finalspd=Math.round(check(check(check(check(basespd+basetotal*(tempspdBoost+racespd)/100,maxBoostPhysStatAmt)+otherspdBoost,maxBoostPhysStatAmt)+stancespdFlat,maxBoostPhysStatAmt)+(stancespdPerc*basetotal)/100,maxBoostPhysStatAmt)-otherspdLoss,maxPhysStatBoost);
+            finalspd=Math.round(check(check(basespd+(totalSpdBoost*basetotal)/100,maxBoostPhysStatAmt)+totalSpdFlatBoost,maxBoostPhysStatAmt)-otherspdLoss,maxBoostPhysStatAmt);
             if(errorFlag)
                 {
                     document.getElementById("statCap-warn-msg").style.display="";
@@ -844,7 +842,7 @@ function mainCalcFunction()
                     errorFlag=false;
                 }
 
-            finaldex=Math.round(check(check(check(check(basedex+basetotal*(tempdexBoost+racedex)/100,maxBoostPhysStatAmt)+otherdexBoost,maxBoostPhysStatAmt)+stancedexFlat,maxBoostPhysStatAmt)+(stancedexPerc*basetotal)/100,maxBoostPhysStatAmt)-otherdexLoss,maxPhysStatBoost);
+            finaldex=Math.round(check(check(basedex+(totalDexBoost*basetotal)/100,maxBoostPhysStatAmt)+totalDexFlatBoost,maxBoostPhysStatAmt)-otherdexLoss,maxBoostPhysStatAmt);
             if(errorFlag)
                 {
                     document.getElementById("statCap-warn-msg").style.display="";
@@ -852,7 +850,7 @@ function mainCalcFunction()
                     errorFlag=false;
                 }
 
-            finalwill=Math.round(check(check(check(check(basewill+basetotal*(tempwillBoost+racewill)/100,maxBoostPhysStatAmt)+otherwillBoost,maxBoostPhysStatAmt)+stancewillFlat,maxBoostPhysStatAmt)+(stancewillPerc*basetotal)/100,maxBoostPhysStatAmt)-otherwillLoss,maxPhysStatBoost);
+            finalwill=Math.round(check(check(basewill+(totalWillBoost*basetotal)/100,maxBoostPhysStatAmt)+totalWillFlatBoost,maxBoostPhysStatAmt)-otherwillLoss,maxBoostPhysStatAmt);
             if(errorFlag)
                 {
                     document.getElementById("statCap-warn-msg").style.display="";
