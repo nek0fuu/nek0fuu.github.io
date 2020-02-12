@@ -32,23 +32,23 @@ function calculateAttack()
     var boostedSpeed=document.getElementById("boostedSpeed");
     var meitoGrade=document.getElementById("attbladeGrade").value;
     var PowCheck=document.getElementById("attPowCheck").checked;
-    var curseCheck=document.getElementById("attCurseCheck").checked;
+    //var curseCheck=document.getElementById("attCurseCheck").checked;
     var DFCheck=document.getElementById("attDFCheck").checked;
     var UACheck=document.getElementById("attUACheck").checked;
     var NACheck=document.getElementById("attNACheck").checked;
     var focCheck=document.getElementById("attHaoFoc").checked;
-    var FMind=document.getElementById("defFMindCheck").checked;
+    //var FMind=document.getElementById("defFMindCheck").checked;
     var attackPower,attackMult,i,lowest=9999;
-    var SoruBoost,SoruMult,spdReq;
+    var SoruBoost,SoruMult,spdReq,SoruFlat;
     var totalStats=basestm+basestr+basespd+basedex+basewill;
-    var baseAtt=0,hakiAtt=0,powerAtt=0,MeitoAtt=0,MeitoFlat=0,curseAtt=0,attBoost;
+    var baseAtt=0,hakiAtt=0,HakiFlat=0,powerAtt=0,powerFlat=0,MeitoAtt=0,MeitoFlat=0,curseAtt=0,curseFlat,attBoost,flatBoost;
     var stats=[basestr,basespd,basedex,basewill];
     var baseFactor=.01
     var strFactor=.325;
     var spdFactor=.1;
     var dexFactor=.280;
     var willFactor=.145;
-    var overflow=.25,sloverflow=.10;
+    var overflow=.25,sloverflow=.10,maxAttMult=60,maxFlatBoost=60;
     var thr=700,soruThr,HakiThr,Haki2Thr,restype;
     var HaoMult,totalDrain,focHao=1,maxDrain,minDrain,willReq,maxPerc,HakiMult,ryouMult,extraWill,HaoRes=0;
     for(i=0;i<errors.length;i++)
@@ -70,11 +70,11 @@ function calculateAttack()
             case "FS5":baseAtt=.95;thr=500;restype="AttMeitoFS";break;
             case "FSS":baseAtt=.95;restype="AttMeitoFS";break;
             case "FSP":baseAtt=1.10;restype="AttMeitoFS";break;
-            case "SO1":baseAtt=1.00;SoruMult=0.25;spdReq=70;soruThr=100;restype="Soru";break;
-            case "SO2":baseAtt=1.00;SoruMult=0.30;spdReq=135;soruThr=200;restype="Soru";break;
-            case "SO3":baseAtt=1.00;SoruMult=0.35;spdReq=200;soruThr=300;restype="Soru";break;
-            case "SOS":baseAtt=1.00;SoruMult=0.35;spdReq=200;soruThr=400;restype="Soru";break;
-            case "SOP":baseAtt=1.00;SoruMult=0.40;spdReq=265;soruThr=400;restype="Soru";break;
+            case "SO1":baseAtt=1.00;SoruFlat=10;SoruMult=0.20;spdReq=70;soruThr=100;restype="Soru";break;
+            case "SO2":baseAtt=1.00;SoruFlat=20;SoruMult=0.25;spdReq=135;soruThr=200;restype="Soru";break;
+            case "SO3":baseAtt=1.00;SoruFlat=30;SoruMult=0.30;spdReq=200;soruThr=300;restype="Soru";break;
+            case "SOS":baseAtt=1.00;SoruFlat=30;SoruMult=0.30;spdReq=200;soruThr=400;restype="Soru";break;
+            case "SOP":baseAtt=1.00;SoruFlat=40;SoruMult=0.35;spdReq=265;soruThr=400;restype="Soru";break;
             case "SH1":baseAtt=1.05;restype="Att";break;
             case "SH2":baseAtt=1.10;restype="Att";break;
             case "SH3":baseAtt=1.15;restype="Att";break;
@@ -90,12 +90,12 @@ function calculateAttack()
             case "RG3":baseAtt=1.35;restype="Att";break;
             case "RGS":baseAtt=1.35;restype="Att";break;
             case "RGP":baseAtt=1.45;restype="Att";break;
-            case "HAL":minDrain=0;maxDrain=20;HaoMult=.4;willReq=200;restype="Hao";break;
-            case "HAM":minDrain=5;maxDrain=30;HaoMult=.6;willReq=250;restype="Hao";break;
-            case "HAH":minDrain=10;maxDrain=40;HaoMult=.8;willReq=300;restype="Hao";break;
-            case "HAI":minDrain=15;maxDrain=50;HaoMult=1;willReq=350;restype="Hao";break;
-            case "HAS":minDrain=15;maxDrain=60;HaoMult=1;willReq=350;restype="Hao";break;
-            case "HAP":minDrain=20;maxDrain=60;HaoMult=1.2;willReq=400;restype="Hao";break;
+            case "HAL":minDrain=0;maxDrain=15;HaoMult=.4;willReq=200;restype="Hao";break;
+            case "HAM":minDrain=5;maxDrain=23;HaoMult=.6;willReq=250;restype="Hao";break;
+            case "HAH":minDrain=10;maxDrain=30;HaoMult=.8;willReq=300;restype="Hao";break;
+            case "HAI":minDrain=15;maxDrain=38;HaoMult=1;willReq=350;restype="Hao";break;
+            case "HAS":minDrain=15;maxDrain=45;HaoMult=1;willReq=350;restype="Hao";break;
+            case "HAP":minDrain=20;maxDrain=45;HaoMult=1.2;willReq=400;restype="Hao";break;
                 
             default:baseAtt=0;break;
         }
@@ -127,20 +127,20 @@ function calculateAttack()
     if(restype.includes("Hao"))
         {
             document.getElementById("hideThisHao").style.display="";
-            document.getElementById("hideThisHao2").style.display="";
+            //document.getElementById("hideThisHao2").style.display="";
             document.getElementById("hideThisHaoCheck").style.display="";
         }
     else
         {
             document.getElementById("hideThisHao").style.display="none";  
-            document.getElementById("hideThisHao2").style.display="none";
+            //document.getElementById("hideThisHao2").style.display="none";
             document.getElementById("hideThisHaoCheck").style.display="none";
         }
     if(restype.includes("Meito"))
         {
             document.getElementById("hideThisBladeGrade").style.display="";
             document.getElementById("attbladeGrade").disabled=false;
-            document.getElementById("hideThisCurseCheck").style.display="";
+            //document.getElementById("hideThisCurseCheck").style.display="";
 
         }
     else
@@ -148,7 +148,7 @@ function calculateAttack()
             document.getElementById("attbladeGrade").value="NON";
             document.getElementById("hideThisBladeGrade").style.display="none";
             document.getElementById("attbladeGrade").disabled=true;
-            document.getElementById("hideThisCurseCheck").style.display="none";
+            //document.getElementById("hideThisCurseCheck").style.display="none";
             meitoGrade=document.getElementById("attbladeGrade").value;
         }
     if(restype.includes("FS"))
@@ -159,7 +159,7 @@ function calculateAttack()
        {
             document.getElementById("hideThisCheck").style.display="none";
        }
-    SoruBoost=(spdReq+basespd)*SoruMult;
+    SoruBoost=(spdReq+basespd)*SoruMult+SoruFlat;
     if(SoruBoost>soruThr)
         {
             SoruBoost=(SoruBoost-soruThr)*overflow+soruThr;
@@ -167,14 +167,15 @@ function calculateAttack()
     document.getElementById("SoruSpd").textContent=Math.round(basespd+SoruBoost);
     
     if(!focCheck)
-       focHao=.6;
+       focHao=.55;
     extraWill=(basewill+willReq)*HaoMult*.025;
     totalDrain=(basewill+extraWill-oppwill)*HaoMult;
-    
+    /*
     if(FMind)
         {
             HaoRes=(300+oppwill)*.05/100;  //300=willReq
         }
+        */
     if(HaoRes>.40)
         {
             HaoRes=(HaoRes-.40)*overflow+.40 //.30=thr
@@ -194,13 +195,13 @@ function calculateAttack()
     
     switch(hakiLevel)
         {
-            case "HC1":HakiMult=0.0075;ryouMult=0;willReq=250;HakiThr=0.05;Haki2Thr=0;break;
-            case "HC2":HakiMult=0.0125;ryouMult=0;willReq=300;HakiThr=0.10;Haki2Thr=0;break;
-            case "HC3":HakiMult=0.0175;ryouMult=0;willReq=350;HakiThr=0.15;Haki2Thr=0;break;
-            case "HCS":HakiMult=0.0225;ryouMult=0;willReq=400;HakiThr=0.2;Haki2Thr=0;break;
-            case "HR1":HakiMult=0.0050;ryouMult=.020;willReq=300;HakiThr=0.03;Haki2Thr=.2;break;
-            case "HR2":HakiMult=0.0075;ryouMult=.040;willReq=350;HakiThr=0.06;Haki2Thr=.4;break;
-            case "HRS":HakiMult=0.0100;ryouMult=.060;willReq=400;HakiThr=0.09;Haki2Thr=.6;break;
+            case "HC1":HakiFlat=5;HakiMult=0.0075;ryouMult=0;willReq=250;HakiThr=0.05;Haki2Thr=0;break;
+            case "HC2":HakiFlat=10;HakiMult=0.0125;ryouMult=0;willReq=300;HakiThr=0.10;Haki2Thr=0;break;
+            case "HC3":HakiFlat=15;HakiMult=0.0175;ryouMult=0;willReq=350;HakiThr=0.15;Haki2Thr=0;break;
+            case "HCS":HakiFlat=20;HakiMult=0.0225;ryouMult=0;willReq=400;HakiThr=0.2;Haki2Thr=0;break;
+            case "HR1":HakiFlat=2.5;HakiMult=0.0050;ryouMult=.020;willReq=300;HakiThr=0.03;Haki2Thr=.2;break;
+            case "HR2":HakiFlat=5;HakiMult=0.0075;ryouMult=.040;willReq=350;HakiThr=0.06;Haki2Thr=.4;break;
+            case "HRS":HakiFlat=7.5;HakiMult=0.0100;ryouMult=.060;willReq=400;HakiThr=0.09;Haki2Thr=.6;break;
             default:HakiMult=0;willReq=0;ryouMult=0;break;
         }
     hakiAtt=(willReq+basewill)*HakiMult/100;
@@ -221,30 +222,34 @@ function calculateAttack()
     if(PowCheck)
         {
             powerAtt=0.10;
+            powerFlat=10;
         }
+    /*
     if(curseCheck)
         {
             curseAtt=0.10;
+            curseFlat=10;
         }
-    if((DFCheck)&&(attackLevel.includes("FS")))
-        {
-            MeitoFlat*=0;
-        }
-    if((UACheck)&&(attackLevel.includes("FS")))
-        {
-            MeitoFlat*=0.5;
-        }
+    */
     attackMult=MeitoAtt+curseAtt+powerAtt+hakiAtt
+    if(attackMult>maxAttMult)
+        {
+            attackMult=(attackMult-maxAttMult)*overflow+maxAttMult;
+        }
     if(DFCheck)         //&&(attackLevel.includes("FS")
         {
-            MeitoFlat*=0;
+            MeitoFlat*=0.2;
         }
     if(UACheck)
         {
-            MeitoFlat*=0.5;
+            MeitoFlat*=0.6;
         }
-    
-    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+totalStats*baseFactor+MeitoFlat)*baseAtt+attackMult/10*totalStats+10;
+    flatBoost=powerFlat+HakiFlat+MeitoFlat;
+    if(flatBoost>maxFlatBoost)
+        {
+            flatBoost=(flatBoost-maxFlatBoost)*overflow+maxFlatBoost;
+        }
+    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+totalStats*baseFactor+flatBoost)*baseAtt+attackMult/10*totalStats+10;
     for(i=0;i<stats.length;i++)
         {
             if(stats[i]<=lowest)
@@ -273,9 +278,9 @@ function calculateDefense()
     var atthakiLevel=document.getElementById("attHakiLevel").value;
     var attackLevel=document.getElementById("attattackLevel").value;
     var FullCheck=document.getElementById("defFullCheck").value;
-    var BSCheck=document.getElementById("defBMCheck").checked;
+    //var BSCheck=document.getElementById("defBMCheck").checked;
     var innDef,armDef=0,maxArmor,armSources,innSources,spdRed,armPerk,fullPart=1;
-    var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,willReq,stamReq,ArmHakiBoost,armDmg;
+    var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,HakiFlat,TekkaiFlat,willReq,stamReq,ArmHakiBoost,armDmg;
     var stamFactor=.1,willFactor=0;
     var overflow=.25,sloverflow=.10,thr=700,Tekkaithr,Hakithr;
     var statRed=basestam*.00025+basewill*.00015, totSpdRed;
@@ -289,42 +294,42 @@ function calculateDefense()
         }
     switch(tekkai)
         {
-            case "TK1":TekkaiMult=0.15;stamReq=70;Tekkaithr=100;break;
-            case "TK2":TekkaiMult=0.25;stamReq=135;Tekkaithr=200;break;
-            case "TK3":TekkaiMult=0.35;stamReq=200;Tekkaithr=300;break;
-            case "TKP":TekkaiMult=0.45;stamReq=265;Tekkaithr=500;break;
-            case "TKS":TekkaiMult=0.35;stamReq=200;Tekkaithr=500;break;
-            default:TekkaiMult=0;stamReq=0;Tekkaithr=0;break;
+            case "TK1":TekkaiFlat=10;TekkaiMult=0.15;stamReq=70;Tekkaithr=100;break;
+            case "TK2":TekkaiFlat=20;TekkaiMult=0.25;stamReq=135;Tekkaithr=200;break;
+            case "TK3":TekkaiFlat=30;TekkaiMult=0.35;stamReq=200;Tekkaithr=300;break;
+            case "TKP":TekkaiFlat=40;TekkaiMult=0.45;stamReq=265;Tekkaithr=500;break;
+            case "TKS":TekkaiFlat=30;TekkaiMult=0.350;stamReq=200;Tekkaithr=500;break;
+            default:TekkaiFlat=0;TekkaiMult=0;stamReq=0;Tekkaithr=0;break;
         }
     TekkaiBoost=(stamReq+basestam)*TekkaiMult;
     if(TekkaiBoost>Tekkaithr)
         {
-            TekkaiBoost=(TekkaiBoost-Tekkaithr)*overflow+Tekkaithr;
+            TekkaiBoost=(TekkaiBoost-Tekkaithr)*overflow+Tekkaithr+TekkaiFlat;
         }
     switch(haki)
         {
-            case "HC1":HakiMult=0.2;willReq=250;Hakithr=150;break;
-            case "HC2":HakiMult=0.3;willReq=300;Hakithr=300;break;
-            case "HC3":HakiMult=0.4;willReq=350;Hakithr=450;break;
-            case "HCP":HakiMult=0.5;willReq=400;Hakithr=700;break;
-            case "HCS":HakiMult=0.4;willReq=350;Hakithr=700;break;
-            default:HakiMult=0;willReq=0;break;
+            case "HC1":HakiFlat=20;HakiMult=0.15;willReq=250;Hakithr=150;break;
+            case "HC2":HakiFlat=30;HakiMult=0.25;willReq=300;Hakithr=300;break;
+            case "HC3":HakiFlat=40;HakiMult=0.35;willReq=350;Hakithr=450;break;
+            case "HCP":HakiFlat=50;HakiMult=0.45;willReq=400;Hakithr=700;break;
+            case "HCS":HakiFlat=40;HakiMult=0.35;willReq=350;Hakithr=700;break;
+            default:HakiFlat=0;HakiMult=0;willReq=0;break;
         }
-    HakiBoost=(willReq+basewill)*HakiMult;
+    HakiBoost=(willReq+basewill)*HakiMult+HakiFlat;
     if(HakiBoost>Hakithr)
         {
             HakiBoost=(HakiBoost-Hakithr)*overflow+Hakithr
         }
     switch(armHaki)
         {
-            case "HC1":HakiMult=0.2;willReq=250;Hakithr=150;break;
-            case "HC2":HakiMult=0.3;willReq=300;Hakithr=300;break;
-            case "HC3":HakiMult=0.4;willReq=350;Hakithr=450;break;
-            case "HCP":HakiMult=0.5;willReq=400;Hakithr=700;break;
-            case "HCS":HakiMult=0.4;willReq=350;Hakithr=700;break;
+            case "HC1":HakiFlat=20;HakiMult=0.2;willReq=250;Hakithr=150;break;
+            case "HC2":HakiFlat=30;HakiMult=0.3;willReq=300;Hakithr=300;break;
+            case "HC3":HakiFlat=40;HakiMult=0.4;willReq=350;Hakithr=450;break;
+            case "HCP":HakiFlat=50;HakiMult=0.5;willReq=400;Hakithr=700;break;
+            case "HCS":HakiFlat=40;HakiMult=0.4;willReq=350;Hakithr=700;break;
             default:HakiMult=0;willReq=0;break;
         }
-    ArmHakiBoost=(willReq+basewill)*HakiMult;
+    ArmHakiBoost=(willReq+basewill)*HakiMult+HakiFlat;
     if(ArmHakiBoost>Hakithr)
         {
             ArmHakiBoost=(ArmHakiBoost-Hakithr)*overflow+Hakithr
@@ -338,10 +343,12 @@ function calculateDefense()
             case 'H4':fullPart=.70;break;
             case 'H5':fullPart=1;break;
         }
+    /*
     if(BSCheck)
         {
             fullPart*=.75;
         }
+    */
     switch(armorPerk)
         {
             case "AP1":maxArmor=100;armPerk=.3;break;
