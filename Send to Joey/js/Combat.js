@@ -38,9 +38,9 @@ function calculateAttack()
     var totalStats=basestm+basestr+basespd+basedex+basewill;
     var baseAtt=0,hakiAtt=0,HakiFlat=0,powerAtt=0,powerFlat=0,MeitoAtt=0,MeitoFlat=0,curseAtt=0,curseFlat,attBoost,flatBoost;
     var stats=[basestr,basespd,basedex,basewill];
-    var baseFactor=.01
+    var baseFactor=.0100
     var strFactor=.325;
-    var spdFactor=.1;
+    var spdFactor=.100;
     var dexFactor=.280;
     var willFactor=.145;
     var overflow=.25,sloverflow=.10,maxAttMult=60,maxFlatBoost=60;
