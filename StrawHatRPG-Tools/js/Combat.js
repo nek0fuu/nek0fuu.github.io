@@ -1,11 +1,6 @@
 var ipfields=document.getElementsByClassName("IP");
 var errors=document.getElementsByClassName("error-msg");
 
-var thr5=500,thr5s=325,thr5o=125;
-var thr4=400,thr4s=260,thr4o=100;
-var thr3=300,thr3s=195,thr3o=75;
-var thr2=200,thr2s=130,thr2o=50;
-var thr1=100,thr1s=65,thr1o=25;
 var attPow,breakAmt;
 
 window.onload=function(){
@@ -31,50 +26,50 @@ function calculateAttack()
     var hakiLevel=document.getElementById("attHakiLevel").value;
     var boostedSpeed=document.getElementById("boostedSpeed");
     var meitoGrade=document.getElementById("attbladeGrade").value;
+    var ench=document.getElementById("attEnchantment").value;
     var PowCheck=document.getElementById("attPowCheck").checked;
-    //var curseCheck=document.getElementById("attCurseCheck").checked;
-    var DFCheck=document.getElementById("attDFCheck").checked;
-    var UACheck=document.getElementById("attUACheck").checked;
-    var NACheck=document.getElementById("attNACheck").checked;
+    //var DFCheck=document.getElementById("attDFCheck").checked;
+    //var UACheck=document.getElementById("attUACheck").checked;
+    //var NACheck=document.getElementById("attNACheck").checked;
     var focCheck=document.getElementById("attHaoFoc").checked;
-    //var FMind=document.getElementById("defFMindCheck").checked;
     var attackPower,attackMult,i,lowest=9999;
     var SoruBoost,SoruMult,spdReq,SoruFlat;
     var totalStats=basestm+basestr+basespd+basedex+basewill;
     var baseAtt=0,hakiAtt=0,HakiFlat=0,powerAtt=0,powerFlat=0,MeitoAtt=0,MeitoFlat=0,curseAtt=0,curseFlat,attBoost,flatBoost;
     var stats=[basestr,basespd,basedex,basewill];
-    var baseFactor=.01
-    var strFactor=.325;
-    var spdFactor=.1;
-    var dexFactor=.280;
-    var willFactor=.145;
+    var baseFactor=.01, boostedStat, statBoosted="";
+    var stamBoost=0;
+    var strFactor=.325, strBoost=0;
+    var spdFactor=.1, spdBoost=0;
+    var dexFactor=.280, dexBoost=0;
+    var willFactor=.145, willBoost=0;
     var overflow=.25,sloverflow=.10,maxAttMult=60,maxFlatBoost=60;
     var thr=700,soruThr,HakiThr,Haki2Thr,restype;
-    var HaoMult,totalDrain,focHao=1,maxDrain,minDrain,willReq,maxPerc,HakiMult,ryouMult,extraWill,HaoRes=0;
+    var HaoMult,totalDrain,focHao=1,maxDrain,minDrain,willReq,maxPerc,HakiMult,ryouMult,extraWill;
     for(i=0;i<errors.length;i++)
     {
         errors[i].style.visibility="hidden";  //Hide Errors by Default
     }
     switch(attackLevel)
         {
-            case "NS":baseAtt=1.00;restype="AttMeitoFS";break;
-            case "IW1":baseAtt=.30;thr=100;restype="AttMeitoFS";break;
-            case "IW2":baseAtt=.45;thr=180;restype="AttMeitoFS";break;
-            case "IW3":baseAtt=.60;thr=260;restype="AttMeitoFS";break;
-            case "IW4":baseAtt=.75;thr=340;restype="AttMeitoFS";break;
-            case "IW5":baseAtt=.90;thr=420;restype="AttMeitoFS";break;
-            case "FS1":baseAtt=.35;thr=100;restype="AttMeitoFS";break;
-            case "FS2":baseAtt=.50;thr=200;restype="AttMeitoFS";break;
-            case "FS3":baseAtt=.65;thr=300;restype="AttMeitoFS";break;
-            case "FS4":baseAtt=.80;thr=400;restype="AttMeitoFS";break;
-            case "FS5":baseAtt=.95;thr=500;restype="AttMeitoFS";break;
-            case "FSS":baseAtt=.95;restype="AttMeitoFS";break;
-            case "FSP":baseAtt=1.10;restype="AttMeitoFS";break;
-            case "SO1":baseAtt=1.00;SoruFlat=10;SoruMult=0.20;spdReq=70;soruThr=100;restype="Soru";break;
-            case "SO2":baseAtt=1.00;SoruFlat=20;SoruMult=0.25;spdReq=135;soruThr=200;restype="Soru";break;
-            case "SO3":baseAtt=1.00;SoruFlat=30;SoruMult=0.30;spdReq=200;soruThr=300;restype="Soru";break;
-            case "SOS":baseAtt=1.00;SoruFlat=30;SoruMult=0.30;spdReq=200;soruThr=400;restype="Soru";break;
-            case "SOP":baseAtt=1.00;SoruFlat=40;SoruMult=0.35;spdReq=265;soruThr=400;restype="Soru";break;
+            case "NS":baseAtt=1.00;restype="AttMeito";break;
+            case "IW1":baseAtt=.30;thr=100;restype="AttMeito";break;
+            case "IW2":baseAtt=.45;thr=180;restype="AttMeito";break;
+            case "IW3":baseAtt=.60;thr=260;restype="AttMeito";break;
+            case "IW4":baseAtt=.75;thr=340;restype="AttMeito";break;
+            case "IW5":baseAtt=.90;thr=420;restype="AttMeito";break;
+            case "FS1":baseAtt=.35;thr=100;restype="AttMeito";break;
+            case "FS2":baseAtt=.50;thr=200;restype="AttMeito";break;
+            case "FS3":baseAtt=.65;thr=300;restype="AttMeito";break;
+            case "FS4":baseAtt=.80;thr=400;restype="AttMeito";break;
+            case "FS5":baseAtt=.95;thr=500;restype="AttMeito";break;
+            case "FSS":baseAtt=.95;restype="AttMeito";break;
+            case "FSP":baseAtt=1.10;restype="AttMeito";break;
+            case "SO1":baseAtt=1.00;SoruFlat=10;SoruMult=0.20;spdReq=70;soruThr=100;restype="Stat";break;
+            case "SO2":baseAtt=1.00;SoruFlat=20;SoruMult=0.25;spdReq=135;soruThr=200;restype="Stat";break;
+            case "SO3":baseAtt=1.00;SoruFlat=30;SoruMult=0.30;spdReq=200;soruThr=300;restype="Stat";break;
+            case "SOS":baseAtt=1.00;SoruFlat=30;SoruMult=0.30;spdReq=200;soruThr=400;restype="Stat";break;
+            case "SOP":baseAtt=1.00;SoruFlat=40;SoruMult=0.35;spdReq=265;soruThr=400;restype="Stat";break;
             case "SH1":baseAtt=1.05;restype="Att";break;
             case "SH2":baseAtt=1.10;restype="Att";break;
             case "SH3":baseAtt=1.15;restype="Att";break;
@@ -99,14 +94,22 @@ function calculateAttack()
                 
             default:baseAtt=0;break;
         }
-    
-    if(restype.includes("Soru"))
+    switch(ench)
         {
-            document.getElementById("hideThisSoru").style.display="";
+            case "STA": basestm+=(totalStats*.030);boostedStat=basestm;statBoosted="Stamina";restype+="Stat";break;
+            case "STR": basestr+=(totalStats*.030);boostedStat=basestr;statBoosted="Strength";restype+="Stat";break;
+            case "SPD": basespd+=(totalStats*.030);boostedStat=basespd;statBoosted="Speed";restype+="Stat";break;
+            case "DEX": basedex+=(totalStats*.030);boostedStat=basedex;statBoosted="Dexterity";restype+="Stat";break;
+            case "WILL": basewill+=(totalStats*.030);boostedStat=basewill;statBoosted="Will";restype+="Stat";break;
+            default:break;
+        }
+    if(restype.includes("Stat"))
+        {
+            document.getElementById("hideThisStatBoost").style.display="";
         }
     else
         {
-            document.getElementById("hideThisSoru").style.display="none";            
+            document.getElementById("hideThisStatBoost").style.display="none";            
         }
     if(restype.includes("Att"))
         {
@@ -127,30 +130,26 @@ function calculateAttack()
     if(restype.includes("Hao"))
         {
             document.getElementById("hideThisHao").style.display="";
-            //document.getElementById("hideThisHao2").style.display="";
             document.getElementById("hideThisHaoCheck").style.display="";
         }
     else
         {
             document.getElementById("hideThisHao").style.display="none";  
-            //document.getElementById("hideThisHao2").style.display="none";
             document.getElementById("hideThisHaoCheck").style.display="none";
         }
     if(restype.includes("Meito"))
         {
             document.getElementById("hideThisBladeGrade").style.display="";
             document.getElementById("attbladeGrade").disabled=false;
-            //document.getElementById("hideThisCurseCheck").style.display="";
-
         }
     else
         {
             document.getElementById("attbladeGrade").value="NON";
             document.getElementById("hideThisBladeGrade").style.display="none";
             document.getElementById("attbladeGrade").disabled=true;
-            //document.getElementById("hideThisCurseCheck").style.display="none";
             meitoGrade=document.getElementById("attbladeGrade").value;
         }
+    /*
     if(restype.includes("FS"))
        {
             document.getElementById("hideThisCheck").style.display="";
@@ -159,27 +158,23 @@ function calculateAttack()
        {
             document.getElementById("hideThisCheck").style.display="none";
        }
-    SoruBoost=(spdReq+basespd)*SoruMult+SoruFlat;
-    if(SoruBoost>soruThr)
+       */
+    if(attackLevel.includes("SO"))
         {
-            SoruBoost=(SoruBoost-soruThr)*overflow+soruThr;
+            SoruBoost=(spdReq+basespd)*SoruMult+SoruFlat;
+            if(SoruBoost>soruThr)
+                {
+                    SoruBoost=(SoruBoost-soruThr)*overflow+soruThr;
+                }
+            boostedStat=basespd+SoruBoost;
         }
-    document.getElementById("SoruSpd").textContent=Math.round(basespd+SoruBoost);
+    document.getElementById("SoruSpd").textContent=Math.round(boostedStat);
     
     if(!focCheck)
        focHao=.55;
     extraWill=(basewill+willReq)*HaoMult*.025;
     totalDrain=(basewill+extraWill-oppwill)*HaoMult;
-    /*
-    if(FMind)
-        {
-            HaoRes=(300+oppwill)*.05/100;  //300=willReq
-        }
-        */
-    if(HaoRes>.40)
-        {
-            HaoRes=(HaoRes-.40)*overflow+.40 //.30=thr
-        }
+    statBoosted="Speed"
     if(totalDrain>maxDrain)
         {
             totalDrain=maxDrain;
@@ -190,8 +185,9 @@ function calculateAttack()
         {
             totalDrain=minDrain;
         }
-    totalDrain=totalDrain*focHao*(1-HaoRes);
+    totalDrain=totalDrain*focHao;
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
+    document.getElementById("Boosted Stat").textContent=statBoosted;
     
     switch(hakiLevel)
         {
@@ -224,18 +220,13 @@ function calculateAttack()
             powerAtt=0.10;
             powerFlat=12.5;
         }
-    /*
-    if(curseCheck)
-        {
-            curseAtt=0.10;
-            curseFlat=10;
-        }
-    */
+    
     attackMult=MeitoAtt+curseAtt+powerAtt+hakiAtt
     if(attackMult>maxAttMult)
         {
             attackMult=(attackMult-maxAttMult)*overflow+maxAttMult;
         }
+    /*
     if(DFCheck)         //&&(attackLevel.includes("FS")
         {
             MeitoFlat*=0.2;
@@ -244,6 +235,7 @@ function calculateAttack()
         {
             MeitoFlat*=0.6;
         }
+    */
     flatBoost=powerFlat+HakiFlat+MeitoFlat;
     if(flatBoost>maxFlatBoost)
         {
@@ -278,7 +270,6 @@ function calculateDefense()
     var atthakiLevel=document.getElementById("attHakiLevel").value;
     var attackLevel=document.getElementById("attattackLevel").value;
     var FullCheck=document.getElementById("defFullCheck").value;
-    //var BSCheck=document.getElementById("defBMCheck").checked;
     var innDef,armDef=0,maxArmor,armSources,innSources,spdRed,armPerk,fullPart=1;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,HakiFlat,TekkaiFlat,willReq,stamReq,ArmHakiBoost,armDmg;
     var stamFactor=.1,willFactor=0;
@@ -343,12 +334,6 @@ function calculateDefense()
             case 'H4':fullPart=.70;break;
             case 'H5':fullPart=1;break;
         }
-    /*
-    if(BSCheck)
-        {
-            fullPart*=.75;
-        }
-    */
     switch(armorPerk)
         {
             case "AP1":maxArmor=100;armPerk=.3;break;
@@ -412,25 +397,22 @@ function calculateDefense()
     armDef*=(1+armDef/700*.25);
     if(attPow>armDef)
         {
-            dmgLvl2="Major Damage"// <span style='color:red''>(Broken)</span>";
+            dmgLvl2="Major Damage"
             attPow=(attPow-armDef)
         }
     else if(attPow>armDef*.8)
         {
-            //armDmg=Math.round((attPow-armDef*.55)*.5)
-            dmgLvl2="Moderate Damage"// <span style='color:yellow'>("+armDmg+")</span>";
+            dmgLvl2="Moderate Damage"
             attPow=0;
         }
     else if(attPow>armDef*.6)
         {
-            //armDmg=Math.round((attPow-armDef*.55)*.5)
-            dmgLvl2="Minor Damage"// <span style='color:yellow'>("+armDmg+")</span>";
+            dmgLvl2="Minor Damage"
             attPow=0;
         }
     else if(attPow>armDef*.4)
         {
-            //armDmg=Math.round((attPow-armDef*.55)*.5)
-            dmgLvl2="Negligable Damage"// <span style='color:yellow'>("+armDmg+")</span>";
+            dmgLvl2="Negligable Damage"
             attPow=0;
         }
     else

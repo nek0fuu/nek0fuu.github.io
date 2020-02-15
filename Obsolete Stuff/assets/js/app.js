@@ -34,6 +34,8 @@ let earnedSplit = document.getElementById('earned-split');
 let newStats = document.getElementById('new-stats');
 // Calculate Button
 let calcBtn = document.getElementById('calc-btn');
+// Max Error Message
+let maxErrorMsg = document.getElementById('max-error-msg');
 // Stats Error Message
 let statsErrorMsg = document.getElementById('stats-error-msg');
 // Username Header
@@ -52,12 +54,15 @@ let tempCommentCount = 0;
 let commentsLoaded = 0;
 let commentsRemoved = false;
 let posts = [];
+let str,stm,spd,dex,will;
 
 // Event Listeners
 fetchBtn.addEventListener("click", fetchComments);
 removeBtn.addEventListener("click", removeComments);
 username.addEventListener('change', () => {
     usernameHeader.textContent = username.value;
+    fetchBtn.disabled = true;
+    fetchUserStats();
 });
 window.addEventListener('load', winLoad);
 baseLevel.addEventListener('change', changeStartingStats);
@@ -67,7 +72,8 @@ maxStats.addEventListener('change', calculateMaxStats);
 function winLoad() {
     timerInit();
     changeStartingStats();
-    calculateMaxStats();
+    fetchMaxStats();
+    newSys(document.getElementById('current-stats').valueAsNumber,document.getElementById('max-stats').valueAsNumber,document.getElementById('manual-score').valueAsNumber,50);
 }
 
 // Initiate the countdown timer and automatically set the start date and end date
@@ -84,7 +90,12 @@ function timerInit() {
         
     } else {
         if (currentTime.getUTCDate() === 1) {
-            month = (`0${currentTime.getUTCMonth()}`).slice(-2);
+            if (currentTime.getUTCMonth() === 0) {
+                month = 12;
+                year = currentTime.getUTCFullYear() - 1;
+            } else {
+                month = (`0${currentTime.getUTCMonth()}`).slice(-2);
+            }
         }
         let day = '15';
         let startTime = `${year}-${month}-${day}`;
@@ -116,23 +127,160 @@ function timerInit() {
 
 // Change starting Stats based on base
 function changeStartingStats() {
-    currentStats.value = 50 + (25 * parseInt(baseLevel.options[baseLevel.selectedIndex].textContent));
+    //Calculate Max Stats since base is changed
+    calculateMaxStats();
+    currentStats.value = 50 * (parseInt(baseLevel.options[baseLevel.selectedIndex].textContent) + 1);
+    newSys(document.getElementById('current-stats').valueAsNumber,document.getElementById('max-stats').valueAsNumber,document.getElementById('manual-score').valueAsNumber,50);
 }
 
 function calculateMaxStats() {
-    let calc = {newBase: baseLevel.selectedIndex};
-    let tempBase = 0
+    let calc = {newBase: 0};
+    let tempBase =  baseLevel.selectedIndex;
     do {
-        tempBase = calc.newBase;
         calc = calculate(maxStats.valueAsNumber, 50, true, tempBase);
-    } while(calc.newBase > tempBase && calc.newBase <= 9);
+        if (calc.newBase > tempBase) {
+            tempBase++;
+        }
+    } while (calc.newStats === 0 && calc.newBase <= 9);
 
     if (calc.newBase > 9) {
+        maxStatsLabelNew.textContent = '0';
         logError(statsErrorMsg, "Need more bases!");
         return;
+    } else if (calc.newBase !== baseLevel.selectedIndex) {
+        maxStatsLabelNew.textContent = '0';
+        logError(statsErrorMsg, 'Incorrect Base; Change Base or Max!');
     } else {
         maxNewStats = calc.newStats;
         maxStatsLabelNew.textContent = maxNewStats;
+    }
+    newSys(document.getElementById('current-stats').valueAsNumber,document.getElementById('max-stats').valueAsNumber,document.getElementById('manual-score').valueAsNumber,50);
+}
+
+// Automatically fetch the max stats from the stats sheet
+function fetchMaxStats() {
+
+    // GET PAGE ID FROM HERE WHEN PUBLISHED
+    // https://spreadsheets.google.com/feeds/cells/SHEET_ID/od6/public/full?alt=json
+    
+    // OFFICIAL STAT SHEET
+    let sheetID = "11DBV69f-U9T1EXbdI_AvjHpp7XzSs38fH9eKqdx2sUw";
+    // JOEY'S SHEET FOR DEBUGGING
+    //let sheetID = "10bBzQNryutYgx49QEb2Vz19alL55lS_hEJ-FrJTOIFE";
+    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
+
+    let request = new XMLHttpRequest();
+    
+    request.ontimeout = () => {
+        logError(statsErrorMsg, `Error - Timed Out while fetching max stats. Please manually input max stats.`);
+    };
+
+    request.open('GET', url);
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    request.timeout = 5000;
+
+    request.send();
+    
+    request.onreadystatechange = function() {
+        if (request.readyState == XMLHttpRequest.DONE) {
+            if (request.status === 200) {
+                // Good response
+                let data = JSON.parse(request.response);
+                maxStats.valueAsNumber = data.feed.entry[0].gsx$currentmax.$t;
+                calculateMaxStats();
+                return;
+            } else {
+                logError(maxErrorMsg, "Error Fetching Max from Google - Using Default");
+                calculateMaxStats();
+                return;
+            }
+        }
+    }
+    
+    request.onabort = function() {
+        logError(maxErrorMsg, "Fetching Stats Aborted - Using Default");
+        calculateMaxStats();
+        return;
+    }
+
+    request.onerror = function() {
+        logError(maxErrorMsg, "Error Fetching Max from Google - Using Default");
+        console.log(`Error ${request.status}: ${request.statusText}`);
+        calculateMaxStats();
+        return;
+    }
+}
+
+// Attempt to fetch user's stats when a new username is entered
+function fetchUserStats() {
+    // Remove stats error because we're getting a new username and new stats
+    statsErrorMsg.classList.remove('show');
+
+    // Reset individual stats
+    str = stm = spd = dex = will = null;
+
+    // GET PAGE ID FROM HERE WHEN PUBLISHED
+    // https://spreadsheets.google.com/feeds/cells/SHEET_ID/od6/public/full?alt=json
+    let sheetID = "11DBV69f-U9T1EXbdI_AvjHpp7XzSs38fH9eKqdx2sUw";
+
+    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/2/public/full?alt=json`;
+    let request = new XMLHttpRequest();
+    
+    request.ontimeout = () => {
+        logError(statsErrorMsg, `Error - Timed Out while fetching user's stats. Please manually input current stats.`);
+        fetchBtn.disabled = false;
+    };
+
+    request.open('GET', url);
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    request.timeout = 5000;
+
+    request.send();
+    
+    request.onreadystatechange = function() {
+        if (request.readyState == XMLHttpRequest.DONE) {
+            if (request.status === 200) {
+                // Good response
+                let data = JSON.parse(request.response).feed.entry;
+                let entry = data.findIndex((e) => {
+                    return (e.gsx$racialboost.$t.localeCompare(username.value, 'en', {sensitivity: 'base'}) === 0)
+                });
+                if (entry) {
+                    currentStats.value = Number(data[entry].gsx$currentstats.$t);
+                    stm=Number(data[entry+1].gsx$currentstats.$t);
+                    str=Number(data[entry+2].gsx$currentstats.$t);
+                    spd=Number(data[entry+3].gsx$currentstats.$t);
+                    dex=Number(data[entry+4].gsx$currentstats.$t);
+                    will=Number(data[entry+5].gsx$currentstats.$t);
+                    fetchComments();
+                } else {
+                    logError(statsErrorMsg, "Error Fetching User's Stats. Check spelling or enter stats manually");
+                    fetchBtn.disabled = false;
+                }
+                return;
+            } else {
+                logError(statsErrorMsg, "Error Fetching User's Stats from Google");
+                fetchBtn.disabled = false;
+                return;
+            }
+        }
+    }
+    
+    request.onabort = function() {
+        logError(statsErrorMsg, "Fetching User's Stats Aborted");
+        calculateMaxStats();
+        fetchBtn.disabled = false;
+        return;
+    }
+
+    request.onerror = function() {
+        logError(statsErrorMsg, "Error Fetching User's Stats from Google");
+        console.log(`Error ${request.status}: ${request.statusText}`);
+        calculateMaxStats();
+        fetchBtn.disabled = false;
+        return;
     }
 }
 
@@ -140,8 +288,7 @@ function updateCalcValues(calc) {
     earnedStats.textContent = calc.earnedStats;
     earnedSplit.textContent = calc.earnedSplit;
     newStats.textContent = calc.newStats;
-    /*for graphing*/
-    currentStats.value = calc.newStats;
+    newSys(document.getElementById('current-stats').valueAsNumber,document.getElementById('max-stats').valueAsNumber,document.getElementById('manual-score').valueAsNumber,50);
 }
 
 startDate.addEventListener('change', changeDate);
@@ -181,7 +328,7 @@ manualScore.addEventListener('change', () => {
     } else {
         manualScore.value = 0;
     }
-    
+
     updateCalcValues(calculate(currentStats.valueAsNumber, manualScore.valueAsNumber));
 });
 
@@ -211,7 +358,7 @@ function fetchComments() {
     fetchBtn.disabled = true;
 
     //let url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}`;
-    let url = `https://api.reddit.com/user/${username.value}/.json`;
+    let url = `https://api.reddit.com/user/${username.value}/comments/.json`;
     query(url, fetchBtn, fetchErrorMsg, fetch);
 }
 
@@ -328,6 +475,7 @@ function filter(response) {
 
 function processComments(response) {
     let data = response.data;
+    //console.log(data);
     for (let comment in data.children) {
         // Make sure comment is not older than start date
         // If it is, end processing
@@ -373,6 +521,7 @@ function processComments(response) {
 
     if (processingComments && commentsLoaded < 1000 && data.after != null) {
         let url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}&?&after=${data.after}`;
+        //console.log(url);
         query(url, fetchBtn, fetchErrorMsg, fetch);
     } else {
         if (commentsLoaded >= 1000) {
@@ -458,7 +607,7 @@ function calculateWords() {
         }
         // Calculate score as soon as word counting is done
         updateScore();
-        
+
         updateCalcValues(calculate(currentStats.valueAsNumber, manualScore.valueAsNumber));
         //wordCount.textContent = tempWordCount;
         //wordsPerComment.textContent = (tempWordCount / posts.length).toFixed(1);
@@ -474,7 +623,8 @@ function decodeHTML(html) {
 function countWords(str) {
     // Use regular expression to replace things we don't want
     // counted as words with empty spaces, then extract all non-whitespace sequences
-    str = str.replace(/[.,?!()<>{}[\]/\\+=~'`|:;0-9-_]/g, '');
+    str = str.replace(/[.,?!()<>{}[\]/\\+=~'`|:;_-]/g, '');
+    str = str.replace(/-/g, ' ');
     let exp = /\S+/ig;
     let tmp, words = 0;
     while ((tmp = exp.exec(str)) != null) {
@@ -496,23 +646,28 @@ function countWords(str) {
     base_0: [
     { //1
         threshold: 0,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //2
         threshold: 101,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //3
         threshold: 151,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //4
         threshold: 201,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     },
     { //5
         threshold: 251,
-        percent: 0.45
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_1: [
@@ -522,23 +677,28 @@ function countWords(str) {
     },
     { //2
         threshold: 301,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //3
         threshold: 351,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //4
         threshold: 401,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //5
         threshold: 451,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     },
     { //6
         threshold: 501,
-        percent: 0.45
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_2: [
@@ -552,23 +712,28 @@ function countWords(str) {
     },
     { //3
         threshold: 551,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //4
         threshold: 601,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //5
         threshold: 651,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //6
         threshold: 701,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     },
     { //7
         threshold: 751,
-        percent: 0.45
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_3: [
@@ -586,23 +751,28 @@ function countWords(str) {
     },
     { //4
         threshold: 801,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //5
         threshold: 851,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //6
         threshold: 901,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //7
         threshold: 951,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     },
     { //8
         threshold: 1001,
-        percent: 0.45
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
         
     base_4: [
@@ -624,23 +794,28 @@ function countWords(str) {
     },
     { //5
         threshold: 1051,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //6
         threshold: 1101,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //7
         threshold: 1151,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //8
         threshold: 1201,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     },
     { //9
         threshold: 1251,
-        percent: 0.45
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_5: [
@@ -666,23 +841,28 @@ function countWords(str) {
     },
     { //6
         threshold: 1301,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //7
         threshold: 1351,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //8
         threshold: 1401,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //9
         threshold: 1451,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     },
     { //10
         threshold: 1501,
-        percent: 0.45
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_6: [
@@ -712,23 +892,28 @@ function countWords(str) {
     },
     { //7
         threshold: 1551,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //8
         threshold: 1601,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //9
         threshold: 1651,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //10
         threshold: 1701,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     },
     { //11
         threshold: 1751,
-        percent: 0.45
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_7: [
@@ -762,23 +947,28 @@ function countWords(str) {
     },
     { //8
         threshold: 1801,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.0
     },
     { //9
         threshold: 1851,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //10
         threshold: 1901,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //11
         threshold: 1951,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     },
     { //12
         threshold: 2001,
-        percent: 0.45
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_8: [
@@ -816,23 +1006,28 @@ function countWords(str) {
     },
     { //9
         threshold: 2051,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //10
         threshold: 2101,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //11
         threshold: 2151,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //12
         threshold: 2201,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     },
     { //13
         threshold: 2251,
-        percent: 0.45
+        percent: 0.500,
+        percent2: 0.60
     }], //DONE
     
     base_9: [
@@ -874,19 +1069,23 @@ function countWords(str) {
     },
     { //10
         threshold: 2301,
-        percent: 1.0
+        percent: 0.500,
+        percent2: 1.00
     },
     { //11
         threshold: 2351,
-        percent: 0.9
+        percent: 0.500,
+        percent2: 0.90
     },
     { //12
         threshold: 2401,
-        percent: 0.75
+        percent: 0.500,
+        percent2: 0.80
     },
     { //13
         threshold: 2451,
-        percent: 0.60
+        percent: 0.500,
+        percent2: 0.70
     }]  //DONE
 };
 
@@ -920,7 +1119,8 @@ function updateScore() {
     manualScore.value = tempScore;
 }
 
-function calculate(stats, score, requestMax = false, base = baseLevel.selectedIndex, tempMaxStats = maxStats.valueAsNumber, tempMaxNewStats = Number(maxStatsLabelNew.textContent), logErrors = true) {
+function calculate(stats, score, getMax = false, base = baseLevel.selectedIndex, max = maxStats.valueAsNumber, maxNew = Number(maxStatsLabelNew.textContent), logErrors = true) {
+    // Return value with all the different information we may need
     let returnVal = {
         earnedStats: 0,
         earnedSplit: "",
@@ -932,14 +1132,15 @@ function calculate(stats, score, requestMax = false, base = baseLevel.selectedIn
     // Clear error message
     statsErrorMsg.classList.remove('show');
 
+    // Change starting stats based on what base we're on
     let tempCurrentStats = 0;
-    let startingStats = 50 + (25 * parseInt(baseLevel.options[base].textContent));
-    
+    let startingStats = 50 * (parseInt(baseLevel.options[base].textContent) + 1);
     tempCurrentStats = stats < startingStats ? startingStats : stats;
-    let isMax = tempCurrentStats >= tempMaxStats;
+    
+    let isMax = tempCurrentStats >= max;
     let rangeLevel = 0;
     let baseArray = baseLevels[`base_${base}`];
-    let baseRangeMin = baseArray[Object.keys(baseArray).length - 1].threshold;
+    let baseRangeMin = baseArray[baseArray.length - 1].threshold;
     let baseRangeMax = baseRangeMin + 49;
     let percent;
     let isBottomRange;
@@ -948,74 +1149,68 @@ function calculate(stats, score, requestMax = false, base = baseLevel.selectedIn
     // If the current stat total is outside of the range, set the rangeLevel
     // to the size of the array
     if (tempCurrentStats >= baseRangeMin) {
-        // If current stats are equal to the max stats, use the final
-        // range level, otherwise use one greater
-        rangeLevel = Object.keys(baseArray).length - 1;
+        rangeLevel = baseArray.length - 1;
     } else {
         // Iterate through the baseArray to find what rangeLevel we're at
         for (let lvl in baseArray) {
             lvl = Number(lvl);
             if (tempCurrentStats >= baseArray[lvl].threshold &&
                 tempCurrentStats < baseArray[lvl+1].threshold) {
-
-                rangeLevel = lvl;                
+                rangeLevel = lvl;
                 break;
             }
         }
     }
 
-    while (score > 0) {
-        // ONLY GO UP LESS THAN 1.0
-        ///*
-        
-        if (!isMax && baseArray[rangeLevel].percent < 1.0) {
-            percent = baseArray[rangeLevel - 1].percent;
-        } else {
-            percent = baseArray[rangeLevel].percent;
-        }
-        //
-
-        // ALWAYS GO UP
+    let tempScore = score;
+    while (tempScore > 0) {
+        // Set to the currect percent
+        percent = baseArray[rangeLevel].percent;
+        // Catch up system
+        // If percent is less than 1.0 and score is multiple of 50
         /*
-        if (isMax || rangeLevel === 0) {
-            percent = baseArray[rangeLevel].percent;
-        } else {
-            percent = baseArray[rangeLevel - 1].percent;
+        if (percent < 1.0 && score % 50 === 0 && isMax === false) {
+            if (percent === 0.90) {
+                percent = 1.0;
+            } else {
+                // Give them a small boost equal to the midway percent value
+                // of their correct range and the range above theirs
+                percent = (percent + baseArray[rangeLevel - 1].percent) / 2;
+            }
         }
-        //*/
+        */
+        if (percent < 1.0 && isMax === false) {
+                percent = baseArray[rangeLevel].percent2;
+            }
+        
 
-        if (rangeLevel === (Object.keys(baseArray).length - 1)) {
+        if (rangeLevel === (baseArray.length - 1)) {
             isBottomRange = true;
         } else {
             isBottomRange = false;
         }
 
-        let temp = score * percent; //ROUNDED
+        let temp = tempScore * percent; //ROUNDED
         let statsNeeded = 0;
         if (isBottomRange) {
             statsNeeded = baseRangeMax - tempCurrentStats; //ROUNDED
             if (temp > statsNeeded) {
-                // Check if you only need a base up because of catch-up
-                if (isMax) {
-                    // Genuine base up
-                    if (logErrors) {
-                        logError(statsErrorMsg, 'You need to Base Up!');
-                    }
-                    returnVal.newBase += 1;
-                    return returnVal;                    
-                }
+                logError(statsErrorMsg, 'You need to Base Up!');
+                returnVal.newBase += 1;
+                return returnVal;
             }
         } else {
             statsNeeded = (baseArray[rangeLevel+1].threshold - 1) - (tempCurrentStats + tempStatsEarned);
         }
-        if (temp > statsNeeded && statsNeeded >= 0) {
+
+        if (temp > statsNeeded) {
             let tmp = (statsNeeded / percent); //ROUNDED
-            score -= tmp;
+            tempScore -= tmp;
             tempStatsEarned += statsNeeded;
             rangeLevel++;
         } else {
             tempStatsEarned += temp;
-            score = 0;
+            tempScore = 0;
         }
     }
 
@@ -1023,31 +1218,36 @@ function calculate(stats, score, requestMax = false, base = baseLevel.selectedIn
     if (tempCurrentStats > stats) {
         earnedRounded += tempCurrentStats - stats;
     }
-
-    if (!requestMax) {
-        if (stats + earnedRounded > tempMaxNewStats) {
-            returnVal.earnedStats = tempMaxNewStats - stats;
-            returnVal.earnedSplit = `(${Math.round(returnVal.earnedStats * 0.6)}/${Math.round(returnVal.earnedStats * 0.4)})`;
+    
+    if (!getMax) {
+        if (stats + earnedRounded > maxNew) {
+            returnVal.earnedStats = maxNew - stats;
+            if((stm)&&(str)&&(spd)&&(dex)&&(will)&&(stm+str+spd+dex+will==stats))
+                {
+                    returnVal.earnedSplit=`(${Math.round((stats+returnVal.earnedStats) * 0.6-(stm+str+spd))}/${Math.round((stats+returnVal.earnedStats) * 0.4 - (dex+will))})`;
+                }
+            else
+                {
+                    returnVal.earnedSplit = `(${Math.round(returnVal.earnedStats * 0.6)}/${Math.round(returnVal.earnedStats * 0.4)})`;
+                }
             returnVal.newStats = stats + returnVal.earnedStats;
 
             return returnVal;
         }
     }
-
-    returnVal.earnedStats = earnedRounded;
-    returnVal.earnedSplit = `(${Math.round(earnedRounded * 0.6)}/${Math.round(earnedRounded * 0.4)})`;
-    returnVal.newStats = stats + earnedRounded;    
     
+    returnVal.earnedStats = earnedRounded;
+    if((stm)&&(str)&&(spd)&&(dex)&&(will)&&(stm+str+spd+dex+will==stats))
+        {
+            returnVal.earnedSplit=`(${Math.round((stats+returnVal.earnedStats) * 0.6-(stm+str+spd))}/${Math.round((stats+returnVal.earnedStats) * 0.4-(dex+will))})`;
+        }
+    else
+    {
+        returnVal.earnedSplit = `(${Math.round(earnedRounded * 0.6)}/${Math.round(earnedRounded * 0.4)})`;
+    }
+    returnVal.newStats = stats + earnedRounded;
     return returnVal;
 }
-
-Object.size = function(obj) {
-    var size = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
-};
 
 function resetStatValues() {
     score.textContent = '0';
@@ -1065,77 +1265,84 @@ function resetStatValues() {
 /
 */
 
-function catchUp(testFirst, newb = 50, useMax = false) {
-    let first = testFirst;
-    let newbie = newb;
+function catchUp(first, newbie, max = 0) {
+    let firstNew = 0;
+    let newbieNew = 0;
+    let maxNew = 0;
     let testBase = 0;
+
+    if (first > max) {
+        max = first;
+    }
 
     let results = {};
 
     let iterations = 0;
 
     console.log(`${iterations}: First: ${first} | Newbie: ${newbie}`);
-    
-    let tempMax = 0;
-    let tempMaxNew = 0
-    if (useMax) {
-       tempMax = maxStats.valueAsNumber;
-       tempMaxNew = Number(maxStatsLabelNew.textContent);
-    } else {
-       tempMax = first;
-    }
 
     while(newbie < first) {
-        if (tempMax < first) {
-            tempMax = first;
-        }
-
-        if (testBase > 9) break;
-
-        results = calculate(first, 50, true, testBase, tempMax, tempMaxNew, false);
-
-        if (results.newBase !== testBase) {
-            testBase += 1;
-            continue;
+        // Should have hit max stats, set first to stat limit
+        if (testBase > 9) {
+            firstNew = 2500;
+            maxNew = 2500;
         } else {
-            first += results.earnedStats;
-            if (tempMax < first) {
-                tempMaxNew = first;
+            // First do max
+            if (max > first) {
+                results = calculate(max, 50, true, testBase, max, null, false);
+                if (results.newBase !== testBase) {
+                    testBase += 1;
+                    continue;
+                }
+                maxNew = results.newStats;
             }
-            results = calculate(newbie, 50, false, testBase, tempMax, tempMaxNew, false);
-            if (results.newBase !== testBase) {
-                testBase += 1;
-                continue;
+
+            if (first === max) {
+                // First and Max are the same, so don't calculate max twice dummy
+                results = calculate(first, 50, true, testBase, max, null, false);
+                if (results.newBase !== testBase) {
+                    testBase += 1;
+                    continue;
+                }
+                firstNew = results.newStats;
+                maxNew = firstNew;
+            } else if (first < max) {
+                // First less than max, proceed as normal
+                results = calculate(first, 50, false, testBase, max, maxNew, false);
+                if (results.newBase !== testBase) {
+                    // This probably shouldn't happen but if it does I'd like to know
+                    console.log("Base up on first when not max?");
+                    break;
+                }
+                firstNew = results.newStats;
             } else {
-                newbie += results.earnedStats;
+                // This probably won't ever happen.
+                console.log("First is somehow greater than max.");
+                break;
             }
         }
+
+        // Do newbie stats outside of the if/else in case the limit is hit
+        if (testBase > 9) {
+            results = calculate(newbie, 50, false, 9, max, maxNew, false);
+            if (results.newBase > 9) {
+                newbieNew = 2500;
+            } else {
+                newbieNew = results.newStats;
+            }
+        } else {
+            results = calculate(newbie, 50, false, testBase, max, maxNew, false);
+            if (results.newBase !== testBase) {
+                console.log("Base up as newbie?");
+            }
+            newbieNew = results.newStats;
+        }
+
+        max = maxNew;
+        first = firstNew;
+        newbie = newbieNew;
 
         console.log(`${++iterations}: First: ${first} | Newbie: ${newbie}`);
-    }
-}
-
-function catchUpToMax(testFirst) {
-    let first = testFirst;
-    let testBase = 0;
-
-    let results = {};
-
-    let iterations = 0;
-
-    console.log(`${iterations}: Stats: ${first}`);
-
-    while(first < 2500) {
-        if (testBase > 9) break;
-        results = catchUpCalc(first, testBase);
-        if (results.Base !== testBase) {
-            testBase += 1;
-            continue;
-        } else {
-            first += results.Earned;
-        }
-
-        console.log(`${++iterations}: Stats: ${first}`);
     }
 }
 
@@ -1207,4 +1414,174 @@ function countThread() {
     }
     
     console.log("Thread processed!");
+}
+
+function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
+{
+    var currentStatsCopy=currStats;
+    var earnedScoreCopy=earnedScore;
+    var maxStatsCopy=maxStats;
+    var maxScoreCopy=maxScore;
+    var baseRate=0.60, boostRate=0.15, acceleRate, diffBoostRate;
+    var earnedStas;
+    var startingStats=(100+Math.floor((maxStats-100)/100)*25)
+    if(currStats < startingStats)
+        {
+            currStats = startingStats;
+        }
+    //maxStats+=maxScore*baseRate
+    if(currStats < maxStats)
+        {
+            diffBoostRate=(maxStats-currStats)/200
+            if(earnedScoreCopy == maxScore)
+                {
+                    acceleRate=boostRate;
+                }
+            else
+                {
+                    acceleRate=0;
+                }
+        }
+    else
+        {
+            diffBoostRate=0;
+            acceleRate=0;
+        }
+    while(earnedScore>0)
+        {
+            if(currStats < maxStats)
+                {
+                    diffBoostRate=(maxStats-currStats)/200
+                    if(earnedScoreCopy == maxScore)
+                        {
+                            acceleRate=boostRate;
+                        }
+                    else
+                        {
+                            acceleRate=0;
+                        }
+                }
+            else
+                {
+                    diffBoostRate=0;
+                    acceleRate=0;
+                }
+            //console.log(baseRate+" / "+diffBoostRate+" / "+acceleRate);
+            currStats+=1*(baseRate + diffBoostRate + acceleRate);
+            maxStats+=1*baseRate;
+            
+            earnedScore--;
+        }
+    maxStats=maxStatsCopy
+    maxScoreCopy=maxScore;
+    while(maxScore)
+        {
+            maxStats+=1*baseRate;
+            maxScore--;
+        }
+    if(currStats > maxStats)
+        {
+            currStats = maxStats;
+        }
+    currStats=Math.round(currStats);
+    maxStats=Math.round(maxStats);
+    earnedStas=currStats-currentStatsCopy;
+    return "Current Stats: "+currentStatsCopy +
+        "\nCurrent Starting Stats: "+(100+Math.floor((maxStatsCopy-100)/100)*25) + 
+        "\nCurrent Max Stats: "+maxStatsCopy + 
+        "\nMax Score: "+maxScoreCopy + 
+        "\nEarned Score: "+earnedScoreCopy + 
+        "\nEarned Stats: "+earnedStas+" (" +Math.round(earnedStas*.6)+"/"+Math.round(earnedStas*.4)+")" + 
+        "\nNew Stats: "+currStats + 
+        "\nNew Max Stats: "+maxStats + 
+        "\nNew Starting Stats: "+(100+Math.floor((maxStats-100)/100)*25);
+    
+}
+
+function newSys(currStats,maxStats,earnedScore=20,maxScore=50)
+{
+    var currentStatsCopy=currStats;
+    var earnedScoreCopy=earnedScore;
+    var maxStatsCopy=maxStats;
+    var maxScoreCopy=maxScore;
+    var baseRate=0.60, boostRate=0.15, acceleRate, diffBoostRate;
+    var earnedStas;
+    var startingStats=(100+Math.floor((maxStats-100)/100)*25)
+    if(currStats < startingStats)
+        {
+            currStats = startingStats;
+        }
+    //maxStats+=maxScore*baseRate
+    if(currStats < maxStats)
+        {
+            diffBoostRate=(maxStats-currStats)/200
+            if(earnedScoreCopy == maxScore)
+                {
+                    acceleRate=boostRate;
+                }
+            else
+                {
+                    acceleRate=0;
+                }
+        }
+    else
+        {
+            diffBoostRate=0;
+            acceleRate=0;
+        }
+    while(earnedScore>0)
+        {
+            if(currStats < maxStats)
+                {
+                    diffBoostRate=(maxStats-currStats)/200
+                    if(earnedScoreCopy == maxScore)
+                        {
+                            acceleRate=boostRate;
+                        }
+                    else
+                        {
+                            acceleRate=0;
+                        }
+                }
+            else
+                {
+                    diffBoostRate=0;
+                    acceleRate=0;
+                }
+            //console.log(baseRate+" / "+diffBoostRate+" / "+acceleRate);
+            currStats+=1*(baseRate + diffBoostRate + acceleRate);
+            maxStats+=1*baseRate;
+            
+            earnedScore--;
+        }
+    maxStats=maxStatsCopy
+    maxScoreCopy=maxScore;
+    while(maxScore)
+        {
+            maxStats+=1*baseRate;
+            maxScore--;
+        }
+    if(currStats > maxStats)
+        {
+            currStats = maxStats;
+        }
+    currStats=Math.round(currStats);
+    maxStats=Math.round(maxStats);
+    earnedStas=currStats-currentStatsCopy;
+    /*
+    return "Current Stats: "+currentStatsCopy +
+        "\nCurrent Starting Stats: "+(100+Math.floor((maxStatsCopy-100)/100)*25) + 
+        "\nCurrent Max Stats: "+maxStatsCopy + 
+        "\nMax Score: "+maxScoreCopy + 
+        "\nEarned Score: "+earnedScoreCopy + 
+        "\nEarned Stats: "+earnedStas+" (" +Math.round(earnedStas*.6)+"/"+Math.round(earnedStas*.4)+")" + 
+        "\nNew Stats: "+currStats + 
+        "\nNew Max Stats: "+maxStats + 
+        "\nNew Starting Stats: "+(50+Math.floor((maxStats-50)/100)*25);
+    */
+    earnedStats.textContent=earnedStas
+    earnedSplit.textContent = "("+Math.round(earnedStas*.6)+"/"+Math.round(earnedStas*.4)+")";
+    newStats.textContent = currStats;
+    document.getElementById('max-stats-label-new').textContent=maxStats;
+    document.getElementById('new-start-stats').textContent=(100+Math.floor((maxStats-100)/100)*25);
 }
