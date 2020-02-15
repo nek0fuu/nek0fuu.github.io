@@ -166,6 +166,7 @@ function calculateAttack()
                 {
                     SoruBoost=(SoruBoost-soruThr)*overflow+soruThr;
                 }
+            statBoosted="Speed"
             boostedStat=basespd+SoruBoost;
         }
     document.getElementById("SoruSpd").textContent=Math.round(boostedStat);
@@ -174,7 +175,6 @@ function calculateAttack()
        focHao=.55;
     extraWill=(basewill+willReq)*HaoMult*.025;
     totalDrain=(basewill+extraWill-oppwill)*HaoMult;
-    statBoosted="Speed"
     if(totalDrain>maxDrain)
         {
             totalDrain=maxDrain;
@@ -187,7 +187,7 @@ function calculateAttack()
         }
     totalDrain=totalDrain*focHao;
     document.getElementById("HaoRes").textContent=Math.round(totalDrain);
-    document.getElementById("Boosted Stat").textContent=statBoosted;
+    document.getElementById("Boosted Stat").textContent=statBoosted
     
     switch(hakiLevel)
         {
