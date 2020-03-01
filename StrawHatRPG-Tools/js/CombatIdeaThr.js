@@ -470,7 +470,7 @@ function adjStat(stat,min)
     var i=min
     while(i<stat)
         {
-            res+=1*(1-(i-min)/675)
+            res+=1*(1-(i-min)/1000)
             i++;
         }
     return res;
