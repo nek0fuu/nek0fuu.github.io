@@ -1,4 +1,3 @@
-// Removed Static Thresholds, replaced with dynamic reduction based on how far away each stat is from the 'min' stat. Might not implement because str min maxers already have enough of a difficult time keeping up with stam and trying to hit a target*/
 
 var ipfields=document.getElementsByClassName("IP");
 var errors=document.getElementsByClassName("error-msg");
@@ -42,8 +41,8 @@ function calculateAttack()
     var baseFactor=.01, boostedStat, statBoosted="";
     var stamBoost=0;
     var strFactor=.325, strBoost=0;
-    var spdFactor=.110, spdBoost=0;
-    var dexFactor=.290, dexBoost=0;
+    var spdFactor=.100, spdBoost=0;
+    var dexFactor=.280, dexBoost=0;
     var willFactor=.145, willBoost=0;
     var overflow=.25,sloverflow=.10,maxAttMult=60,maxFlatBoost=60;
     var thr=700,soruThr,HakiThr,Haki2Thr,restype;
@@ -105,7 +104,7 @@ function calculateAttack()
             case "WILL": basewill+=(totalStats*.025+10);boostedStat=basewill;statBoosted="Will";restype+="Stat";break;
             default:break;
         }
-    stats=[basestm*1.5,basestr,basespd*1.3,basedex*1.05,basewill*1.2];
+    stats=[basestm,basestr,basespd,basedex,basewill];
     if(restype.includes("Stat"))
         {
             document.getElementById("hideThisStatBoost").style.display="";
@@ -246,11 +245,13 @@ function calculateAttack()
                     lowest=stats[i];
                 }
         }
-    basestr=adjStat(basestr,lowest);
+    basestm=adjStat(basestm,lowest);
+    //basestr=adjStat(basestr,lowest);
     basespd=adjStat(basespd,lowest);
     basedex=adjStat(basedex,lowest);
     basewill=adjStat(basewill,lowest);
-    //thr=[lowest*5,basestr*2.5,thr].sort(function(a,b){return a-b})[0];
+    //totalStats=basestm+basestr+basespd+basedex+basewill;
+    //thr=[lowest*10,basestr*5,thr].sort(function(a,b){return a-b})[0];
     console.log(basestr+"/"+basespd+"/"+basedex+"/"+basewill+"/"+lowest+"/"+thr+"/"+stats[0])
     flatBoost=powerFlat+HakiFlat+MeitoFlat;
     if(flatBoost>maxFlatBoost)
@@ -469,7 +470,7 @@ function adjStat(stat,min)
     var i=min
     while(i<stat)
         {
-            res+=1*(1-(i-min)/1000)
+            res+=1*(1-(i-min)/675)
             i++;
         }
     return res;

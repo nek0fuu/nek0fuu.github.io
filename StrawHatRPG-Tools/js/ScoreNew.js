@@ -57,7 +57,7 @@ let tempCommentCount = 0;
 let commentsLoaded = 0;
 let commentsRemoved = false;
 let posts = [];
-let str,stm,spd,dex,will;
+let str,stm,spd,dex,will,currentReserveScore;
 
 // Event Listeners
 fetchBtn.addEventListener("click", fetchComments);
@@ -188,7 +188,6 @@ function calculateMaxStats() {
     //do {
         //calc = calculate(maxStats.valueAsNumber, 50, true, tempBase);
         calc = calculate(maxStats.valueAsNumber, maxStats.valueAsNumber, maxScore.valueAsNumber, maxScore.valueAsNumber)
-        
         /*
         if (calc.newBase > tempBase) {
             tempBase++;
@@ -215,7 +214,7 @@ function changeStartingStats() {
     //Calculate Max Stats since base is changed
     calculateMaxStats();
     //currentStats.value = 50 * (parseInt(baseLevel.options[baseLevel.selectedIndex].textContent) + 1);
-    currentStats.value = (100+Math.floor((maxStats.valueAsNumber-100)/100)*25)
+    currentStats.value = (50+Math.floor((maxStats.valueAsNumber-50)/100)*25)
 }
 // Automatically fetch the max stats from the stats sheet
 
@@ -226,7 +225,7 @@ function fetchUserStats() {
     statsErrorMsg.classList.remove('show');
 
     // Reset individual stats
-    str = stm = spd = dex = will = null;
+    str = stm = spd = dex = will = currentReserveScore = null;
 
     // GET PAGE ID FROM HERE WHEN PUBLISHED
     // https://spreadsheets.google.com/feeds/cells/SHEET_ID/od6/public/full?alt=json
@@ -262,6 +261,7 @@ function fetchUserStats() {
                     spd=Number(data[entry+3].gsx$currentstats.$t);
                     dex=Number(data[entry+4].gsx$currentstats.$t);
                     will=Number(data[entry+5].gsx$currentstats.$t);
+                    currentReserveScore=Number(data[entry+6].gsx$currentstats.$t);
                     fetchComments();
                 } else {
                     logError(statsErrorMsg, "Error Fetching User's Stats. Check spelling or enter stats manually");
@@ -293,6 +293,7 @@ function fetchUserStats() {
 }
 
 function updateCalcValues(calc) {
+    calculateMaxStats();
     earnedStats.textContent = calc.earnedStats;
     earnedSplit.textContent = calc.earnedSplit;
     newStats.textContent = calc.newStats;
@@ -617,6 +618,7 @@ function calculateWords() {
                 }
             }
         }
+    }
         // Calculate score as soon as word counting is done
         updateScore();
 
@@ -624,7 +626,7 @@ function calculateWords() {
         //updateCalcValues(calculate(currentStats.valueAsNumber, manualScore.valueAsNumber));
         //wordCount.textContent = tempWordCount;
         //wordsPerComment.textContent = (tempWordCount / posts.length).toFixed(1);
-    }
+    //}
 }
 
 function decodeHTML(html) {
@@ -1055,7 +1057,8 @@ function countWords(str) {
 const MAX_RESERVE_SCORE = 5;
 const MAX_TOTAL_RESERVE = 50;
 const WORD_REQUIREMENT = 100;
-const WORDS_PER_POINT = 170;
+const TOTAL_WORDS_REQ = 5100;
+//const WORDS_PER_POINT = 170;
 
 calcBtn.addEventListener('click', () => {
     //updateCalcValues(calculate(currentStats.valueAsNumber, manualScore.valueAsNumber));
@@ -1065,34 +1068,43 @@ calcBtn.addEventListener('click', () => {
 function updateScore() {
     var MAX_STAT_SCORE = maxScore.valueAsNumber;
     var MIN_SCORE = maxScore.valueAsNumber*0.40;
+    var WORDS_PER_POINT = 5100/(MAX_STAT_SCORE-MIN_SCORE);
+    var NORMAL_SCORE_RATE = 5100/30;
     // Get a temporary score by dividing word count by WORDS_PER_POINT
     //tempScore = Math.floor(tempWordCount / WORDS_PER_POINT);
     // If the player has written at least 100 words, they can get the minimum score of 20
     let tempScore = 0;
+    let earnedReserveScore = 0;
     if (tempWordCount >= WORD_REQUIREMENT) {
         // Calculate Score
         tempScore = MIN_SCORE + Math.floor(tempWordCount / WORDS_PER_POINT);
-        reserveScore = tempScore - MAX_STAT_SCORE;
+        earnedReserveScore = (tempScore - MAX_STAT_SCORE)/(5100/(MAX_STAT_SCORE-MIN_SCORE)/NORMAL_SCORE_RATE);
         // If score is above MAX_STAT_SCORE, set it equal to max score
         if (tempScore > MAX_STAT_SCORE) {
             tempScore = MAX_STAT_SCORE;
         }
-        if(reserveScore < 0)
+        if(earnedReserveScore < 0)
             {
-                reserveScore = 0
+                earnedReserveScore = 0
             }
-        if(reserveScore > MAX_RESERVE_SCORE)
+        if(earnedReserveScore > MAX_RESERVE_SCORE)
             {
-                reserveScore = MAX_RESERVE_SCORE;
+                earnedReserveScore = MAX_RESERVE_SCORE;
+            }
+        if((currentReserveScore + earnedReserveScore) > MAX_TOTAL_RESERVE)
+            {
+                earnedReserveScore = MAX_TOTAL_RESERVE - currentReserveScore
             }
     } else {
-        logError(statsErrorMsg, 'Player did not write 100 words, 0 points awarded!');
+        logError(statsErrorMsg, `Player did not write ${WORD_REQUIREMENT} words, 0 points awarded!`);
         tempScore = 0;
+        earnedReserveScore = 0;
     }
+    
     score.textContent = tempScore;
     manualScore.value = tempScore;
-    earnedReserve.textContent = reserveScore;
-    totalReserve.textContent =  0 + reserveScore;
+    earnedReserve.textContent = earnedReserveScore;
+    totalReserve.textContent =  currentReserveScore + earnedReserveScore;
 }
 
 function calculateOld(stats, score, getMax = false, base = baseLevel.selectedIndex, max = maxStats.valueAsNumber, maxNew = Number(maxStatsLabelNew.textContent), logErrors = true) {
@@ -1111,7 +1123,7 @@ function calculateOld(stats, score, getMax = false, base = baseLevel.selectedInd
     // Change starting stats based on what base we're on
     let tempCurrentStats = 0;
     //let startingStats = 50 * (parseInt(baseLevel.options[base].textContent) + 1);
-    startingStats = (100+Math.floor((maxStats.valueAsNumber-100)/100)*25)
+    startingStats = (50+Math.floor((maxStats.valueAsNumber-50)/100)*25)
     tempCurrentStats = stats < startingStats ? startingStats : stats;
     
     let isMax = tempCurrentStats >= max;
@@ -1395,7 +1407,7 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
     var maxScoreCopy=maxScore;
     var baseRate=0.60, boostRate=0.15, acceleRate, diffBoostRate;
     var earnedStas;
-    var startingStats=(100+Math.floor((maxStats-100)/100)*25)
+    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
     if(currStats < startingStats)
         {
             currStats = startingStats;
@@ -1458,14 +1470,14 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
     maxStats=Math.round(maxStats);
     earnedStas=currStats-currentStatsCopy;
     return "Current Stats: "+currentStatsCopy +
-        "\nCurrent Starting Stats: "+(100+Math.floor((maxStatsCopy-100)/100)*25) + 
+        "\nCurrent Starting Stats: "+(50+Math.floor((maxStatsCopy-50)/100)*25) + 
         "\nCurrent Max Stats: "+maxStatsCopy + 
         "\nMax Score: "+maxScoreCopy + 
         "\nEarned Score: "+earnedScoreCopy + 
         "\nEarned Stats: "+earnedStas+" (" +Math.round(earnedStas*.6)+"/"+Math.round(earnedStas*.4)+")" + 
         "\nNew Stats: "+currStats + 
         "\nNew Max Stats: "+maxStats + 
-        "\nNew Starting Stats: "+(100+Math.floor((maxStats-100)/100)*25);
+        "\nNew Starting Stats: "+(50+Math.floor((maxStats-50)/100)*25);
     
 }
 
@@ -1483,7 +1495,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     var maxScoreCopy=maxScore;
     var baseRate=0.60, boostRate=0.15, acceleRate, diffBoostRate;
     var earnedStas;
-    var startingStats=(100+Math.floor((maxStats-100)/100)*25)
+    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
     if(currStats < startingStats)
         {
             currStats = startingStats;
@@ -1547,7 +1559,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     earnedStas=currStats-currentStatsCopy;
     /*
     return "Current Stats: "+currentStatsCopy +
-        "\nCurrent Starting Stats: "+(100+Math.floor((maxStatsCopy-100)/100)*25) + 
+        "\nCurrent Starting Stats: "+(50+Math.floor((maxStatsCopy-50)/100)*25) + 
         "\nCurrent Max Stats: "+maxStatsCopy + 
         "\nMax Score: "+maxScoreCopy + 
         "\nEarned Score: "+earnedScoreCopy + 
@@ -1559,7 +1571,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     earnedSplit.textContent = "("+Math.round(earnedStas*.6)+"/"+Math.round(earnedStas*.4)+")";
     newStats.textContent = currStats;
     document.getElementById('max-stats-label-new').textContent=maxStats;
-    document.getElementById('new-start-stats').textContent=(100+Math.floor((maxStats-100)/100)*25);
+    document.getElementById('new-start-stats').textContent=(50+Math.floor((maxStats-50)/100)*25);
     */
     
     returnVal.earnedStats=currStats-currentStatsCopy
