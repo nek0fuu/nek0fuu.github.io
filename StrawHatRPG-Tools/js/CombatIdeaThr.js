@@ -238,7 +238,7 @@ function calculateAttack()
             MeitoFlat*=0.6;
         }
     */
-    for(i=0;i<stats.length;i++)
+    for(i=1;i<stats.length;i++)
         {
             if(stats[i]<=lowest)
                 {
@@ -250,7 +250,7 @@ function calculateAttack()
     basespd=adjStat(basespd,lowest);
     basedex=adjStat(basedex,lowest);
     basewill=adjStat(basewill,lowest);
-    //totalStats=basestm+basestr+basespd+basedex+basewill;
+    totalStats=basestm+basestr+basespd+basedex+basewill;
     //thr=[lowest*10,basestr*5,thr].sort(function(a,b){return a-b})[0];
     console.log(basestr+"/"+basespd+"/"+basedex+"/"+basewill+"/"+lowest+"/"+thr+"/"+stats[0])
     flatBoost=powerFlat+HakiFlat+MeitoFlat;
@@ -298,7 +298,7 @@ function calculateDefense()
             case "TK2":TekkaiFlat=20;TekkaiMult=0.35;stamReq=135;Tekkaithr=200;break;
             case "TK3":TekkaiFlat=30;TekkaiMult=0.40;stamReq=200;Tekkaithr=300;break;
             case "TKP":TekkaiFlat=40;TekkaiMult=0.45;stamReq=265;Tekkaithr=500;break;
-            case "TKS":TekkaiFlat=30;TekkaiMult=0.35;stamReq=200;Tekkaithr=500;break;
+            case "TKS":TekkaiFlat=30;TekkaiMult=0.40;stamReq=200;Tekkaithr=500;break;
             default:TekkaiFlat=0;TekkaiMult=0;stamReq=0;Tekkaithr=0;break;
         }
     TekkaiBoost=(stamReq+basestam)*TekkaiMult;
