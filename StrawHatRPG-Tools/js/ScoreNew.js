@@ -1415,7 +1415,7 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
     //maxStats+=maxScore*baseRate
     if(currStats < maxStats)
         {
-            diffBoostRate=(maxStats-currStats)/200
+            diffBoostRate=(maxStats-currStats)/250
             if(earnedScoreCopy == maxScore)
                 {
                     acceleRate=boostRate;
@@ -1434,7 +1434,7 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
         {
             if(currStats < maxStats)
                 {
-                    diffBoostRate=(maxStats-currStats)/200
+                    diffBoostRate=(maxStats-currStats)/250
                     if(earnedScoreCopy == maxScore)
                         {
                             acceleRate=boostRate;
@@ -1503,7 +1503,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     //maxStats+=maxScore*baseRate
     if(currStats < maxStats)
         {
-            diffBoostRate=(maxStats-currStats)/200
+            diffBoostRate=(maxStats-currStats)/250
             if(earnedScoreCopy == maxScore)
                 {
                     acceleRate=boostRate;
@@ -1522,7 +1522,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
         {
             if(currStats < maxStats)
                 {
-                    diffBoostRate=(maxStats-currStats)/200
+                    diffBoostRate=(maxStats-currStats)/250
                     if(earnedScoreCopy == maxScore)
                         {
                             acceleRate=boostRate;

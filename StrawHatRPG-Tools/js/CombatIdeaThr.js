@@ -294,25 +294,25 @@ function calculateDefense()
         }
     switch(tekkai)
         {
-            case "TK1":TekkaiFlat=10;TekkaiMult=0.30;stamReq=70;Tekkaithr=100;break;
-            case "TK2":TekkaiFlat=20;TekkaiMult=0.35;stamReq=135;Tekkaithr=200;break;
-            case "TK3":TekkaiFlat=30;TekkaiMult=0.40;stamReq=200;Tekkaithr=300;break;
+            case "TK1":TekkaiFlat=10;TekkaiMult=0.15;stamReq=70;Tekkaithr=100;break;
+            case "TK2":TekkaiFlat=20;TekkaiMult=0.25;stamReq=135;Tekkaithr=200;break;
+            case "TK3":TekkaiFlat=30;TekkaiMult=0.35;stamReq=200;Tekkaithr=300;break;
             case "TKP":TekkaiFlat=40;TekkaiMult=0.45;stamReq=265;Tekkaithr=500;break;
-            case "TKS":TekkaiFlat=30;TekkaiMult=0.40;stamReq=200;Tekkaithr=500;break;
+            case "TKS":TekkaiFlat=30;TekkaiMult=0.35;stamReq=200;Tekkaithr=500;break;
             default:TekkaiFlat=0;TekkaiMult=0;stamReq=0;Tekkaithr=0;break;
         }
-    TekkaiBoost=(stamReq+basestam)*TekkaiMult;
+    TekkaiBoost=(stamReq+basestam)*TekkaiMult+TekkaiFlat;
     if(TekkaiBoost>Tekkaithr)
         {
-            TekkaiBoost=(TekkaiBoost-Tekkaithr)*overflow+Tekkaithr+TekkaiFlat;
+            TekkaiBoost=(TekkaiBoost-Tekkaithr)*overflow+Tekkaithr;
         }
     switch(haki)
         {
-            case "HC1":HakiFlat=20;HakiMult=0.300;willReq=250;Hakithr=150;break;
-            case "HC2":HakiFlat=30;HakiMult=0.350;willReq=300;Hakithr=300;break;
-            case "HC3":HakiFlat=40;HakiMult=0.400;willReq=350;Hakithr=450;break;
-            case "HCP":HakiFlat=50;HakiMult=0.450;willReq=400;Hakithr=700;break;
-            case "HCS":HakiFlat=40;HakiMult=0.400;willReq=350;Hakithr=700;break;
+            case "HC1":HakiFlat=20;HakiMult=0.30;willReq=250;Hakithr=150;break;
+            case "HC2":HakiFlat=30;HakiMult=0.35;willReq=300;Hakithr=300;break;
+            case "HC3":HakiFlat=40;HakiMult=0.40;willReq=350;Hakithr=450;break;
+            case "HCP":HakiFlat=50;HakiMult=0.45;willReq=400;Hakithr=700;break;
+            case "HCS":HakiFlat=40;HakiMult=0.40;willReq=350;Hakithr=700;break;
             default:HakiFlat=0;HakiMult=0;willReq=0;break;
         }
     HakiBoost=(willReq+basewill)*HakiMult+HakiFlat;
@@ -322,12 +322,12 @@ function calculateDefense()
         }
     switch(armHaki)
         {
-            case "HC1":HakiFlat=20;HakiMult=0.300;willReq=250;Hakithr=150;break;
-            case "HC2":HakiFlat=30;HakiMult=0.350;willReq=300;Hakithr=300;break;
-            case "HC3":HakiFlat=40;HakiMult=0.400;willReq=350;Hakithr=450;break;
+            case "HC1":HakiFlat=20;HakiMult=0.30;willReq=250;Hakithr=150;break;
+            case "HC2":HakiFlat=30;HakiMult=0.35;willReq=300;Hakithr=300;break;
+            case "HC3":HakiFlat=40;HakiMult=0.40;willReq=350;Hakithr=450;break;
             case "HCP":HakiFlat=50;HakiMult=0.45;willReq=400;Hakithr=700;break;
-            case "HCS":HakiFlat=40;HakiMult=0.400;willReq=350;Hakithr=700;break;
-            default:HakiMult=0;willReq=0;break;
+            case "HCS":HakiFlat=40;HakiMult=0.40;willReq=350;Hakithr=700;break;
+            default:HakiFlat=0;HakiMult=0;willReq=0;break;
         }
     ArmHakiBoost=(willReq+basewill)*HakiMult+HakiFlat;
     if(ArmHakiBoost>Hakithr)
