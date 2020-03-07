@@ -294,7 +294,7 @@ function calculateDefense()
         }
     switch(tekkai)
         {
-            case "TK1":TekkaiFlat=10;TekkaiMult=0.10;stamReq=70;Tekkaithr=100;break;
+            case "TK1":TekkaiFlat=10;TekkaiMult=0.30;stamReq=70;Tekkaithr=100;break;
             case "TK2":TekkaiFlat=20;TekkaiMult=0.35;stamReq=135;Tekkaithr=200;break;
             case "TK3":TekkaiFlat=30;TekkaiMult=0.40;stamReq=200;Tekkaithr=300;break;
             case "TKP":TekkaiFlat=40;TekkaiMult=0.45;stamReq=265;Tekkaithr=500;break;
