@@ -1415,7 +1415,9 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
     //maxStats+=maxScore*baseRate
     if(currStats < maxStats)
         {
-            diffBoostRate=(maxStats-currStats)/250
+            diffBoostRate=(maxStats-currStats)/200
+            //acceleRate=boostRate;
+            
             if(earnedScoreCopy == maxScore)
                 {
                     acceleRate=boostRate;
@@ -1434,7 +1436,8 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
         {
             if(currStats < maxStats)
                 {
-                    diffBoostRate=(maxStats-currStats)/250
+                    diffBoostRate=(maxStats-currStats)/200
+                    acceleRate=boostRate;
                     if(earnedScoreCopy == maxScore)
                         {
                             acceleRate=boostRate;
@@ -1493,7 +1496,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     var earnedScoreCopy=earnedScore;
     var maxStatsCopy=maxStats;
     var maxScoreCopy=maxScore;
-    var baseRate=0.50, boostRate=0.125, acceleRate, diffBoostRate;
+    var baseRate=0.50, boostRate=0.20, acceleRate, diffBoostRate;
     var earnedStas;
     var startingStats=(50+Math.floor((maxStats-50)/100)*25)
     if(currStats < startingStats)
@@ -1503,7 +1506,8 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     //maxStats+=maxScore*baseRate
     if(currStats < maxStats)
         {
-            diffBoostRate=(maxStats-currStats)/250
+            diffBoostRate=(maxStats-currStats)/200
+            //acceleRate=boostRate;
             if(earnedScoreCopy == maxScore)
                 {
                     acceleRate=boostRate;
@@ -1522,7 +1526,8 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
         {
             if(currStats < maxStats)
                 {
-                    diffBoostRate=(maxStats-currStats)/250
+                    diffBoostRate=(maxStats-currStats)/200
+                    //acceleRate=boostRate;
                     if(earnedScoreCopy == maxScore)
                         {
                             acceleRate=boostRate;
@@ -1588,4 +1593,27 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     
     return returnVal;
     
+}
+
+function WhenWillICatchUp(maxStats,score=50)
+{
+    var maxStatCopy=maxStats
+    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
+    var res=""
+    while (startingStats<maxStats)
+        {
+            if(((startingStats>=maxStats*.95)||(startingStats>=maxStats-25))&&res=="")
+                {
+                    res="Semi: "+(maxStats-maxStatCopy)/25
+                }
+            startingStats=calculate(startingStats,maxStats,score,50).newStats;
+            maxStats=calculate(maxStats,maxStats,50,50).newStats;
+            if(maxStats>2500)
+                {
+                    res+="\nFully: >2500 Stats"
+                    return res;
+                }
+        }
+    res+="\nFully: "+(maxStats-maxStatCopy)/25;
+    return res;
 }
