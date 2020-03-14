@@ -76,7 +76,6 @@ maxStats.addEventListener('change', changeStartingStats);
 function winLoad() {
     timerInit();
     fetchMaxStats();
-    changeStartingStats();
 }
 
 // Initiate the countdown timer and automatically set the start date and end date
@@ -158,10 +157,12 @@ function fetchMaxStats() {
                 let data = JSON.parse(request.response);
                 maxStats.valueAsNumber = data.feed.entry[0].gsx$currentmax.$t;
                 calculateMaxStats();
+                changeStartingStats();
                 return;
             } else {
                 logError(maxErrorMsg, "Error Fetching Max from Google - Using Default");
                 calculateMaxStats();
+                changeStartingStats();
                 return;
             }
         }
