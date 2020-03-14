@@ -1416,8 +1416,8 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
     if(currStats < maxStats)
         {
             diffBoostRate=(maxStats-currStats)/200
-            //acceleRate=boostRate;
-            
+            acceleRate=boostRate*(earnedScoreCopy/maxScore);
+            /*
             if(earnedScoreCopy == maxScore)
                 {
                     acceleRate=boostRate;
@@ -1426,6 +1426,7 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
                 {
                     acceleRate=0;
                 }
+            */
         }
     else
         {
@@ -1437,7 +1438,8 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
             if(currStats < maxStats)
                 {
                     diffBoostRate=(maxStats-currStats)/200
-                    acceleRate=boostRate;
+                    acceleRate=boostRate*(earnedScoreCopy/maxScore);
+                    /*
                     if(earnedScoreCopy == maxScore)
                         {
                             acceleRate=boostRate;
@@ -1446,6 +1448,7 @@ function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
                         {
                             acceleRate=0;
                         }
+                    */
                 }
             else
                 {
@@ -1507,7 +1510,8 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     if(currStats < maxStats)
         {
             diffBoostRate=(maxStats-currStats)/200
-            //acceleRate=boostRate;
+            acceleRate=boostRate*(earnedScoreCopy/maxScore);
+            /*
             if(earnedScoreCopy == maxScore)
                 {
                     acceleRate=boostRate;
@@ -1516,6 +1520,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
                 {
                     acceleRate=0;
                 }
+            */
         }
     else
         {
@@ -1527,7 +1532,8 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
             if(currStats < maxStats)
                 {
                     diffBoostRate=(maxStats-currStats)/200
-                    //acceleRate=boostRate;
+                    acceleRate=boostRate*(earnedScoreCopy/maxScore);
+                    /*
                     if(earnedScoreCopy == maxScore)
                         {
                             acceleRate=boostRate;
@@ -1536,6 +1542,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
                         {
                             acceleRate=0;
                         }
+                    */
                 }
             else
                 {
@@ -1599,21 +1606,30 @@ function WhenWillICatchUp(maxStats,score=50)
 {
     var maxStatCopy=maxStats
     var startingStats=(50+Math.floor((maxStats-50)/100)*25)
-    var res=""
+    var res1, res2, res3, res4;
+    res1 = res2 = res3 = res4 = ""
     while (startingStats<maxStats)
         {
-            if(((startingStats>=maxStats*.95)||(startingStats>=maxStats-25))&&res=="")
+            if((startingStats>=maxStats*.50)&&res1=="")
                 {
-                    res="Semi: "+(maxStats-maxStatCopy)/25
+                    res1="50%: "+(maxStats-maxStatCopy)/25+" Forts\n"
+                }
+            if((startingStats>=maxStats*.75)&&res2=="")
+                {
+                    res2="75%: "+(maxStats-maxStatCopy)/25+" Forts\n"
+                }
+            if((startingStats>=maxStats*.95)&&res3=="")
+                {
+                    res3="95%: "+(maxStats-maxStatCopy)/25+" Forts\n"
                 }
             startingStats=calculate(startingStats,maxStats,score,50).newStats;
             maxStats=calculate(maxStats,maxStats,50,50).newStats;
             if(maxStats>2500)
                 {
-                    res+="\nFully: >2500 Stats"
-                    return res;
+                    res4+="100%: >2500 Stats"
+                    return res1+res2+res3+res4;
                 }
         }
-    res+="\nFully: "+(maxStats-maxStatCopy)/25;
-    return res;
+    res4+="100%: "+(maxStats-maxStatCopy)/25+" Forts\n";
+    return res1+res2+res3+res4;
 }
