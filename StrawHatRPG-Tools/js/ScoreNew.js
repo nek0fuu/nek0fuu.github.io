@@ -1553,6 +1553,10 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
             //console.log(baseRate+" / "+diffBoostRate+" / "+acceleRate);
             currStats+=1*(baseRate + diffBoostRate + acceleRate);
             maxStats+=1*baseRate;
+            if(currStats > maxStats)
+                {
+                    currStats = maxStats;
+                }
             
             earnedScore--;
         }
@@ -1567,8 +1571,8 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
         {
             currStats = maxStats;
         }
-    currStats=Math.round(currStats);
-    maxStats=Math.round(maxStats);
+    currStats=Math.floor(currStats);
+    //maxStats=Math.floor(maxStats);
     earnedStas=currStats-currentStatsCopy;
     /*
     return "Current Stats: "+currentStatsCopy +
