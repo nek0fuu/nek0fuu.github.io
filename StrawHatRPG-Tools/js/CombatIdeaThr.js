@@ -97,11 +97,11 @@ function calculateAttack()
         }
     switch(ench)
         {
-            case "STA": basestm+=(totalStats*.025+10);boostedStat=basestm;statBoosted="Stamina";restype+="Stat";break;
-            case "STR": basestr+=(totalStats*.025+10);boostedStat=basestr;statBoosted="Strength";restype+="Stat";break;
-            case "SPD": basespd+=(totalStats*.025+10);boostedStat=basespd;statBoosted="Speed";restype+="Stat";break;
-            case "DEX": basedex+=(totalStats*.025+10);boostedStat=basedex;statBoosted="Dexterity";restype+="Stat";break;
-            case "WILL": basewill+=(totalStats*.025+10);boostedStat=basewill;statBoosted="Will";restype+="Stat";break;
+            case "STA": basestm+=(totalStats*.025+20);boostedStat=basestm;statBoosted="Stamina";restype+="Stat";break;
+            case "STR": basestr+=(totalStats*.025+20);boostedStat=basestr;statBoosted="Strength";restype+="Stat";break;
+            case "SPD": basespd+=(totalStats*.025+20);boostedStat=basespd;statBoosted="Speed";restype+="Stat";break;
+            case "DEX": basedex+=(totalStats*.025+20);boostedStat=basedex;statBoosted="Dexterity";restype+="Stat";break;
+            case "WILL": basewill+=(totalStats*.025+20);boostedStat=basewill;statBoosted="Will";restype+="Stat";break;
             default:break;
         }
     stats=[basestm,basestr,basespd,basedex,basewill];
