@@ -1,4 +1,3 @@
-
 var ipfields=document.getElementsByClassName("IP");
 var errors=document.getElementsByClassName("error-msg");
 
@@ -228,6 +227,11 @@ function calculateAttack()
         {
             attackMult=(attackMult-maxAttMult)*overflow+maxAttMult;
         }
+    flatBoost=powerFlat+HakiFlat+MeitoFlat;
+    if(flatBoost>maxFlatBoost)
+        {
+            flatBoost=(flatBoost-maxFlatBoost)*overflow+maxFlatBoost;
+        }
     /*
     if(DFCheck)         //&&(attackLevel.includes("FS")
         {
@@ -252,12 +256,7 @@ function calculateAttack()
     basewill=adjStat(basewill,lowest);
     totalStats=basestm+basestr+basespd+basedex+basewill;
     //thr=[lowest*10,basestr*5,thr].sort(function(a,b){return a-b})[0];
-    console.log(basestr+"/"+basespd+"/"+basedex+"/"+basewill+"/"+lowest+"/"+thr+"/"+stats[0])
-    flatBoost=powerFlat+HakiFlat+MeitoFlat;
-    if(flatBoost>maxFlatBoost)
-        {
-            flatBoost=(flatBoost-maxFlatBoost)*overflow+maxFlatBoost;
-        }
+    
     attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+totalStats*baseFactor+flatBoost)*baseAtt+attackMult/10*totalStats+10;
     if(attackPower>thr)
         {
@@ -467,10 +466,16 @@ function adjStat(stat,min)
     if(stat<min)
         return stat;
     var res=min;
-    var i=min
+    var i=min;
+    var mult;
     while(i<stat)
         {
-            res+=1*(1-(i-min)/1000)
+            mult=1-(i-min)/500
+            if(mult<0.01)
+                {
+                    mult=0.01
+                }
+            res+=mult;
             i++;
         }
     return res;

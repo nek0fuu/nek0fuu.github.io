@@ -1400,93 +1400,6 @@ function countThread() {
     console.log("Thread processed!");
 }
 
-function newSysC    (currStats,maxStats,earnedScore=20,maxScore=50)
-{
-    var currentStatsCopy=currStats;
-    var earnedScoreCopy=earnedScore;
-    var maxStatsCopy=maxStats;
-    var maxScoreCopy=maxScore;
-    var baseRate=0.60, boostRate=0.15, acceleRate, diffBoostRate;
-    var earnedStas;
-    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
-    if(currStats < startingStats)
-        {
-            currStats = startingStats;
-        }
-    //maxStats+=maxScore*baseRate
-    if(currStats < maxStats)
-        {
-            diffBoostRate=(maxStats-currStats)/200
-            acceleRate=boostRate*(earnedScoreCopy/maxScore);
-            /*
-            if(earnedScoreCopy == maxScore)
-                {
-                    acceleRate=boostRate;
-                }
-            else
-                {
-                    acceleRate=0;
-                }
-            */
-        }
-    else
-        {
-            diffBoostRate=0;
-            acceleRate=0;
-        }
-    while(earnedScore>0)
-        {
-            if(currStats < maxStats)
-                {
-                    diffBoostRate=(maxStats-currStats)/200
-                    acceleRate=boostRate*(earnedScoreCopy/maxScore);
-                    /*
-                    if(earnedScoreCopy == maxScore)
-                        {
-                            acceleRate=boostRate;
-                        }
-                    else
-                        {
-                            acceleRate=0;
-                        }
-                    */
-                }
-            else
-                {
-                    diffBoostRate=0;
-                    acceleRate=0;
-                }
-            //console.log(baseRate+" / "+diffBoostRate+" / "+acceleRate);
-            currStats+=1*(baseRate + diffBoostRate + acceleRate);
-            maxStats+=1*baseRate;
-            
-            earnedScore--;
-        }
-    maxStats=maxStatsCopy
-    maxScoreCopy=maxScore;
-    while(maxScore)
-        {
-            maxStats+=1*baseRate;
-            maxScore--;
-        }
-    if(currStats > maxStats)
-        {
-            currStats = maxStats;
-        }
-    currStats=Math.round(currStats);
-    maxStats=Math.round(maxStats);
-    earnedStas=currStats-currentStatsCopy;
-    return "Current Stats: "+currentStatsCopy +
-        "\nCurrent Starting Stats: "+(50+Math.floor((maxStatsCopy-50)/100)*25) + 
-        "\nCurrent Max Stats: "+maxStatsCopy + 
-        "\nMax Score: "+maxScoreCopy + 
-        "\nEarned Score: "+earnedScoreCopy + 
-        "\nEarned Stats: "+earnedStas+" (" +Math.round(earnedStas*.6)+"/"+Math.round(earnedStas*.4)+")" + 
-        "\nNew Stats: "+currStats + 
-        "\nNew Max Stats: "+maxStats + 
-        "\nNew Starting Stats: "+(50+Math.floor((maxStats-50)/100)*25);
-    
-}
 
 function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
 {
@@ -1551,20 +1464,19 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
                     acceleRate=0;
                 }
             //console.log(baseRate+" / "+diffBoostRate+" / "+acceleRate);
-            currStats+=1*(baseRate + diffBoostRate + acceleRate);
-            maxStats+=1*baseRate;
+            currStats+=(baseRate + diffBoostRate + acceleRate);
+            maxStats+=baseRate;
             if(currStats > maxStats)
                 {
                     currStats = maxStats;
                 }
-            
             earnedScore--;
         }
     maxStats=maxStatsCopy
     maxScoreCopy=maxScore;
     while(maxScore)
         {
-            maxStats+=1*baseRate;
+            maxStats+=baseRate;
             maxScore--;
         }
     if(currStats > maxStats)
