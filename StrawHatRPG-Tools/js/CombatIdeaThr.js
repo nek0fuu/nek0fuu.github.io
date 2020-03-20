@@ -222,7 +222,7 @@ function calculateAttack()
             powerFlat=12.5;
         }
     
-    attackMult=MeitoAtt+curseAtt+powerAtt+hakiAtt
+    attackMult=MeitoAtt+powerAtt+hakiAtt
     if(attackMult>maxAttMult)
         {
             attackMult=(attackMult-maxAttMult)*overflow+maxAttMult;
@@ -242,21 +242,20 @@ function calculateAttack()
             MeitoFlat*=0.6;
         }
     */
-    for(i=1;i<stats.length;i++)
+    for(i=0;i<stats.length;i++)
         {
             if(stats[i]<=lowest)
                 {
                     lowest=stats[i];
                 }
         }
-    basestm=adjStat(basestm,lowest);
-    //basestr=adjStat(basestr,lowest);
-    basespd=adjStat(basespd,lowest);
-    basedex=adjStat(basedex,lowest);
-    basewill=adjStat(basewill,lowest);
+    basestm=adjStat(basestm,lowest,basestr);
+    basespd=adjStat(basespd,lowest,basestr);
+    basedex=adjStat(basedex,lowest,basestr);
+    basewill=adjStat(basewill,lowest,basestr);
     totalStats=basestm+basestr+basespd+basedex+basewill;
     //thr=[lowest*10,basestr*5,thr].sort(function(a,b){return a-b})[0];
-    
+    console.log(totalStats)
     attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+totalStats*baseFactor+flatBoost)*baseAtt+attackMult/10*totalStats+10;
     if(attackPower>thr)
         {
@@ -461,16 +460,21 @@ function Try2(base)
         return base*base/700;
 }
 
-function adjStat(stat,min)
+function adjStat(stat,min,str)
 {
     if(stat<min)
         return stat;
     var res=min;
     var i=min;
     var mult;
+    var stroffset=str/1000;
+    if(stroffset>1)
+        {
+            stroffset=1
+        }
     while(i<stat)
         {
-            mult=1-(i-min)/500
+            mult=1-((i-min)/500*(1-stroffset))
             if(mult<0.01)
                 {
                     mult=0.01
