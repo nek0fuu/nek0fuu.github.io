@@ -135,7 +135,7 @@ function fetchMaxStats() {
     let sheetID = "11DBV69f-U9T1EXbdI_AvjHpp7XzSs38fH9eKqdx2sUw";
     // JOEY'S SHEET FOR DEBUGGING
     //let sheetID = "10bBzQNryutYgx49QEb2Vz19alL55lS_hEJ-FrJTOIFE";
-    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
+    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/2/public/full?alt=json`;
 
     let request = new XMLHttpRequest();
     
@@ -154,12 +154,20 @@ function fetchMaxStats() {
         if (request.readyState == XMLHttpRequest.DONE) {
             if (request.status === 200) {
                 // Good response
-                let data = JSON.parse(request.response);
-                maxStats.valueAsNumber = data.feed.entry[0].gsx$currentmax.$t;
-                calculateMaxStats();
-                changeStartingStats();
-                return;
-            } else {
+                let str="gsx$fort"+new Date(endDate.value).toDateString().substr(4).replace(" ","").replace(" ","").toLowerCase()
+                let data = JSON.parse(request.response).feed.entry;
+                let max = Number(data[0][str]["$t"])
+                /*findIndex((e) => {
+                    return (e.gsx$racialboost.$t.localeCompare(username.value, 'en', {sensitivity: 'base'}) === 0)
+                });*/
+                if (max) {
+                    maxStats.valueAsNumber = max;
+                    calculateMaxStats();
+                    changeStartingStats();
+                    return;
+                }
+            }
+            else {
                 logError(maxErrorMsg, "Error Fetching Max from Google - Using Default");
                 calculateMaxStats();
                 changeStartingStats();
@@ -167,6 +175,7 @@ function fetchMaxStats() {
             }
         }
     }
+
     
     request.onabort = function() {
         logError(maxErrorMsg, "Fetching Stats Aborted - Using Default");
@@ -326,6 +335,7 @@ function changeDate() {
         let endString = `${year}-${month}-${day}`;
         endDate.value = endString;
     }
+    fetchMaxStats();
 }
 
 manualScore.addEventListener('change', () => {
