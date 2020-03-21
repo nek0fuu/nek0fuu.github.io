@@ -310,6 +310,7 @@ function updateCalcValues(calc) {
 }
 
 startDate.addEventListener('change', changeDate);
+endDate.addEventListener('change', fetchMaxStats);
 
 function changeDate() {
     // Every time the start date is changed, check to see if
@@ -1559,4 +1560,74 @@ function WhenWillICatchUp(maxStats,score=50)
         }
     res4+="100%: "+(maxStats-maxStatCopy)/25+" Forts\n";
     return res1+res2+res3+res4;
+}
+
+function getFortResults(number=50)
+{
+    let eachResult
+    let result=[]
+    let sheetID = "11DBV69f-U9T1EXbdI_AvjHpp7XzSs38fH9eKqdx2sUw";
+    // JOEY'S SHEET FOR DEBUGGING
+    //let sheetID = "10bBzQNryutYgx49QEb2Vz19alL55lS_hEJ-FrJTOIFE";
+    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
+
+    let request = new XMLHttpRequest();
+    
+    request.ontimeout = () => {
+        logError(statsErrorMsg, `Error - Timed Out while getting Fort Results. Please manually do so manually.`);
+    };
+
+    request.open('GET', url);
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    request.timeout = 5000;
+
+    request.send();
+    
+    request.onreadystatechange = async function() {
+        if (request.readyState == XMLHttpRequest.DONE) {
+            if (request.status === 200) {
+                // Good response
+                let data = JSON.parse(request.response).feed.entry;
+                for(i=0;i<number;i++)
+                    {
+                        username.value=data[i]["gsx$username"]["$t"]
+                        fetchUserStats();
+                        await sleep(10000);
+                        eachResult=username.value+"\t"+score.innerHTML+earnedSplit.innerHTML+"\tReserve:"+earnedReserve.innerHTML
+                        result[i]=eachResult;
+                        /*
+                        result[i]={
+                                    User: usernames[i],
+                                    Score: score.innerHTML,
+                                    Split: earnedSplit.innerHTML,
+                                    Reserve: earnedReserve.innerHTML,
+                                  }
+                        */
+                        console.log(eachResult)
+                    }
+                console.log(result)
+            }
+            else {
+                logError(maxErrorMsg, "Error Getting Usernames from Google");
+                return;
+            }
+        }
+    }
+
+    
+    request.onabort = function() {
+        logError(maxErrorMsg, "Get Fort Results Aborted");
+        calculateMaxStats();
+        return;
+    }
+
+    request.onerror = function() {
+        logError(maxErrorMsg, "Error Getting Usernames from Google");
+        console.log(`Error ${request.status}: ${request.statusText}`);
+        return;
+    }
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
