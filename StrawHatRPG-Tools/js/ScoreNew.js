@@ -1530,10 +1530,13 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     
 }
 
-function WhenWillICatchUp(maxStats,score=50)
+function WhenWillICatchUp(maxStats,startingStats=-1,score=50)
 {
     var maxStatCopy=maxStats
-    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
+    if(startingStats==-1)
+        {
+            startingStats=(50+Math.floor((maxStats-50)/100)*25)
+        } 
     var res1, res2, res3, res4;
     res1 = res2 = res3 = res4 = ""
     while (startingStats<maxStats)
