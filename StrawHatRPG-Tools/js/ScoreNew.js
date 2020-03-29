@@ -531,6 +531,13 @@ function processComments(response) {
                 continue;
             }
         }
+        
+        //Check if comment was made in a post by Rewards, Stats, Newscoo or DavyJones
+        //if so, continue to next comment
+        if(data.children[comment].data.link_author=="Stats-san"||data.children[comment].data.link_author=="Rewards-san"||data.children[comment].data.link_author=="Newscoo-san"||data.children[comment].data.link_author=="DavyJones-san")
+            {
+                continue;
+            }
 
         //console.log(data.children[comment]);
         // Any comment that makes it this far is assumed to be
