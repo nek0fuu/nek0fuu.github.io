@@ -43,12 +43,14 @@ let commentsRemoved = false;
 let posts = [];
 
 // Event Listeners
+fetchBtn.addEventListener("click", reset);
 fetchBtn.addEventListener("click", fetchComments);
 removeBtn.addEventListener("click", removeComments);
 calcBtn.addEventListener("click", checkActive);
 username.addEventListener('change', () => {
     usernameHeader.textContent = username.value;
     fetchBtn.disabled = true;
+    reset();
     checkActive();
 });
 window.addEventListener('load', winLoad);
@@ -94,6 +96,20 @@ function logError(element, message) {
     element.classList.add('show');
 }
 
+function reset()
+{
+    while (postsCol.lastChild.id !== 'posts-col-header') {
+        postsCol.removeChild(postsCol.lastChild);
+    }
+    activeTillElement.style.display="none";
+    inactive.style.display="none";
+    posts = [];
+    commentsLoaded = 0;
+    tempWordCount = 0;
+    commentsRemoved = false;
+    filterIndex = 0;
+}
+
 function fetchComments() {
     // Clear global variables
     posts = [];
@@ -109,7 +125,8 @@ function fetchComments() {
 
     // Clear stat values since the new comments are
     // potentially unrelated to the old ones
-
+    reset();
+    
     // Disable fetch button until processing is complete
     fetchBtn.disabled = true;
 
