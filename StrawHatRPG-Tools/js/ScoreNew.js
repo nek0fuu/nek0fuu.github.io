@@ -548,6 +548,8 @@ function processComments(response) {
         post.postedToLink = data.children[comment].data.permalink;
         post.body = data.children[comment].data.body_html;
         post.id = data.children[comment].data.id;
+        post.date = data.children[comment].data.created_utc;
+        post.edited = data.children[comment].data.edited;
         posts.push(post);
     }
 
@@ -583,6 +585,14 @@ function displayPosts() {
         commentTitle.innerHTML = `Posted to: <a href="https://www.reddit.com${posts[i].postedToLink}">${posts[i].postedTo}</a>`;
         commentDiv.appendChild(commentTitle);
 
+        let commentDate = document.createElement('h6');
+        commentDate.classList.add('comment-date');
+        commentDate.innerHTML = `Posted on: <span>${new Date((posts[i].date)*1000).toGMTString()}</span>`;
+        if(posts[i].edited > (endDate.valueAsNumber / 1000) + 43200)
+            {
+                commentDate.innerHTML = `<p style="color: red;font-weight: 800">Edited on ${new Date((posts[i].date)*1000).toGMTString()}<p>`
+            }
+        commentDiv.appendChild(commentDate);
 
         let commentBody = document.createElement('div');
         commentBody.classList.add('comment-body');

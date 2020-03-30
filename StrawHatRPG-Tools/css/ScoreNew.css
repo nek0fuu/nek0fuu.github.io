@@ -149,6 +149,25 @@ body {
     font-size: 3em;
 }
 
+#active-till, #inactive {
+    margin: 5px 0px 0px 0px;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+#active-till{
+    color: green;
+}
+
+#active-till-date{
+    font-size: 1.5em;
+}
+
+#inactive{
+    color:red;
+    font-size: 2em;
+}
+
 #manual-score {
     line-height: 1.0em!important;
     height: 1em;
@@ -231,6 +250,12 @@ body {
 
 .comment-title > a:hover {
     text-decoration: underline;
+}
+
+.comment-date {
+    font-size: 1.1em;
+    margin: 15px 0;
+    font-weight: 600;
 }
 
 /* Comment styling */
