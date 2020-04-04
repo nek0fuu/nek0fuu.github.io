@@ -26,7 +26,7 @@ function calculateAttack()
     var hakiLevel=document.getElementById("attHakiLevel").value;
     var boostedSpeed=document.getElementById("boostedSpeed");
     var meitoGrade=document.getElementById("attbladeGrade").value;
-    var ench=document.getElementById("attEnchantment").value;
+    var ench=document.getElementById("attEnchantment").value; var enchThr=150;
     var PowCheck=document.getElementById("attPowCheck").checked;
     //var DFCheck=document.getElementById("attDFCheck").checked;
     //var UACheck=document.getElementById("attUACheck").checked;
@@ -96,11 +96,21 @@ function calculateAttack()
         }
     switch(ench)
         {
-            case "STA": basestm+=(basestm*.25+20);boostedStat=basestm;statBoosted="Stamina";restype+="Stat";break;
-            case "STR": basestr+=(basestr*.25+20);boostedStat=basestr;statBoosted="Strength";restype+="Stat";break;
-            case "SPD": basespd+=(basespd*.25+20);boostedStat=basespd;statBoosted="Speed";restype+="Stat";break;
-            case "DEX": basedex+=(basedex*.25+20);boostedStat=basedex;statBoosted="Dexterity";restype+="Stat";break;
-            case "WILL": basewill+=(basewill*.25+20);boostedStat=basewill;statBoosted="Will";restype+="Stat";break;
+            case "STA": enchBoost=(basestm*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+                basestm+=enchBoost;boostedStat=basestm;statBoosted="Stamina";restype+="Stat";break;
+                
+            case "STR": enchBoost=(basestr*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+                basestr+=enchBoost;boostedStat=basestr;statBoosted="Strength";restype+="Stat";break;
+                
+            case "SPD": enchBoost=(basespd*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+                basespd+=enchBoost;boostedStat=basespd;statBoosted="Speed";restype+="Stat";break;
+                
+            case "DEX": enchBoost=(basedex*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+                basedex+=enchBoost;boostedStat=basedex;statBoosted="Dexterity";restype+="Stat";break;
+                
+            case "WILL": enchBoost=(basewill*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+                basewill+=enchBoost;boostedStat=basewill;statBoosted="Will";restype+="Stat";break;
+                
             default:break;
         }
     stats=[basestm,basestr,basespd,basedex,basewill];
