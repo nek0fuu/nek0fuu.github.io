@@ -154,17 +154,23 @@ function fetchMaxStats() {
         if (request.readyState == XMLHttpRequest.DONE) {
             if (request.status === 200) {
                 // Good response
-                let str="gsx$fort"+new Date(endDate.value).toDateString().substr(4).replace(" ","").replace(" ","").toLowerCase()
+                str="gsx$fort"+new Date(endDate.value).toUTCString().substr(5,11).replace(" ","").replace(" ","").toLowerCase();
                 let data = JSON.parse(request.response).feed.entry;
-                let max = Number(data[0][str]["$t"])
-                /*findIndex((e) => {
-                    return (e.gsx$racialboost.$t.localeCompare(username.value, 'en', {sensitivity: 'base'}) === 0)
-                });*/
-                if (max) {
-                    maxStats.valueAsNumber = max;
-                    calculateMaxStats();
-                    changeStartingStats();
-                    return;
+                //console.log(str);
+                //console.log(data);
+                if (data[0][str]) {
+                    let max = Number(data[0][str]["$t"])
+                    /*findIndex((e) => {
+                        return (e.gsx$racialboost.$t.localeCompare(username.value, 'en', {sensitivity: 'base'}) === 0)
+                    });*/
+                    if (max) {
+                        maxStats.valueAsNumber = max;
+                        calculateMaxStats();
+                        changeStartingStats();
+                        return;
+                    }
+                } else {
+                    logError(maxErrorMsg, "If the end date is not set to the 1st or 15th of a month, the max stats must be manually set. Please make sure the value is correct.");
                 }
             }
             else {
@@ -335,8 +341,9 @@ function changeDate() {
         let day = (`0${end.getUTCDate()}`).slice(-2);
         let endString = `${year}-${month}-${day}`;
         endDate.value = endString;
+        fetchMaxStats();
     }
-    fetchMaxStats();
+    //fetchMaxStats();
 }
 
 manualScore.addEventListener('change', () => {
