@@ -265,7 +265,6 @@ function calculateAttack()
     basewill=adjStat(basewill,lowest,basestr);
     totalStats=basestm+basestr+basespd+basedex+basewill;
     thr=[basestr*5,thr].sort(function(a,b){return a-b})[0];
-    console.log(totalStats)
     attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+totalStats*baseFactor+flatBoost)*baseAtt+attackMult/10*totalStats+10;
     if(attackPower>thr)
         {
@@ -290,16 +289,16 @@ function calculateDefense()
     var innDef,armDef=0,maxArmor,armSources,innSources,spdRed,armPerk,fullPart=1;
     var statDef,HakiMult,TekkaiMult,HakiMin,TekkaiMin,HakiBoost,TekkaiBoost,HakiFlat,TekkaiFlat,willReq,stamReq,ArmHakiBoost,armDmg;
     var stamFactor=.1,willFactor=0;
-    var overflow=.25,sloverflow=.10,thr=700,Tekkaithr,Hakithr;
+    var overflow=.25,sloverflow=.10,thr=700,armThr=600,Tekkaithr,Hakithr;
     var statRed=basestam*.00025+basewill*.00015, totSpdRed;
     var thrStat=0,dmgLvl="",dmgLvl2="";
     
     statDef=basestam*stamFactor+basewill*willFactor;
-    thrStat=[basestam/2,basewill].sort(function(a,b){return a-b})[0]
-    if(statDef>thrStat)
-        {
-            statDef=(statDef-thrStat)*overflow+thrStat;
-        }
+    //thrStat=[basestam/2,basewill].sort(function(a,b){return a-b})[0]
+    //if/(statDef>thrStat)
+    //    {
+    //        statDef=(statDef-thrStat)*overflow+thrStat;
+    //    }
     switch(tekkai)
         {
             case "TK1":TekkaiFlat=10;TekkaiMult=0.15;stamReq=70;Tekkaithr=100;break;
@@ -390,6 +389,7 @@ function calculateDefense()
         {
             armSources=[ArmHakiBoost,armor].sort(function(a,b){return a-b});
             armSources.reverse();
+            console.log(armSources)
             armDef=armSources[0]+armSources[1]*.25;
         }
     switch(attackLevel)
@@ -406,6 +406,10 @@ function calculateDefense()
     if(innDef>thr)
         {
             innDef=(innDef-thr)*overflow+thr;
+        }
+    if(armDef>armThr)
+        {
+            armDef=(armDef-armThr)*overflow+armThr;
         }
     document.getElementById("InnDef").textContent=Math.round(innDef);
     document.getElementById("ArmDef").textContent=Math.round(armDef);
