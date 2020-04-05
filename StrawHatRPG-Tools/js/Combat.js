@@ -86,9 +86,9 @@ function calculateAttack()
             case "RGS":baseAtt=1.35;restype="Att";break;
             case "RGP":baseAtt=1.45;restype="Att";break;
             case "HAL":minDrain=0;maxDrain=15;HaoMult=.4;willReq=200;restype="Hao";break;
-            case "HAM":minDrain=5;maxDrain=23;HaoMult=.6;willReq=250;restype="Hao";break;
-            case "HAH":minDrain=10;maxDrain=30;HaoMult=.8;willReq=300;restype="Hao";break;
-            case "HAI":minDrain=15;maxDrain=38;HaoMult=1;willReq=350;restype="Hao";break;
+            case "HAM":minDrain=5;maxDrain=22;HaoMult=.6;willReq=250;restype="Hao";break;
+            case "HAH":minDrain=10;maxDrain=29;HaoMult=.8;willReq=300;restype="Hao";break;
+            case "HAI":minDrain=15;maxDrain=37;HaoMult=1;willReq=350;restype="Hao";break;
             case "HAS":minDrain=15;maxDrain=45;HaoMult=1;willReq=350;restype="Hao";break;
             case "HAP":minDrain=20;maxDrain=45;HaoMult=1.2;willReq=400;restype="Hao";break;
                 
