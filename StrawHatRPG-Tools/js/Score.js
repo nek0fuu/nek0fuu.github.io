@@ -68,9 +68,7 @@ username.addEventListener('change', () => {
     fetchUserStats();
 });
 window.addEventListener('load', winLoad);
-//baseLevel.addEventListener('change', changeStartingStats);
 maxStats.addEventListener('change', calculateMaxStats);
-maxStats.addEventListener('change', changeStartingStats);
 
 // Window Load Function
 function winLoad() {
@@ -166,7 +164,6 @@ function fetchMaxStats() {
                     if (max) {
                         maxStats.valueAsNumber = max;
                         calculateMaxStats();
-                        changeStartingStats();
                         return;
                     }
                 } else {
@@ -176,7 +173,6 @@ function fetchMaxStats() {
             else {
                 logError(maxErrorMsg, "Error Fetching Max from Google - Using Default");
                 calculateMaxStats();
-                changeStartingStats();
                 return;
             }
         }
@@ -193,7 +189,6 @@ function fetchMaxStats() {
         logError(maxErrorMsg, "Error Fetching Max from Google - Using Default");
         console.log(`Error ${request.status}: ${request.statusText}`);
         calculateMaxStats();
-        changeStartingStats();
         return;
     }
 }
@@ -223,13 +218,14 @@ function calculateMaxStats() {
         maxNewStats = calc.newStats;
         maxStatsLabelNew.textContent = maxNewStats;
     }
+    if(!username.value)
+        {
+            changeStartingStats();
+        }
 }
 
 // Change starting Stats based on base
 function changeStartingStats() {
-    //Calculate Max Stats since base is changed
-    calculateMaxStats();
-    //currentStats.value = 50 * (parseInt(baseLevel.options[baseLevel.selectedIndex].textContent) + 1);
     currentStats.value = (50+Math.floor((maxStats.valueAsNumber-50)/100)*25)
 }
 // Automatically fetch the max stats from the stats sheet
@@ -330,7 +326,6 @@ function updateCalcValues(calc) {
 }
 
 startDate.addEventListener('change', changeDate);
-endDate.addEventListener('change', fetchMaxStats);
 
 function changeDate() {
     // Every time the start date is changed, check to see if
