@@ -265,7 +265,20 @@ function calculateAttack()
     basewill=adjStat(basewill,lowest,basestr);
     totalStats=basestm+basestr+basespd+basedex+basewill;
     thr=[basestr*5,thr].sort(function(a,b){return a-b})[0];
-    attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+totalStats*baseFactor+flatBoost)*baseAtt+attackMult/10*totalStats+10;
+    basePower=(
+        strFactor*basestr+
+        spdFactor*basespd+
+        dexFactor*basedex+
+        willFactor*basewill+
+        baseFactor*totalStats
+    )
+    attackPower=(
+        basePower+
+        flatBoost+10+
+        attackMult*totalStats/10
+    )*baseAtt
+                
+    //attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+totalStats*baseFactor+flatBoost)*baseAtt+attackMult/10*totalStats+10;
     if(attackPower>thr)
         {
             attackPower=(attackPower-thr)*overflow+thr;
