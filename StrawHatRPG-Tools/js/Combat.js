@@ -96,19 +96,19 @@ function calculateAttack()
         }
     switch(ench)
         {
-            case "STA": enchBoost=(basestm*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+            case "STA": enchBoost=(totalStats/10*.6+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
                 basestm+=enchBoost;boostedStat=basestm;statBoosted="Stamina";restype+="Stat";break;
                 
-            case "STR": enchBoost=(basestr*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+            case "STR": enchBoost=(totalStats/10*.6+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
                 basestr+=enchBoost;boostedStat=basestr;statBoosted="Strength";restype+="Stat";break;
                 
-            case "SPD": enchBoost=(basespd*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+            case "SPD": enchBoost=(totalStats/10*.6+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
                 basespd+=enchBoost;boostedStat=basespd;statBoosted="Speed";restype+="Stat";break;
                 
-            case "DEX": enchBoost=(basedex*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+            case "DEX": enchBoost=(totalStats/10*.6+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
                 basedex+=enchBoost;boostedStat=basedex;statBoosted="Dexterity";restype+="Stat";break;
                 
-            case "WILL": enchBoost=(basewill*.25+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
+            case "WILL": enchBoost=(totalStats/10*.6+20);if(enchBoost>enchThr){enchBoost=(enchBoost-enchThr)*overflow+enchThr}
                 basewill+=enchBoost;boostedStat=basewill;statBoosted="Will";restype+="Stat";break;
                 
             default:break;
