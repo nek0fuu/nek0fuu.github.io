@@ -530,6 +530,19 @@ function SaijoScale(total, min, max)
     else return min+(max-min)*(total-minstats)/(maxstats-minstats)
 
 }
+function SaijoScale2(total, min, max)
+{
+    var minstats=500, maxstats=1500;
+    if(total<minstats)
+        {
+            return min
+        }
+    if(total>maxstats)
+        {
+            return max
+        }
+    else return min+(max-min)*(total-minstats)/(maxstats-minstats)
 
+}
 /*
             */
