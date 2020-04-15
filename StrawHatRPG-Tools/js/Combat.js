@@ -527,8 +527,9 @@ function SaijoScale(total, min, max)
         {
             return max
         }
-    else return min+(min-max)*(total-minstats)/(maxstats-minstats)
+    else return min+(max-min)*(total-minstats)/(maxstats-minstats)
 
 }
+
 /*
             */
