@@ -226,6 +226,11 @@ function calculateAttack()
             case "SOW":MeitoAtt=0.30;MeitoFlat=45;break;
             default:break;
         }
+    if(meitoGrade=="SOW")
+        {
+            MeitoAtt=SaijoScale(totalStats,0.20,0.30);
+            MeitoFlat=SaijoScale(totalStats,30,45);
+        }
     if(PowCheck)
         {
             powerAtt=0.10;
@@ -510,6 +515,20 @@ function adjStat(stat,min,str)
             i++;
         }
     return res;
+}
+function SaijoScale(total, min, max)
+{
+    var minstats=1000, maxstats=1250;
+    if(total<minstats)
+        {
+            return min
+        }
+    if(total>maxstats)
+        {
+            return max
+        }
+    else return min+(min-max)*(total-minstats)/(maxstats-minstats)
+
 }
 /*
             */
