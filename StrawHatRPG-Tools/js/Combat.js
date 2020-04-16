@@ -16,6 +16,7 @@ window.onload=function(){
 
 function calculateAttack()
 {
+    var basebase=document.getElementById("attbaseIPF").valueAsNumber;
     var basestm=document.getElementById("attstmIPF").valueAsNumber;
     var basestr=document.getElementById("attstrIPF").valueAsNumber;
     var basespd=document.getElementById("attspdIPF").valueAsNumber; var basespdCopy=basespd;
@@ -228,8 +229,8 @@ function calculateAttack()
         }
     if(meitoGrade=="SOW")
         {
-            MeitoAtt=SaijoScale(totalStats,0.20,0.30);
-            MeitoFlat=SaijoScale(totalStats,30,45);
+            MeitoAtt=SaijoScale(basebase,0.20,0.30);
+            MeitoFlat=SaijoScale(basebase,30,45);
         }
     if(PowCheck)
         {
@@ -518,21 +519,7 @@ function adjStat(stat,min,str)
 }
 function SaijoScale(total, min, max)
 {
-    var minstats=1000, maxstats=1250;
-    if(total<minstats)
-        {
-            return min
-        }
-    if(total>maxstats)
-        {
-            return max
-        }
-    else return min+(max-min)*(total-minstats)/(maxstats-minstats)
-
-}
-function SaijoScale2(total, min, max)
-{
-    var minstats=500, maxstats=1500;
+    var minstats=1000, maxstats=1500;
     if(total<minstats)
         {
             return min
