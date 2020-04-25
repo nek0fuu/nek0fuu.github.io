@@ -235,7 +235,7 @@ function calculateAttack()
     if(PowCheck)
         {
             powerAtt=0.10;
-            powerFlat=12.5;
+            powerFlat=10;
         }
     
     attackMult=MeitoAtt+powerAtt+hakiAtt
