@@ -281,12 +281,12 @@ function calculateAttack()
         dexFactor*basedex+
         willFactor*basewill+
         baseFactor*totalStats
-    )
+    )*baseAtt
     attackPower=(
         basePower+
         flatBoost+
         attackMult*totalStats/10
-    )*baseAtt            
+    )            
     //attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+totalStats*baseFactor+flatBoost)*baseAtt+attackMult/10*totalStats+10;
     thr+=(HakiFlat+powerFlat+(hakiAtt+powerAtt)*totalStats/10)
     if(attackPower>thr)
