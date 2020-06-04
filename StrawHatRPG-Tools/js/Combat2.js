@@ -284,7 +284,7 @@ function calculateAttack()
     )
     attackPower=(
         basePower+
-        flatBoost+10+
+        flatBoost+
         attackMult*totalStats/10
     )*baseAtt            
     //attackPower=(strFactor*basestr+spdFactor*basespd+dexFactor*basedex+willFactor*basewill+totalStats*baseFactor+flatBoost)*baseAtt+attackMult/10*totalStats+10;
@@ -293,7 +293,7 @@ function calculateAttack()
         {
             attackPower=(attackPower-thr)*overflow+thr;
         }
-    attackPower=PowerFunction(attackPower)
+    attackPower=PowerFunction(attackPower)+10
     document.getElementById("attPow").textContent=Math.round(attackPower);
     attPow=attackPower;
     
