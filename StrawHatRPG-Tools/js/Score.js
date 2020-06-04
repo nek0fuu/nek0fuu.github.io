@@ -778,7 +778,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     var earnedScoreCopy=earnedScore;
     var maxStatsCopy=maxStats;
     var maxScoreCopy=maxScore;
-    var baseRate=0.40, boostRate=0.15, acceleRate, diffBoostRate;
+    var baseRate=0.40, boostRate=0.15, acceleRate, diffBoostRate;  //Change Base to 0.50 and Boost to 0.20 for previous numbers
     var earnedStas;
     var startingStats=(50+Math.floor((maxStats-50)/100)*25)
     if(currStats < startingStats)
