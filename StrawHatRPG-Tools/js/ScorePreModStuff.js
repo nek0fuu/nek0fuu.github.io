@@ -52,10 +52,11 @@ let processingComments = false;
 let filteringComments = false;
 let filterIndex = 0;
 let maxNewStats = 0;
-let tempWordCount = 0, playerWordCount = 0, npcWordCount = 0;
-let commentsLoaded = 0,  modcommentsLoaded = 0;
+let tempWordCount = 0;
+let tempCommentCount = 0;
+let commentsLoaded = 0;
 let commentsRemoved = false;
-let posts = [], modlinks = [];
+let posts = [];
 let str,stm,spd,dex,will,currentReserveScore,stri;
 
 // Event Listeners
@@ -382,8 +383,6 @@ function fetchComments() {
     posts = [];
     commentsLoaded = 0;
     tempWordCount = 0;
-    npcWordCount = 0;
-    playerWordCount = 0;
     commentsRemoved = false;
     filterIndex = 0;
 
@@ -402,94 +401,6 @@ function fetchComments() {
     //let url = `https://api.reddit.com/user/${username.value}/comments/.json?limit=${QUERY_LIMIT}`;
     let url = `https://api.reddit.com/user/${username.value}/comments/.json`;
     query(url, fetchBtn, fetchErrorMsg, fetch);
-}
-
-function fetchModLinks()
-{
-    // Clear global variables
-    var plink
-    modlinks =[]
-    modcommentsLoaded = 0;
-    //modtempWordCount = 0;
-    
-    let index = ""
-    let x=0
-    let sheetID = "1cJTwl83F0EYOPiRztLb0ENWbv-J4_jaXzBLnPZjkR94";
-
-    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
-
-    let request = new XMLHttpRequest();
-    
-    request.ontimeout = () => {
-        logError(statsErrorMsg, `Error - Timed Out while fetching NPC Links.`);
-        fetchBtn.disabled = false;
-    };
-
-    request.open('GET', url);
-    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    request.timeout = 5000;
-
-    request.send();
-    
-    request.onreadystatechange = function() {
-        if (request.readyState == XMLHttpRequest.DONE) {
-            if (request.status === 200) {
-                // Good response
-                let data = JSON.parse(request.response).feed.entry;
-                for(var i=0;i<data.length;i++)
-                    {
-                        if(data[i].gsx$username.$t.toLocaleLowerCase()==document.getElementById("username").value.toLocaleLowerCase())
-                            {
-                                //modlinks[x]={link:data[i].gsx$commentlink.$t,isLastLink:false};
-                                plink=data[i].gsx$commentlink.$t.toString().split('.com')[1].split('?')[0].toLocaleLowerCase();
-                                if(plink.charAt(plink.length-1)!='/')
-                                    {
-                                        plink+="/"
-                                    }
-                                modlinks[x]=plink;
-                                x++;
-                            }
-                    }
-                if(modlinks.length==0)
-                    {
-                        //posts[posts.length-1].isLastLink = true;
-                        displayPosts();
-                    }
-                else
-                    {
-                        //modlinks[modlinks.length-1].isLastLink=true;
-                        fetchModComments();
-                    }
-                
-            } else {
-                logError(statsErrorMsg, "Error Fetching NPC Links from Google");
-                fetchBtn.disabled = false;
-                return;
-            }
-        }
-    }
-    
-    request.onabort = function() {
-        logError(statsErrorMsg, "Fetching NPC Links Aborted");
-        calculateMaxStats();
-        fetchBtn.disabled = false;
-        return;
-    }
-
-    request.onerror = function() {
-        logError(statsErrorMsg, "Error Fetching NPC Links from Google");
-        console.log(`Error ${request.status}: ${request.statusText}`);
-        calculateMaxStats();
-        fetchBtn.disabled = false;
-        return;
-    }
-}
-
-function fetchModComments()
-{
-    let url = `https://api.reddit.com/user/NPC-senpai/comments/.json`;
-    query(url, fetchBtn, fetchErrorMsg, modfetch);
 }
 
 function removeComments() {
@@ -560,14 +471,6 @@ function fetch(response) {
     processingComments = true;
     queryStatus.textContent = 'Processing';
     processComments(response);
-}
-
-function modfetch(response)
-{
-    modcommentsLoaded++;
-    processingComments = true;
-    queryStatus.textContent = 'Processing';
-    modprocessComments(response);
 }
 
 function filter(response) {
@@ -682,8 +585,6 @@ function processComments(response) {
         post.id = data.children[comment].data.id;
         post.date = data.children[comment].data.created_utc;
         post.edited = data.children[comment].data.edited;
-        post.NPC = false
-        //post.isLastLink = false;
         posts.push(post);
     }
 
@@ -697,169 +598,23 @@ function processComments(response) {
         }
 
         // Reenable fetchBtn so that the tool can still be used
-        //fetchBtn.disabled = false;
-        //queryStatus.textContent = 'Complete';
-        //commentCount.textContent = posts.length;
-        fetchModLinks();
-        //displayPosts();
-    }
-}
-
-function modprocessComments(response) {
-    let data = response.data;
-    for (let comment in data.children) {
-        // Make sure comment is not older than start date
-        // If it is, end processing
-        if (data.children[comment].data.created_utc < (startDate.valueAsNumber / 1000) + 43200) {
-            if (data.children[comment].data.pinned === true) {
-                continue;
-            } else {
-                processingComments = false;
-                break;
-            }
-        }
-
-        // Check if comment was made in the correct subreddit
-        // and if it was made later than end-date
-        // if so, continue to next comment
-        if (data.children[comment].data.created_utc > (endDate.valueAsNumber / 1000) + 43200) {
-            continue;
-        }
-
-        if (data.children[comment].data.subreddit.localeCompare(subreddit.value, 'en', {sensitivity: 'base'}) !== 0) {
-            if (subreddit.value.localeCompare('StrawHatRPG', 'en', {sensitivity: 'base'}) === 0) {
-                // If the subreddit is set to StrawHatRPG, then it checks if the comment was made in
-                // any of the subs within the StrawHatRPG Community
-                if (data.children[comment].data.subreddit.localeCompare('StrawHatRPGShops', 'en', {sensitivity: 'base'}) !== 0) {
-                    continue;
-                } 
-            } else {
-                continue;
-            }
-        }
-        
-        //console.log(data.children[comment]);
-        for(var i=0;i<modlinks.length;i++)
-            {
-                if(modlinks[i]==data.children[comment].data.permalink.toLocaleLowerCase())
-                    {
-                        // Any comment that makes it this far is assumed to be
-                        // from the correct subreddit in the correct timeframe.
-                        // Now it will be added to the posts array
-                        let post = {};
-                        post.postedTo = data.children[comment].data.link_title;
-                        post.postedToLink = data.children[comment].data.permalink;
-                        post.body = data.children[comment].data.body_html;
-                        post.id = data.children[comment].data.id;
-                        post.date = data.children[comment].data.created_utc;
-                        post.edited = data.children[comment].data.edited;
-                        post.NPC = true
-                        //post.isLastLink = false;
-                        posts.push(post);
-                    }
-            }
-    }
-
-    if (processingComments && commentsLoaded < 1000 && data.after != null) {
-        let url = `https://api.reddit.com/user/NPC-senpai/comments/.json?limit=${QUERY_LIMIT}&?&after=${data.after}`;
-        //console.log(url);
-        query(url, fetchBtn, fetchErrorMsg, modfetch);
-    } else {
-        if (commentsLoaded >= 1000) {
-            logError(fetchErrorMsg, `Max Comments Loaded - Due to limitations set by Reddit, only the last 1000 comments from a user can be loaded`);
-        }
-
-        // Reenable fetchBtn so that the tool can still be used
         fetchBtn.disabled = false;
         queryStatus.textContent = 'Complete';
+        //commentCount.textContent = posts.length;
         displayPosts();
     }
 }
-/*
-function modprocessComments(response, isLastLink)
-{
-    let skipFlag=false
-    let comment = response[1].data.children[0].data;
-    
-    if (comment.created_utc < (startDate.valueAsNumber / 1000) + 43200) {
-        skipFlag=true;
-        //Commented out since mods may not post links in the right order
-        }
 
-        // Check if comment was made in the correct subreddit
-        // and if it was made later than end-date
-        // if so, continue to next comment
-        if (comment.created_utc > (endDate.valueAsNumber / 1000) + 43200) {
-            skipFlag=true;
-        }
-
-        if (comment.subreddit.localeCompare(subreddit.value, 'en', {sensitivity: 'base'}) !== 0) {
-            if (subreddit.value.localeCompare('StrawHatRPG', 'en', {sensitivity: 'base'}) === 0) {
-                // If the subreddit is set to StrawHatRPG, then it checks if the comment was made in
-                // any of the subs within the StrawHatRPG Community
-                if (comment.subreddit.localeCompare('StrawHatRPGShops', 'en', {sensitivity: 'base'}) !== 0) {
-                    skipFlag=true;
-                } 
-            } else {
-                skipFlag=true;
-            }
-        if (comment.author!='NPC-senpai')
-            {
-                skipFlag=true;
-            }
-        }
-    if(!skipFlag)
-        {
-            let post = {};
-            post.postedTo = response[0].data.children[0].data.title;
-            post.postedToLink = comment.permalink;
-            post.body = comment.body_html;
-            post.id = comment.id;
-            post.date = comment.created_utc;
-            post.edited = comment.edited;
-            post.NPC = true;
-            post.isLastLink = isLastLink;
-            
-            posts.push(post);
-            processingComments=false;
-        }
-    
-    if(posts[posts.length-1].isLastLink&&!processingComments)
-        {
-            console.log(2)
-            displayPosts();
-        }
-}
-*/
 function displayPosts() {
-    /*
-    if(!posts[posts.length-1].isLastLink)
-        {
-            return;
-        }
-    */
-    //Query is Complete
-    processingComments=false;
-    fetchBtn.disabled = false;
-    queryStatus.textContent = 'Complete';
     // Delete all comments from webpage to make room for the new ones
     while (postsCol.lastChild.id !== 'posts-col-header') {
         postsCol.removeChild(postsCol.lastChild);
     }
     // Iterate through posts array
-    for (var i=0;i<posts.length;i++) {
+    for (let i in posts) {
         let commentDiv = document.createElement('div');
         commentDiv.classList.add('comment');
-        
-        if(posts[i].NPC)
-            {
-                let commentNPC = document.createElement('h4');
-                commentNPC.classList.add('comment-npc');
-                commentNPC.innerHTML = 'NPC Reply';
-                commentDiv.appendChild(commentNPC);
-                commentDiv.style.display = 'none';
-            }
-        
+
         let commentTitle = document.createElement('h3');
         commentTitle.classList.add('comment-title');
         commentTitle.innerHTML = `Posted to: <a href="https://www.reddit.com${posts[i].postedToLink}">${posts[i].postedTo}</a>`;
@@ -881,21 +636,14 @@ function displayPosts() {
 
         postsCol.appendChild(commentDiv);
     }
-    calculateWords();
-}
 
-function showAllPosts()
-{
-    for(var i=0;i<postsCol.childElementCount;i++)
-        {
-            postsCol.children[i].style.display="";
-        }
+    calculateWords();
 }
 
 function filterPosts() {
     let comments = Array.from(postsCol.querySelectorAll('.comment'));
     // Iterate through posts array
-    for (var i=0;i<posts.length;i++) {
+    for (let i in posts) {
         //console.log(posts[i]);
         if (posts[i].filter) {
             let comment = comments[i];
@@ -908,7 +656,6 @@ function filterPosts() {
 }
 
 function calculateWords() {
-    var isNPCReply;
     tempWordCount = 0;
 
     if (posts.length) {
@@ -916,12 +663,7 @@ function calculateWords() {
         let comments = Array.from(postsCol.querySelectorAll('.comment'));
         let posts = Array.from(postsCol.querySelectorAll('.comment-body'));
 
-        for (var i=0;i<posts.length;i++) {
-            isNPCReply=false
-            if(comments[i].children[0].innerText=='NPC Reply')
-                {
-                    isNPCReply=true;
-                }
+        for (let i in posts) {
             if (comments[i].classList.contains('filtered')) {
                 // Do not count filtered comments
                 continue;
@@ -936,16 +678,7 @@ function calculateWords() {
                     commentElements[element].tagName.toLowerCase() != 'ul' &&
                     commentElements[element].tagName.toLowerCase() != 'ol')
                 {
-                    if(isNPCReply)
-                        {
-                            tempWordCount += countWords(commentElements[element].textContent)*2/3
-                            npcWordCount += countWords(commentElements[element].textContent)
-                        }
-                    else
-                        {
-                            tempWordCount += countWords(commentElements[element].textContent);
-                            playerWordCount += countWords(commentElements[element].textContent);
-                        }
+                    tempWordCount += countWords(commentElements[element].textContent);
                 }
             }
         }
@@ -1114,6 +847,249 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     
 }
 
+function calculateTS(currStats,maxStats,earnedScore=20,maxScore=50)
+{
+    let returnVal = {
+        earnedStats: 0,
+        earnedSplit: "",
+        newStats: 0,
+        //newBase: base
+    }
+    var currentStatsCopy=currStats;
+    var earnedScoreCopy=earnedScore;
+    var maxStatsCopy=maxStats;
+    var maxScoreCopy=maxScore;
+    var baseRate=2.12, boostRate=0.848, acceleRate, diffBoostRate;  //Change Base to 0.50 and Boost to 0.20 for previous numbers
+    var earnedStas;
+    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
+    if(currStats < startingStats)
+        {
+            currStats = startingStats;
+        }
+    if(currStats < maxStats)
+        {
+            diffBoostRate=(maxStats-currStats)/100  
+            acceleRate=boostRate*(earnedScoreCopy/maxScore);
+        }
+    else
+        {
+            diffBoostRate=0;
+            acceleRate=0;
+        }
+    while(earnedScore>0)
+        {
+            if(currStats < maxStats)
+                {
+                    diffBoostRate=(maxStats-currStats)/100 
+                    acceleRate=boostRate*(earnedScoreCopy/maxScore);
+                }
+            else
+                {
+                    diffBoostRate=0;
+                    acceleRate=0;
+                }
+            currStats+=(baseRate + diffBoostRate + acceleRate);
+            maxStats+=baseRate; 
+            if(currStats > maxStats)
+                {
+                    currStats = maxStats;
+                }
+            earnedScore--;
+        }
+    maxStats=maxStatsCopy
+    maxScoreCopy=maxScore;
+    while(maxScore)
+        {
+            maxStats+=baseRate;
+            maxScore--;
+        }
+    if(currStats > maxStats)
+        {
+            currStats = maxStats;
+        }
+    currStats=Math.round(currStats);
+    //maxStats=Math.floor(maxStats);
+    earnedStas=currStats-currentStatsCopy;
+    
+    returnVal.earnedStats=currStats-currentStatsCopy
+    if((stm)&&(str)&&(spd)&&(dex)&&(will)&&(stm+str+spd+dex+will==currentStatsCopy))
+        {
+            returnVal.earnedSplit=`(${Math.round((currentStatsCopy+returnVal.earnedStats) * 0.6-(stm+str+spd))}/${Math.round((currentStatsCopy+returnVal.earnedStats) * 0.4-(dex+will))})`;
+        }
+    else
+    {
+        returnVal.earnedSplit = `(${Math.round(earnedStas * 0.6)}/${Math.round(earnedStas * 0.4)})`;
+    }
+    
+    returnVal.newStats = currStats;
+    
+    return returnVal;
+    
+}
+
+function calculateTS2(currStats,maxStats,earnedScore=20,maxScore=50)
+{
+    //Preferred
+    //100 Score Fort
+    let returnVal = {
+        earnedStats: 0,
+        earnedSplit: "",
+        newStats: 0,
+        //newBase: base
+    }
+    var currentStatsCopy=currStats;
+    var earnedScoreCopy=earnedScore;
+    var maxStatsCopy=maxStats;
+    var maxScoreCopy=maxScore;
+    var baseRate=1.06, boostRate=0.53, acceleRate, diffBoostRate;  //Change Base to 0.50 and Boost to 0.20 for previous numbers
+    var earnedStas;
+    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
+    if(currStats < startingStats)
+        {
+            currStats = startingStats;
+        }
+    if(currStats < maxStats)
+        {
+            diffBoostRate=(maxStats-currStats)/150  
+            acceleRate=boostRate*(earnedScoreCopy/maxScore);
+        }
+    else
+        {
+            diffBoostRate=0;
+            acceleRate=0;
+        }
+    while(earnedScore>0)
+        {
+            if(currStats < maxStats)
+                {
+                    diffBoostRate=(maxStats-currStats)/150 
+                    acceleRate=boostRate*(earnedScoreCopy/maxScore);
+                }
+            else
+                {
+                    diffBoostRate=0;
+                    acceleRate=0;
+                }
+            currStats+=(baseRate + diffBoostRate + acceleRate);
+            maxStats+=baseRate; 
+            if(currStats > maxStats)
+                {
+                    currStats = maxStats;
+                }
+            earnedScore--;
+        }
+    maxStats=maxStatsCopy
+    maxScoreCopy=maxScore;
+    while(maxScore)
+        {
+            maxStats+=baseRate;
+            maxScore--;
+        }
+    if(currStats > maxStats)
+        {
+            currStats = maxStats;
+        }
+    currStats=Math.round(currStats);
+    //maxStats=Math.floor(maxStats);
+    earnedStas=currStats-currentStatsCopy;
+    
+    returnVal.earnedStats=currStats-currentStatsCopy
+    if((stm)&&(str)&&(spd)&&(dex)&&(will)&&(stm+str+spd+dex+will==currentStatsCopy))
+        {
+            returnVal.earnedSplit=`(${Math.round((currentStatsCopy+returnVal.earnedStats) * 0.6-(stm+str+spd))}/${Math.round((currentStatsCopy+returnVal.earnedStats) * 0.4-(dex+will))})`;
+        }
+    else
+    {
+        returnVal.earnedSplit = `(${Math.round(earnedStas * 0.6)}/${Math.round(earnedStas * 0.4)})`;
+    }
+    
+    returnVal.newStats = currStats;
+    
+    return returnVal;
+    
+}
+
+function calculateTSScrapped(currStats,maxStats,earnedScore=20,maxScore=50)
+{
+    let returnVal = {
+        earnedStats: 0,
+        earnedSplit: "",
+        newStats: 0,
+        //newBase: base
+    }
+    var currentStatsCopy=currStats;
+    var earnedScoreCopy=earnedScore;
+    var maxStatsCopy=maxStats;
+    var maxScoreCopy=maxScore;
+    var baseRate=1.06, boostRate=1.06, acceleRate, diffBoostRate;  //Change Base to 0.50 and Boost to 0.20 for previous numbers
+    var earnedStas;
+    var startingStats=(50+Math.floor((maxStats-50)/100)*25)
+    if(currStats < startingStats)
+        {
+            currStats = startingStats;
+        }
+    if(currStats < maxStats)
+        {
+            diffBoostRate=(maxStats-currStats)/100  
+            acceleRate=boostRate*(earnedScoreCopy/maxScore);
+        }
+    else
+        {
+            diffBoostRate=0;
+            acceleRate=0;
+        }
+    while(earnedScore>0)
+        {
+            if(currStats < maxStats)
+                {
+                    diffBoostRate=(maxStats-currStats)/100 
+                    acceleRate=boostRate*(earnedScoreCopy/maxScore);
+                }
+            else
+                {
+                    diffBoostRate=0;
+                    acceleRate=0;
+                    acceleRate=boostRate*(earnedScoreCopy/maxScore); 
+                }
+            currStats+=(baseRate + diffBoostRate + acceleRate);
+            maxStats+=baseRate+boostRate; 
+            if(currStats > maxStats)
+                {
+                    currStats = maxStats;
+                }
+            earnedScore--;
+        }
+    maxStats=maxStatsCopy
+    maxScoreCopy=maxScore;
+    while(maxScore)
+        {
+            maxStats+=baseRate+boostRate;
+            maxScore--;
+        }
+    if(currStats > maxStats)
+        {
+            currStats = maxStats;
+        }
+    currStats=Math.round(currStats);
+    //maxStats=Math.floor(maxStats);
+    earnedStas=currStats-currentStatsCopy;
+    
+    returnVal.earnedStats=currStats-currentStatsCopy
+    if((stm)&&(str)&&(spd)&&(dex)&&(will)&&(stm+str+spd+dex+will==currentStatsCopy))
+        {
+            returnVal.earnedSplit=`(${Math.round((currentStatsCopy+returnVal.earnedStats) * 0.6-(stm+str+spd))}/${Math.round((currentStatsCopy+returnVal.earnedStats) * 0.4-(dex+will))})`;
+        }
+    else
+    {
+        returnVal.earnedSplit = `(${Math.round(earnedStas * 0.6)}/${Math.round(earnedStas * 0.4)})`;
+    }
+    
+    returnVal.newStats = currStats;
+    
+    return returnVal;
+    
+}
+
 function resetStatValues() {
     score.textContent = '0';
     earnedStats.textContent = '0';
@@ -1195,7 +1171,7 @@ function getFortResults(number=50)
             if (request.status === 200) {
                 // Good response
                 let data = JSON.parse(request.response).feed.entry;
-                for(var i=0;i<number;i++)
+                for(i=0;i<number;i++)
                     {
                         username.value=data[i]["gsx$username"]["$t"]
                         fetchUserStats();
