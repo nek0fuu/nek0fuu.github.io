@@ -1199,7 +1199,7 @@ function getFortResults(number=50)
                     {
                         username.value=data[i]["gsx$username"]["$t"]
                         fetchUserStats();
-                        await sleep(10000);
+                        await sleep(15000);
                         eachResult=username.value+"\t"+score.innerHTML+"\t"+earnedStats.innerHTML+"\tReserve:"+earnedReserve.innerHTML;
                         result[i]=eachResult;
                         /*
