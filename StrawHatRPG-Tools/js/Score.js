@@ -1050,7 +1050,7 @@ function countWords(str) {
 const MAX_RESERVE_SCORE = 5;
 const MAX_TOTAL_RESERVE = 50;
 const WORD_REQUIREMENT = 100;
-const TOTAL_WORDS_REQ = 5100;
+const TOTAL_WORDS_REQ = 5000;
 //const WORDS_PER_POINT = 170;
 
 calcBtn.addEventListener('click', () => {
@@ -1135,8 +1135,8 @@ function newUpdateScore(tempWordCount, MAX_STAT_SCORE) {
 function updateScore() {
     var MAX_STAT_SCORE = maxScore.valueAsNumber;
     var MIN_SCORE = maxScore.valueAsNumber*0.40;
-    var WORDS_PER_POINT = 5179/(MAX_STAT_SCORE-MIN_SCORE);
-    var NORMAL_SCORE_RATE = 5100/30;
+    var WORDS_PER_POINT = 5000/(MAX_STAT_SCORE-MIN_SCORE);
+    var NORMAL_SCORE_RATE = 5000/30;
     // Get a temporary score by dividing word count by WORDS_PER_POINT
     //tempScore = Math.floor(tempWordCount / WORDS_PER_POINT);
     // If the player has written at least 100 words, they can get the minimum score of 20
@@ -1145,7 +1145,7 @@ function updateScore() {
     if (tempWordCount >= WORD_REQUIREMENT) {
         // Calculate Score
         tempScore = MIN_SCORE + Math.floor(tempWordCount / WORDS_PER_POINT);
-        earnedReserveScore = (tempScore - MAX_STAT_SCORE)/(5100/(MAX_STAT_SCORE-MIN_SCORE)/NORMAL_SCORE_RATE);
+        earnedReserveScore = (tempScore - MAX_STAT_SCORE)/(5000/(MAX_STAT_SCORE-MIN_SCORE)/NORMAL_SCORE_RATE);
         // If score is above MAX_STAT_SCORE, set it equal to max score
         if (tempScore > MAX_STAT_SCORE) {
             tempScore = MAX_STAT_SCORE;
@@ -1186,12 +1186,12 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     var earnedScoreCopy=earnedScore;
     var maxStatsCopy=maxStats;
     var maxScoreCopy=maxScore;
-    var baseRate=0.40, boostRate=0.20, acceleRate, diffBoostRate;  
-    
+    var baseRate=0.50, boostRate=0.25, acceleRate, diffBoostRate;  
+    var redRate=0.795
     //15th March-1st April: Base: 0.50, Boost:0.20, diffRate=diffBoostRate=(maxStats-currStats)*.005, boostRate*(earnedScoreCopy/maxScore)
     //15th April-15th July: Base: 0.40, Boost:0.16, diffRate=diffBoostRate=(maxStats-currStats)*.005, boostRate*(earnedScoreCopy/maxScore)
     //15th July> 
-    //Base: 0.40, Boost:0.20, diffRate=(maxStats-currStats)*.0032*(1+(2500-maxStats)*0.00032), acceleRate=boostRate*(earnedScoreCopy/maxScore)*(1+(2500-maxStats)*0.00032);
+    //Base: 0.45, Boost:0.25, redRate=0.795, diffRate=(maxStats-currStats)*.04*(1+(2500-maxStats)*0.0004), acceleRate=boostRate*(earnedScoreCopy/maxScore)*(1+(2500-maxStats)*0.0004);
     
     var earnedStas;
     var startingStats=(50+Math.floor((maxStats-50)/100)*25)
@@ -1201,8 +1201,8 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
         }
     if(currStats < maxStats)
         {
-            diffBoostRate=(maxStats-currStats)*.0032*(1+(2500-maxStats)*0.00032);
-            acceleRate=boostRate*(earnedScoreCopy/maxScore)*(1+(2500-maxStats)*0.00032);
+            diffBoostRate=(maxStats-currStats)*.004*(1+(2500-maxStats)*0.0004);
+            acceleRate=boostRate*(earnedScoreCopy/maxScore)*(1+(2500-maxStats)*0.0004);
         }
     else
         {
@@ -1213,16 +1213,16 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
         {
             if(currStats < maxStats)
                 {
-                    diffBoostRate=(maxStats-currStats)*.0032*(1+(2500-maxStats)*0.00032);
-                    acceleRate=boostRate*(earnedScoreCopy/maxScore)*(1+(2500-maxStats)*0.00032);
+                    diffBoostRate=(maxStats-currStats)*.004*(1+(2500-maxStats)*0.0004);
+                    acceleRate=boostRate*(earnedScoreCopy/maxScore)*(1+(2500-maxStats)*0.0004);
                 }
             else
                 {
                     diffBoostRate=0;
                     acceleRate=0;
                 }
-            currStats+=(baseRate + diffBoostRate + acceleRate);
-            maxStats+=baseRate;
+            currStats+=(baseRate + diffBoostRate + acceleRate)*redRate;
+            maxStats+=baseRate*redRate;
             if(currStats > maxStats)
                 {
                     currStats = maxStats;
@@ -1242,9 +1242,9 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
         }
     currStats=Math.round(currStats);
     //maxStats=Math.floor(maxStats);
-    earnedStas=currStats-currentStatsCopy;
+    earnedStas=(currStats-currentStatsCopy);
     
-    returnVal.earnedStats=currStats-currentStatsCopy
+    returnVal.earnedStats=(currStats-currentStatsCopy)
     if((stm)&&(str)&&(spd)&&(dex)&&(will)&&(stm+str+spd+dex+will==currentStatsCopy))
         {
             returnVal.earnedSplit=`(${Math.round((currentStatsCopy+returnVal.earnedStats) * 0.6-(stm+str+spd))}/${Math.round((currentStatsCopy+returnVal.earnedStats) * 0.4-(dex+will))})`;
