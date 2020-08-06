@@ -1233,7 +1233,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     maxScoreCopy=maxScore;
     while(maxScore)
         {
-            maxStats+=baseRate;
+            maxStats+=baseRate*redRate;
             maxScore--;
         }
     if(currStats > maxStats)
