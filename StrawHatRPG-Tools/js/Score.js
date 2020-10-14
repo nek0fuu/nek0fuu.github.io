@@ -53,7 +53,7 @@ let modprocessingComments = false;
 let filteringComments = false;
 let filterIndex = 0;
 let maxNewStats = 0;
-let tempWordCount = 0, playerWordCount = 0, npcWordCount = 0;
+let tempWordCount = 0, playerWordCount = 0, npcWordCount = 0, imgWordCount = 0;
 let commentsLoaded = 0,  modcommentsLoaded = 0;
 let commentsRemoved = false;
 let posts = [], modlinks = [], donelinks = [];
@@ -434,6 +434,7 @@ function fetchComments() {
     commentsLoaded = 0;
     tempWordCount = 0;
     npcWordCount = 0;
+    imgWordCount = 0;
     playerWordCount = 0;
     commentsRemoved = false;
     filterIndex = 0;
@@ -948,7 +949,7 @@ function displayPosts() {
 
         postsCol.appendChild(commentDiv);
     }
-    calculateWords();
+    calculateImageWords();
 }
 
 function showAllPosts()
@@ -970,9 +971,67 @@ function filterPosts() {
         }
     }
 
-    calculateWords();
+    calculateImageWords();
     queryStatus.textContent = 'Complete';
 }
+
+function calculateImageWords()
+{
+    let sheetID = "1F_PSXzR-2hINQIkDL0ZDa_TduRFfNdRQI4vvslHESBk";
+
+    let url = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/full?alt=json`;
+
+    let request = new XMLHttpRequest();
+    
+    request.ontimeout = () => {
+        logError(statsErrorMsg, `Error - Timed Out while fetching NPC Links.`);
+        fetchBtn.disabled = false;
+    };
+
+    request.open('GET', url);
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    request.timeout = 5000;
+
+    request.send();
+    
+    request.onreadystatechange = function() {
+        if (request.readyState == XMLHttpRequest.DONE) {
+            if (request.status === 200) {
+                // Good response
+                let data = JSON.parse(request.response).feed.entry;
+                for(var i=0;i<data.length;i++)
+                    {
+                        if(data[i].gsx$username.$t.toLocaleLowerCase()==document.getElementById("username").value.toLocaleLowerCase() && data[i].gsx$fortending.$t == new Date(endDate.value).toUTCString().substr(5,11))
+                            {
+                                imgWordCount+=Number(data[i].gsx$words.$t)
+                            }
+                    }
+                
+            } else {
+                logError(statsErrorMsg, "Error Fetching Image Words from Google");
+                fetchBtn.disabled = false;
+                return;
+            }
+        }
+        calculateWords()
+    }
+    
+    request.onabort = function() {
+        logError(statsErrorMsg, "Fetching Image Words Aborted");
+        calculateWords();
+        fetchBtn.disabled = false;
+        return;
+    }
+
+    request.onerror = function() {
+        logError(statsErrorMsg, "Error Fetching Image Words from Google");
+        console.log(`Error ${request.status}: ${request.statusText}`);
+        calculateWords();
+        fetchBtn.disabled = false;
+        return;
+    }
+} 
 
 function calculateWords() {
     var isNPCReply;
@@ -1017,6 +1076,10 @@ function calculateWords() {
             }
         }
     }
+    tempWordCount+=imgWordCount;
+    
+        
+    
         // Calculate score as soon as word counting is done
         updateScore();
 
@@ -1192,6 +1255,7 @@ function calculate(currStats,maxStats,earnedScore=20,maxScore=50)
     //15th April-15th July: Base: 0.40, Boost:0.16, diffRate=diffBoostRate=(maxStats-currStats)*.005, boostRate*(earnedScoreCopy/maxScore)
     //15th July> 
     //Base: 0.45, Boost:0.25, redRate=0.795, diffRate=(maxStats-currStats)*.04*(1+(2500-maxStats)*0.0004), acceleRate=boostRate*(earnedScoreCopy/maxScore)*(1+(2500-maxStats)*0.0004);
+    //TS: Base: 4.075, Boost:2.0375, redRate=1.50
     
     var earnedStas;
     var startingStats=(50+Math.floor((maxStats-50)/100)*25)
@@ -1947,7 +2011,6 @@ function oldfetchUserStats() {
         percent: 0.55
     }]  //DONE
 };
-
 
 function calculateOld(stats, score, getMax = false, base = baseLevel.selectedIndex, max = maxStats.valueAsNumber, maxNew = Number(maxStatsLabelNew.textContent), logErrors = true) {
     // Return value with all the different information we may need
